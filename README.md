@@ -62,18 +62,30 @@ graph TD
     TemplateResponse --> End
     CustomResponse --> End
 
-    style Start fill:#e1f5e1
-    style End fill:#ffe1e1
-    style Guardrails fill:#fff4e1
-    style Decision fill:#e1f0ff
-    style ResponseDecision fill:#e1f0ff
-    style Tools fill:#f0e1ff
-    style T1 fill:#f0e1ff
-    style T2 fill:#f0e1ff
-    style T3 fill:#f0e1ff
-    style TemplateResponse fill:#e1ffe1
-    style CustomResponse fill:#e1ffe1
-    style NoResponse fill:#ffe1e1
+    %% Entry / Exit
+    style Start fill:#F5F7FA,stroke:#4B5563,stroke-width:2px
+    style End fill:#F5F7FA,stroke:#4B5563,stroke-width:2px
+
+    %% Guardrails / Safety
+    style Guardrails fill:#FFF7ED,stroke:#EA580C,stroke-width:2px
+    style NoResponse fill:#FEE2E2,stroke:#DC2626,stroke-width:2px
+
+    %% Decisions
+    style Decision fill:#EFF6FF,stroke:#2563EB,stroke-width:2px
+    style ResponseDecision fill:#EFF6FF,stroke:#2563EB,stroke-width:2px
+
+    %% Tool execution
+    style Tools fill:#F5F3FF,stroke:#7C3AED,stroke-width:2px
+    style T1 fill:#F5F3FF,stroke:#7C3AED,stroke-width:1.5px
+    style T2 fill:#F5F3FF,stroke:#7C3AED,stroke-width:1.5px
+    style T3 fill:#F5F3FF,stroke:#7C3AED,stroke-width:1.5px
+    style Merge fill:#EDE9FE,stroke:#7C3AED,stroke-width:2px
+
+    %% Successful responses
+    style TemplateResponse fill:#ECFDF5,stroke:#059669,stroke-width:2px
+    style CustomResponse fill:#ECFDF5,stroke:#059669,stroke-width:2px
+
+
 ```
 
 ## Tech Stack
