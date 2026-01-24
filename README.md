@@ -18,16 +18,16 @@ A production-quality AI agent that generates responses to guest accommodation in
 
 ```mermaid
 graph LR
-    Start([Guest Message]) --> Guardrails[Apply Guardrails<br/>- Detect & Redact PII<br/>- Topic Filter]
+    Start([Guest Message]) --> Guardrails[Apply Guardrails<br/>Detect & Redact PII<br/>Topic Filter]
 
     Guardrails -->|Topic Allowed?| Decision{Guardrail Check}
 
-    Decision -->|Rejected| NoResponse[Generate No Response<br/>Polite Decline]
-    Decision -->|Approved| Tools[Execute Tools in Parallel]
+    Decision -->|Rejected| NoResponse[No Response<br/>Polite Decline]
+    Decision -->|Approved| Tools[Execute Tools]
 
-    Tools --> T1[Template Retrieval<br/>Qdrant Vector Search]
-    Tools --> T2[Property Details<br/>Fetch Property Info]
-    Tools --> T3[Reservation Details<br/>Fetch Booking Info]
+    Tools --> T1[Template Retrieval<br/>Qdrant]
+    Tools --> T2[Property Details]
+    Tools --> T3[Reservation Details]
 
     T1 --> Merge[Merge Results]
     T2 --> Merge
@@ -35,35 +35,35 @@ graph LR
 
     Merge --> ResponseDecision{Template<br/>Score ≥ 0.75?}
 
-    ResponseDecision -->|Yes| TemplateResponse[Generate Template Response<br/>GPT-4o-mini<br/>Use Template + Context]
-    ResponseDecision -->|No| CustomResponse[Generate Custom Response<br/>GPT-4o-mini<br/>Property + Reservation Only]
+    ResponseDecision -->|Yes| TemplateResponse[Template Response<br/>Deepseek-V3.2]
+    ResponseDecision -->|No| CustomResponse[Custom Response<br/>Deepseek-V3.2]
 
     NoResponse --> End([Return Response])
     TemplateResponse --> End
     CustomResponse --> End
 
     %% Entry / Exit
-    style Start fill:#F5F7FA,stroke:#4B5563,stroke-width:2px
-    style End fill:#F5F7FA,stroke:#4B5563,stroke-width:2px
+    style Start fill:#E5E7EB,stroke:#374151,stroke-width:1.5px,color:#111827
+    style End fill:#E5E7EB,stroke:#374151,stroke-width:1.5px,color:#111827
 
     %% Guardrails / Safety
-    style Guardrails fill:#FFF7ED,stroke:#EA580C,stroke-width:2px
-    style NoResponse fill:#FEE2E2,stroke:#DC2626,stroke-width:2px
+    style Guardrails fill:#FFEDD5,stroke:#C2410C,stroke-width:1.5px,color:#111827
+    style NoResponse fill:#FECACA,stroke:#B91C1C,stroke-width:1.5px,color:#111827
 
     %% Decisions
-    style Decision fill:#EFF6FF,stroke:#2563EB,stroke-width:2px
-    style ResponseDecision fill:#EFF6FF,stroke:#2563EB,stroke-width:2px
+    style Decision fill:#DBEAFE,stroke:#1D4ED8,stroke-width:1.5px,color:#111827
+    style ResponseDecision fill:#DBEAFE,stroke:#1D4ED8,stroke-width:1.5px,color:#111827
 
     %% Tool execution
-    style Tools fill:#F5F3FF,stroke:#7C3AED,stroke-width:2px
-    style T1 fill:#F5F3FF,stroke:#7C3AED,stroke-width:1.5px
-    style T2 fill:#F5F3FF,stroke:#7C3AED,stroke-width:1.5px
-    style T3 fill:#F5F3FF,stroke:#7C3AED,stroke-width:1.5px
-    style Merge fill:#EDE9FE,stroke:#7C3AED,stroke-width:2px
+    style Tools fill:#EDE9FE,stroke:#6D28D9,stroke-width:1.5px,color:#111827
+    style T1 fill:#EDE9FE,stroke:#6D28D9,stroke-width:1.2px,color:#111827
+    style T2 fill:#EDE9FE,stroke:#6D28D9,stroke-width:1.2px,color:#111827
+    style T3 fill:#EDE9FE,stroke:#6D28D9,stroke-width:1.2px,color:#111827
+    style Merge fill:#DDD6FE,stroke:#6D28D9,stroke-width:1.5px,color:#111827
 
     %% Successful responses
-    style TemplateResponse fill:#ECFDF5,stroke:#059669,stroke-width:2px
-    style CustomResponse fill:#ECFDF5,stroke:#059669,stroke-width:2px
+    style TemplateResponse fill:#D1FAE5,stroke:#047857,stroke-width:1.5px,color:#111827
+    style CustomResponse fill:#D1FAE5,stroke:#047857,stroke-width:1.5px,color:#111827
 
 
 ```
