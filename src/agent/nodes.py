@@ -50,8 +50,8 @@ async def apply_guardrails(state: AgentState) -> Dict[str, Any]:
             },
         }
 
-    # Detect and redact PII
-    redacted_message, has_pii = await detect_and_redact_pii(message)
+    # Detect and redact PII (synchronous call)
+    redacted_message, has_pii = detect_and_redact_pii(message)
 
     # Check topic restrictions
     topic_result = await check_topic_restriction(redacted_message)
