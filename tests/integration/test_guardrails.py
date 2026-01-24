@@ -1,145 +1,134 @@
 """Integration tests for guardrail functionality."""
 
 import pytest
-from src.guardrails.pii_redaction import PIIRedactionGuardrail
-from src.guardrails.topic_filter import TopicFilterGuardrail
+from src.guardrails.pii_redaction import detect_and_redact_pii, should_block_pii
+from src.guardrails.topic_filter import check_topic_restriction
 
 
 class TestPIIRedactionIntegration:
     """Test PII redaction guardrail integration."""
 
-    @pytest.fixture
-    def pii_guardrail(self):
-        """Create PII redaction guardrail."""
-        return PIIRedactionGuardrail()
-
-    def test_blocks_email(self, pii_guardrail):
-        """Test that emails are detected and blocked."""
-        message = "Please send the invoice to john.doe@example.com"
-        result = pii_guardrail.check(message)
-
-        assert result.passed is False
-        assert "email" in result.reason.lower() or "pii" in result.reason.lower()
-
-    def test_blocks_phone_number(self, pii_guardrail):
-        """Test that phone numbers are detected and blocked."""
-        message = "Call me at 555-123-4567"
-        result = pii_guardrail.check(message)
-
-        assert result.passed is False
-
-    def test_blocks_ssn(self, pii_guardrail):
+    def test_blocks_ssn(self):
         """Test that SSNs are detected and blocked."""
         message = "My SSN is 123-45-6789"
-        result = pii_guardrail.check(message)
+        should_block = should_block_pii(message)
+        assert should_block is True
 
-        assert result.passed is False
-
-    def test_blocks_credit_card(self, pii_guardrail):
+    def test_blocks_credit_card(self):
         """Test that credit card numbers are detected and blocked."""
         message = "My card is 4532-1234-5678-9010"
-        result = pii_guardrail.check(message)
+        should_block = should_block_pii(message)
+        assert should_block is True
 
-        assert result.passed is False
-
-    def test_allows_safe_message(self, pii_guardrail):
+    def test_allows_safe_message(self):
         """Test that safe messages pass through."""
         message = "What time is check-in?"
-        result = pii_guardrail.check(message)
+        should_block = should_block_pii(message)
+        assert should_block is False
 
-        assert result.passed is True
+    @pytest.mark.asyncio
+    async def test_detects_and_redacts_email(self):
+        """Test that emails are detected and redacted."""
+        message = "Please send the invoice to john.doe@example.com"
+        redacted_text, has_pii = await detect_and_redact_pii(message)
 
-    def test_redacts_pii(self, pii_guardrail):
-        """Test that PII is properly redacted."""
-        message = "Contact me at test@example.com or 555-1234"
-        result = pii_guardrail.check(message)
+        assert has_pii is True
+        assert "john.doe@example.com" not in redacted_text
 
-        if hasattr(result, 'redacted_message'):
-            assert "test@example.com" not in result.redacted_message
-            assert "555-1234" not in result.redacted_message
+    @pytest.mark.asyncio
+    async def test_detects_and_redacts_phone(self):
+        """Test that phone numbers are detected and redacted."""
+        message = "Call me at 555-123-4567"
+        redacted_text, has_pii = await detect_and_redact_pii(message)
+
+        assert has_pii is True
+        assert "555-123-4567" not in redacted_text
+
+    @pytest.mark.asyncio
+    async def test_safe_message_unchanged(self):
+        """Test that safe messages remain unchanged."""
+        message = "What time is check-in?"
+        redacted_text, has_pii = await detect_and_redact_pii(message)
+
+        assert has_pii is False
+        assert redacted_text == message
 
 
 class TestTopicFilterIntegration:
     """Test topic filter guardrail integration."""
 
-    @pytest.fixture
-    def topic_filter(self):
-        """Create topic filter guardrail."""
-        return TopicFilterGuardrail()
-
     @pytest.mark.asyncio
-    async def test_blocks_legal_advice(self, topic_filter):
+    async def test_blocks_legal_advice(self):
         """Test that legal advice requests are blocked."""
         message = "Can you help me sue my landlord?"
-        result = await topic_filter.check_async(message)
+        result = await check_topic_restriction(message)
 
         # May or may not be blocked depending on model sensitivity
-        assert result.passed is not None
-        assert result.reasoning is not None
+        assert "allowed" in result
+        assert "reason" in result
+        # Legal advice should be restricted
+        assert result["allowed"] is False or "legal" in result.get("topic", "").lower()
 
     @pytest.mark.asyncio
-    async def test_blocks_medical_advice(self, topic_filter):
+    async def test_blocks_medical_advice(self):
         """Test that medical advice requests are blocked."""
         message = "I have a fever, should I take antibiotics?"
-        result = await topic_filter.check_async(message)
+        result = await check_topic_restriction(message)
 
-        assert result.passed is not None
+        assert "allowed" in result
+        # Medical advice should be restricted
+        assert result["allowed"] is False or "medical" in result.get("topic", "").lower()
 
     @pytest.mark.asyncio
-    async def test_allows_accommodation_questions(self, topic_filter):
+    async def test_allows_accommodation_questions(self):
         """Test that accommodation questions are allowed."""
         message = "What time is check-in?"
-        result = await topic_filter.check_async(message)
+        result = await check_topic_restriction(message)
 
-        assert result.passed is True
+        assert result["allowed"] is True
 
     @pytest.mark.asyncio
-    async def test_allows_amenity_questions(self, topic_filter):
+    async def test_allows_amenity_questions(self):
         """Test that amenity questions are allowed."""
         message = "Do you have a swimming pool?"
-        result = await topic_filter.check_async(message)
+        result = await check_topic_restriction(message)
 
-        assert result.passed is True
+        assert result["allowed"] is True
 
     @pytest.mark.asyncio
-    async def test_blocks_price_negotiation(self, topic_filter):
+    async def test_blocks_price_negotiation(self):
         """Test that price negotiation is blocked."""
         message = "Can you give me a discount on the rate?"
-        result = await topic_filter.check_async(message)
+        result = await check_topic_restriction(message)
 
         # May or may not be blocked depending on configuration
-        assert result.passed is not None
+        assert "allowed" in result
 
 
 class TestGuardrailChaining:
     """Test that multiple guardrails work together."""
 
-    @pytest.fixture
-    def pii_guardrail(self):
-        return PIIRedactionGuardrail()
-
-    @pytest.fixture
-    def topic_filter(self):
-        return TopicFilterGuardrail()
-
     @pytest.mark.asyncio
-    async def test_both_guardrails_applied(self, pii_guardrail, topic_filter):
+    async def test_both_guardrails_applied(self):
         """Test that both guardrails are applied in sequence."""
         message = "My email is test@example.com. Can you help me sue someone?"
 
-        # PII check
-        pii_result = pii_guardrail.check(message)
+        # PII check - email should be detected
+        redacted_text, has_pii = await detect_and_redact_pii(message)
+        assert has_pii is True
 
-        # Should be blocked by PII
-        assert pii_result.passed is False
+        # Topic check on original message
+        topic_result = await check_topic_restriction(message)
+        # Legal advice should be restricted
+        assert topic_result["allowed"] is False or "legal" in topic_result.get("topic", "").lower()
 
     @pytest.mark.asyncio
-    async def test_safe_message_passes_both(self, pii_guardrail, topic_filter):
+    async def test_safe_message_passes_both(self):
         """Test that safe messages pass both guardrails."""
         message = "What amenities do you have?"
 
-        pii_result = pii_guardrail.check(message)
-        topic_result = await topic_filter.check_async(message)
+        redacted_text, has_pii = await detect_and_redact_pii(message)
+        topic_result = await check_topic_restriction(message)
 
-        assert pii_result.passed is True
-        assert topic_result.passed is True
+        assert has_pii is False
+        assert topic_result["allowed"] is True
