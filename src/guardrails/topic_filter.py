@@ -1,12 +1,17 @@
 """
 Topic filter to restrict certain types of queries.
 """
-from typing import Dict
+import json
+import re
+from typing import Any, Dict
 
 from langchain_deepseek import ChatDeepSeek
 
 from src.config.settings import get_settings
+from src.monitoring.logging import get_logger
 from src.monitoring.metrics import guardrail_triggered
+
+logger = get_logger(__name__)
 
 # Restricted topics
 RESTRICTED_TOPICS = [
@@ -48,7 +53,7 @@ Respond in JSON format:
 """
 
 
-async def check_topic_restriction(message: str) -> Dict[str, any]:
+async def check_topic_restriction(message: str) -> Dict[str, Any]:
     """
     Check if message contains restricted topics.
 
@@ -66,23 +71,42 @@ async def check_topic_restriction(message: str) -> Dict[str, any]:
 
     # Classify topic
     prompt = TOPIC_FILTER_PROMPT.format(message=message)
+    logger.debug(f"Topic filter prompt for message: {message[:50]}...")
+
     response = await llm.ainvoke(prompt)
+    logger.debug(f"Topic filter raw response: {response.content[:200]}")
 
     # Parse response
-    import json
     try:
-        result = json.loads(response.content)
+        content = response.content
+
+        # Strip markdown code blocks if present
+        if "```json" in content:
+            match = re.search(r'```json\s*(.*?)\s*```', content, re.DOTALL)
+            if match:
+                content = match.group(1)
+        elif "```" in content:
+            match = re.search(r'```\s*(.*?)\s*```', content, re.DOTALL)
+            if match:
+                content = match.group(1)
+
+        result = json.loads(content)
         restricted = result.get("restricted", False)
 
         if restricted:
             guardrail_triggered.labels(guardrail_type="topic_filter").inc()
+            logger.info(f"Topic restricted: {result.get('topic')} - {result.get('reason')}")
 
         return {
             "allowed": not restricted,
             "reason": result.get("reason", ""),
             "topic": result.get("topic", "general"),
         }
-    except json.JSONDecodeError:
+    except (json.JSONDecodeError, AttributeError) as e:
+        # Log the error for debugging
+        logger.error(f"Failed to parse topic filter response: {response.content[:200]}")
+        logger.error(f"Parse error: {str(e)}")
+
         # Default to allowed if parsing fails
         return {
             "allowed": True,

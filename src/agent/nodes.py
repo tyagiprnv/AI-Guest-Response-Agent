@@ -3,6 +3,7 @@ LangGraph agent nodes.
 """
 import asyncio
 import json
+from datetime import datetime, date
 from time import time
 from typing import Any, Dict
 
@@ -24,6 +25,13 @@ from src.tools.reservation_details import get_reservation_info
 from src.tools.template_retrieval import retrieve_templates
 
 logger = get_logger(__name__)
+
+
+def json_serial(obj):
+    """JSON serializer for objects not serializable by default json code."""
+    if isinstance(obj, (datetime, date)):
+        return obj.isoformat()
+    raise TypeError(f"Type {type(obj)} not serializable")
 
 
 async def apply_guardrails(state: AgentState) -> Dict[str, Any]:
@@ -123,8 +131,8 @@ async def generate_template_response(state: AgentState) -> Dict[str, Any]:
     ])
 
     # Format property and reservation info
-    property_info = json.dumps(state.get("property_details"), indent=2) if state.get("property_details") else "Not available"
-    reservation_info = json.dumps(state.get("reservation_details"), indent=2) if state.get("reservation_details") else "Not available"
+    property_info = json.dumps(state.get("property_details"), indent=2, default=json_serial) if state.get("property_details") else "Not available"
+    reservation_info = json.dumps(state.get("reservation_details"), indent=2, default=json_serial) if state.get("reservation_details") else "Not available"
 
     prompt = RESPONSE_GENERATION_PROMPT.format(
         guest_message=state["redacted_message"],
@@ -168,8 +176,8 @@ async def generate_custom_response(state: AgentState) -> Dict[str, Any]:
         api_key=settings.deepseek_api_key,
     )
 
-    property_info = json.dumps(state.get("property_details"), indent=2) if state.get("property_details") else "Not available"
-    reservation_info = json.dumps(state.get("reservation_details"), indent=2) if state.get("reservation_details") else "Not available"
+    property_info = json.dumps(state.get("property_details"), indent=2, default=json_serial) if state.get("property_details") else "Not available"
+    reservation_info = json.dumps(state.get("reservation_details"), indent=2, default=json_serial) if state.get("reservation_details") else "Not available"
 
     prompt = CUSTOM_RESPONSE_PROMPT.format(
         guest_message=state["redacted_message"],

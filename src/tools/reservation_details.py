@@ -88,7 +88,8 @@ async def get_reservation_info(reservation_id: str | None) -> Dict[str, Any] | N
     if not reservation:
         return None
 
-    result = reservation.model_dump()
+    # Use mode="json" to serialize datetime objects to ISO format strings
+    result = reservation.model_dump(mode="json")
 
     # Cache result
     tool_result_cache.set(cache_key, result)

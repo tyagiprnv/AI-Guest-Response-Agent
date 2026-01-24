@@ -91,7 +91,8 @@ async def get_property_info(property_id: str) -> Dict[str, Any] | None:
     if not property:
         return None
 
-    result = property.model_dump()
+    # Use mode="json" to ensure proper serialization of enums
+    result = property.model_dump(mode="json")
 
     # Cache result
     tool_result_cache.set(cache_key, result)
