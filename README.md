@@ -14,26 +14,6 @@ A production-quality AI agent that generates responses to guest accommodation in
 
 ## Architecture
 
-### System Overview
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                         FastAPI Application                      │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │              LangGraph Agent Workflow                     │  │
-│  │                                                            │  │
-│  │  1. Apply Guardrails (PII, Topic Filter)                  │  │
-│  │  2. Execute Tools in Parallel                             │  │
-│  │     ├─ Template Retrieval (Qdrant)                        │  │
-│  │     ├─ Property Details                                   │  │
-│  │     └─ Reservation Details                                │  │
-│  │  3. Generate Response (Template/Custom/No Response)       │  │
-│  └──────────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────────┘
-```
-
 ### Agent Workflow
 
 ```mermaid
