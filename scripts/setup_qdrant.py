@@ -3,7 +3,12 @@ Initialize Qdrant and index templates.
 """
 import asyncio
 import json
+import sys
 from pathlib import Path
+
+# Add project root to Python path
+BASE_DIR = Path(__file__).parent.parent
+sys.path.insert(0, str(BASE_DIR))
 
 from qdrant_client.models import PointStruct
 
@@ -11,7 +16,6 @@ from src.config.settings import get_settings
 from src.retrieval.embeddings import generate_embeddings
 from src.retrieval.qdrant_client import create_collection, upsert_points
 
-BASE_DIR = Path(__file__).parent.parent
 DATA_DIR = BASE_DIR / "data"
 
 
