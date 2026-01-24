@@ -65,10 +65,10 @@ cd agentic-project
 #### 2. Install Dependencies
 ```bash
 # Install package in editable mode
-pip install -e .
+uv pip install -e .
 
 # Install development dependencies (optional)
-pip install -e ".[dev]"
+uv pip install -e ".[dev]"
 
 # Download spaCy model for PII detection
 python -m spacy download en_core_web_sm
@@ -516,7 +516,7 @@ python -c "from presidio_analyzer import AnalyzerEngine; print(AnalyzerEngine().
 
 **Solutions**:
 - Install spaCy model: `python -m spacy download en_core_web_sm`
-- Update Presidio: `pip install --upgrade presidio-analyzer presidio-anonymizer`
+- Update Presidio: `uv pip install --upgrade presidio-analyzer presidio-anonymizer`
 - Check guardrail is enabled in agent graph
 
 #### 8. LangSmith Traces Not Appearing

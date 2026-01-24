@@ -109,10 +109,10 @@ python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 # Install dependencies
-pip install -e .
+uv pip install -e .
 
 # For development tools
-pip install -e ".[dev]"
+uv pip install -e ".[dev]"
 ```
 
 ### 2. Configure Environment

@@ -19,13 +19,13 @@ Before you begin, ensure you have:
 
 ```bash
 # Install the package and dependencies
-pip install -e .
+uv pip install -e .
 
 # Download spaCy model for PII detection
 python -m spacy download en_core_web_sm
 
 # (Optional) Install development tools
-pip install -e ".[dev]"
+uv pip install -e ".[dev]"
 ```
 
 This will install all required packages including:
@@ -272,7 +272,7 @@ python scripts/setup_qdrant.py
 
 **Solution**: Install dependencies:
 ```bash
-pip install -e .
+uv pip install -e .
 python -m spacy download en_core_web_sm
 ```
 

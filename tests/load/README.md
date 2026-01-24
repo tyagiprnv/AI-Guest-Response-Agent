@@ -5,7 +5,7 @@ This directory contains load testing scenarios for the AI Guest Response Agent A
 ## Prerequisites
 
 ```bash
-pip install locust
+uv pip install locust
 ```
 
 ## Running Load Tests
