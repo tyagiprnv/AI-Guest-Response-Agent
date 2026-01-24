@@ -24,12 +24,29 @@ class TestCase(BaseModel):
     """A test case for evaluation."""
 
     id: str
-    category: str
-    query: str
+    guest_message: str
     property_id: Optional[str] = None
     reservation_id: Optional[str] = None
-    expected_behavior: str
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    expected_response_type: str
+    expected_category: Optional[str] = None
+    ground_truth: Optional[str] = None
+    annotations: Dict[str, Any] = Field(default_factory=dict)
+
+    # Computed properties for backward compatibility
+    @property
+    def query(self) -> str:
+        """Alias for guest_message."""
+        return self.guest_message
+
+    @property
+    def category(self) -> Optional[str]:
+        """Alias for expected_category."""
+        return self.expected_category
+
+    @property
+    def expected_behavior(self) -> str:
+        """Generate expected behavior description."""
+        return f"Expected response type: {self.expected_response_type}"
 
 
 class EvaluationMetrics(BaseModel):
@@ -72,7 +89,7 @@ class EvaluationRunner:
 
     def __init__(
         self,
-        test_cases_path: str = "data/test_cases.json",
+        test_cases_path: str = "data/test_cases/test_cases.json",
         model_name: str = "deepseek-chat",
         passing_score: int = 3,
     ):
@@ -135,43 +152,59 @@ class EvaluationRunner:
             # Prepare input
             from src.agent.state import AgentState
             initial_state: AgentState = {
-                "messages": query,
+                "guest_message": query,
                 "property_id": property_id,
                 "reservation_id": reservation_id,
-                "guardrail_passed": True,
-                "tools_output": {},
-                "response": "",
-                "response_type": "no_response",
-                "metadata": {},
             }
 
             # Run agent
             result = await self.agent.ainvoke(initial_state)
 
-            latency_ms = (time.time() - start_time) * 1000
+            latency_ms = result.get("execution_time_ms", (time.time() - start_time) * 1000)
+
+            # Calculate total tokens
+            tokens = result.get("tokens_used", {})
+            total_tokens = sum(tokens.values()) if isinstance(tokens, dict) else 0
 
             return {
-                "response": result.get("response", ""),
+                "response": result.get("final_response", ""),
                 "response_type": result.get("response_type", "no_response"),
                 "latency_ms": latency_ms,
-                "tokens_used": result.get("metadata", {}).get("total_tokens", 0),
-                "cost_usd": result.get("metadata", {}).get("total_cost", 0.0),
+                "tokens_used": total_tokens,
+                "cost_usd": result.get("cost_usd", 0.0),
                 "template_matched": result.get("response_type") == "template",
-                "tools_output": result.get("tools_output", {}),
-                "metadata": result.get("metadata", {}),
+                "tools_output": {
+                    "property_details": result.get("property_details"),
+                    "reservation_details": result.get("reservation_details"),
+                    "templates": result.get("retrieved_templates", []),
+                },
+                "metadata": {
+                    "tokens_used": tokens,
+                    "confidence_score": result.get("confidence_score", 0.0),
+                    "error": result.get("error"),
+                },
             }
 
         except Exception as e:
             logger.error(f"Agent execution failed: {e}")
+            latency_ms = (time.time() - start_time) * 1000
             return {
                 "response": f"Error: {str(e)}",
                 "response_type": "error",
-                "latency_ms": 0,
+                "latency_ms": latency_ms,
                 "tokens_used": 0,
                 "cost_usd": 0.0,
                 "template_matched": False,
-                "tools_output": {},
-                "metadata": {"error": str(e)},
+                "tools_output": {
+                    "property_details": None,
+                    "reservation_details": None,
+                    "templates": [],
+                },
+                "metadata": {
+                    "error": str(e),
+                    "tokens_used": {},
+                    "confidence_score": 0.0,
+                },
             }
 
     def evaluate_response(
