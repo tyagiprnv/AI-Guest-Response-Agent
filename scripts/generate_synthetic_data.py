@@ -217,6 +217,10 @@ def generate_test_cases(properties: list[dict], reservations: list[dict]) -> lis
     """Generate 50 annotated test cases."""
     test_cases = []
 
+    # Get properties that have reservations
+    property_ids_with_reservations = set(r["property_id"] for r in reservations)
+    properties_with_reservations = [p for p in properties if p["id"] in property_ids_with_reservations]
+
     # Easy cases (20)
     easy_queries = [
         ("What time is check-in?", "check-in", "template", False),
@@ -227,7 +231,7 @@ def generate_test_cases(properties: list[dict], reservations: list[dict]) -> lis
     ]
 
     for i, (query, category, response_type, ambiguous) in enumerate(easy_queries * 4):
-        prop = random.choice(properties)
+        prop = random.choice(properties_with_reservations)
         res = random.choice([r for r in reservations if r["property_id"] == prop["id"]])
 
         test_cases.append({
@@ -254,7 +258,7 @@ def generate_test_cases(properties: list[dict], reservations: list[dict]) -> lis
     ]
 
     for query, category, response_type, ambiguous in medium_queries * 5:
-        prop = random.choice(properties)
+        prop = random.choice(properties_with_reservations)
         res = random.choice([r for r in reservations if r["property_id"] == prop["id"]])
 
         test_cases.append({
