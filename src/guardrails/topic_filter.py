@@ -3,7 +3,7 @@ Topic filter to restrict certain types of queries.
 """
 from typing import Dict
 
-from langchain_openai import ChatOpenAI
+from langchain_deepseek import ChatDeepSeek
 
 from src.config.settings import get_settings
 from src.monitoring.metrics import guardrail_triggered
@@ -58,10 +58,10 @@ async def check_topic_restriction(message: str) -> Dict[str, any]:
     settings = get_settings()
 
     # Initialize LLM
-    llm = ChatOpenAI(
-        model="gpt-4o-mini",  # Use smaller model for classification
+    llm = ChatDeepSeek(
+        model=settings.llm_model,
         temperature=0,
-        openai_api_key=settings.openai_api_key,
+        api_key=settings.deepseek_api_key,
     )
 
     # Classify topic

@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any, Optional
 from pydantic import BaseModel, Field
-from langchain_openai import ChatOpenAI
+from langchain_deepseek import ChatDeepSeek
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 import logging
@@ -25,24 +25,33 @@ class BaseEvaluator(ABC):
 
     def __init__(
         self,
-        model_name: str = "gpt-4o-mini",
+        model_name: str = "deepseek-chat",
         temperature: float = 0.0,
         passing_score: int = 3,
+        api_key: Optional[str] = None,
     ):
         """Initialize evaluator.
 
         Args:
-            model_name: OpenAI model to use for evaluation
+            model_name: Model to use for evaluation
             temperature: Temperature for LLM generation
             passing_score: Minimum score to pass (1-5)
+            api_key: API key (will use settings if not provided)
         """
         self.model_name = model_name
         self.temperature = temperature
         self.passing_score = passing_score
 
-        self.llm = ChatOpenAI(
+        # Get API key from settings if not provided
+        if api_key is None:
+            from src.config.settings import get_settings
+            settings = get_settings()
+            api_key = settings.deepseek_api_key
+
+        self.llm = ChatDeepSeek(
             model=model_name,
             temperature=temperature,
+            api_key=api_key,
         )
 
         self.parser = JsonOutputParser(pydantic_object=EvaluationResult)

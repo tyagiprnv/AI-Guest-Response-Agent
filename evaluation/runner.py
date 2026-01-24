@@ -73,14 +73,14 @@ class EvaluationRunner:
     def __init__(
         self,
         test_cases_path: str = "data/test_cases.json",
-        model_name: str = "gpt-4o-mini",
+        model_name: str = "deepseek-chat",
         passing_score: int = 3,
     ):
         """Initialize evaluation runner.
 
         Args:
             test_cases_path: Path to test cases JSON file
-            model_name: OpenAI model for LLM-as-Judge
+            model_name: Model for LLM-as-Judge (deepseek-chat recommended)
             passing_score: Minimum score to pass (1-5)
         """
         self.test_cases_path = Path(test_cases_path)

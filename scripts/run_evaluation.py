@@ -38,8 +38,8 @@ async def main():
     parser.add_argument(
         "--model",
         type=str,
-        default="gpt-4o-mini",
-        help="OpenAI model for LLM-as-Judge evaluation",
+        default="deepseek-chat",
+        help="Model for LLM-as-Judge evaluation",
     )
     parser.add_argument(
         "--passing-score",

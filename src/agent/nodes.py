@@ -6,7 +6,7 @@ import json
 from time import time
 from typing import Any, Dict
 
-from langchain_openai import ChatOpenAI
+from langchain_deepseek import ChatDeepSeek
 
 from src.agent.prompts import (
     CUSTOM_RESPONSE_PROMPT,
@@ -108,10 +108,10 @@ async def generate_response(state: AgentState) -> Dict[str, Any]:
 async def generate_template_response(state: AgentState) -> Dict[str, Any]:
     """Generate response using templates."""
     settings = get_settings()
-    llm = ChatOpenAI(
-        model="gpt-4o-mini",
-        temperature=0.7,
-        openai_api_key=settings.openai_api_key,
+    llm = ChatDeepSeek(
+        model=settings.llm_model,
+        temperature=settings.llm_temperature,
+        api_key=settings.deepseek_api_key,
     )
 
     # Format templates
@@ -162,10 +162,10 @@ async def generate_template_response(state: AgentState) -> Dict[str, Any]:
 async def generate_custom_response(state: AgentState) -> Dict[str, Any]:
     """Generate custom response without templates."""
     settings = get_settings()
-    llm = ChatOpenAI(
-        model="gpt-4o-mini",
-        temperature=0.7,
-        openai_api_key=settings.openai_api_key,
+    llm = ChatDeepSeek(
+        model=settings.llm_model,
+        temperature=settings.llm_temperature,
+        api_key=settings.deepseek_api_key,
     )
 
     property_info = json.dumps(state.get("property_details"), indent=2) if state.get("property_details") else "Not available"
@@ -201,10 +201,10 @@ async def generate_custom_response(state: AgentState) -> Dict[str, Any]:
 async def generate_no_response(state: AgentState) -> Dict[str, Any]:
     """Generate polite decline response."""
     settings = get_settings()
-    llm = ChatOpenAI(
-        model="gpt-4o-mini",
-        temperature=0.7,
-        openai_api_key=settings.openai_api_key,
+    llm = ChatDeepSeek(
+        model=settings.llm_model,
+        temperature=settings.llm_temperature,
+        api_key=settings.deepseek_api_key,
     )
 
     reason = state["topic_filter_result"]["reason"]
