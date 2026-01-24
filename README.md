@@ -17,7 +17,7 @@ A production-quality AI agent that generates responses to guest accommodation in
 ### Agent Workflow
 
 ```mermaid
-graph TD
+graph LR
     Start([Guest Message]) --> Guardrails[Apply Guardrails<br/>- Detect & Redact PII<br/>- Topic Filter]
 
     Guardrails -->|Topic Allowed?| Decision{Guardrail Check}
