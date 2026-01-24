@@ -14,6 +14,8 @@ A production-quality AI agent that generates responses to guest accommodation in
 
 ## Architecture
 
+### System Overview
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                         FastAPI Application                      │
@@ -30,6 +32,48 @@ A production-quality AI agent that generates responses to guest accommodation in
 │  │  3. Generate Response (Template/Custom/No Response)       │  │
 │  └──────────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────┘
+```
+
+### Agent Workflow
+
+```mermaid
+graph TD
+    Start([Guest Message]) --> Guardrails[Apply Guardrails<br/>- Detect & Redact PII<br/>- Topic Filter]
+
+    Guardrails -->|Topic Allowed?| Decision{Guardrail Check}
+
+    Decision -->|Rejected| NoResponse[Generate No Response<br/>Polite Decline]
+    Decision -->|Approved| Tools[Execute Tools in Parallel]
+
+    Tools --> T1[Template Retrieval<br/>Qdrant Vector Search]
+    Tools --> T2[Property Details<br/>Fetch Property Info]
+    Tools --> T3[Reservation Details<br/>Fetch Booking Info]
+
+    T1 --> Merge[Merge Results]
+    T2 --> Merge
+    T3 --> Merge
+
+    Merge --> ResponseDecision{Template<br/>Score ≥ 0.75?}
+
+    ResponseDecision -->|Yes| TemplateResponse[Generate Template Response<br/>GPT-4o-mini<br/>Use Template + Context]
+    ResponseDecision -->|No| CustomResponse[Generate Custom Response<br/>GPT-4o-mini<br/>Property + Reservation Only]
+
+    NoResponse --> End([Return Response])
+    TemplateResponse --> End
+    CustomResponse --> End
+
+    style Start fill:#e1f5e1
+    style End fill:#ffe1e1
+    style Guardrails fill:#fff4e1
+    style Decision fill:#e1f0ff
+    style ResponseDecision fill:#e1f0ff
+    style Tools fill:#f0e1ff
+    style T1 fill:#f0e1ff
+    style T2 fill:#f0e1ff
+    style T3 fill:#f0e1ff
+    style TemplateResponse fill:#e1ffe1
+    style CustomResponse fill:#e1ffe1
+    style NoResponse fill:#ffe1e1
 ```
 
 ## Tech Stack
