@@ -1,0 +1,305 @@
+{
+  "dashboard": {
+    "title": "AI Agent Cost & Efficiency",
+    "tags": ["agent", "cost", "optimization"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 0,
+    "refresh": "1m",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Total Cost (Last 24h)",
+        "type": "stat",
+        "gridPos": {"h": 6, "w": 6, "x": 0, "y": 0},
+        "targets": [
+          {
+            "expr": "sum(increase(agent_cost_usd_total[24h]))",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "graphMode": "area",
+          "textMode": "value_and_name",
+          "colorMode": "value"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "currencyUSD",
+            "decimals": 4
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Cost per Request",
+        "type": "stat",
+        "gridPos": {"h": 6, "w": 6, "x": 6, "y": 0},
+        "targets": [
+          {
+            "expr": "rate(agent_cost_usd_total[5m]) / rate(agent_requests_total[5m])",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "currencyUSD",
+            "decimals": 4,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "green"},
+                {"value": 0.01, "color": "yellow"},
+                {"value": 0.02, "color": "red"}
+              ]
+            }
+          }
+        },
+        "options": {
+          "colorMode": "background"
+        }
+      },
+      {
+        "id": 3,
+        "title": "Tokens per Request",
+        "type": "stat",
+        "gridPos": {"h": 6, "w": 6, "x": 12, "y": 0},
+        "targets": [
+          {
+            "expr": "rate(agent_tokens_total[5m]) / rate(agent_requests_total[5m])",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "decimals": 0
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "Cache Savings",
+        "type": "stat",
+        "gridPos": {"h": 6, "w": 6, "x": 18, "y": 0},
+        "targets": [
+          {
+            "expr": "sum(increase(agent_cache_savings_usd[24h]))",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "graphMode": "area",
+          "colorMode": "value"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "currencyUSD",
+            "decimals": 4,
+            "color": {"mode": "fixed", "fixedColor": "green"}
+          }
+        }
+      },
+      {
+        "id": 5,
+        "title": "Cost Over Time",
+        "type": "graph",
+        "gridPos": {"h": 10, "w": 12, "x": 0, "y": 6},
+        "targets": [
+          {
+            "expr": "rate(agent_cost_usd_total[5m])",
+            "legendFormat": "Cost/sec",
+            "refId": "A"
+          },
+          {
+            "expr": "rate(agent_cache_savings_usd[5m])",
+            "legendFormat": "Cache savings/sec",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {"format": "currencyUSD", "label": "USD/sec"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Token Usage by Type",
+        "type": "graph",
+        "gridPos": {"h": 10, "w": 12, "x": 12, "y": 6},
+        "targets": [
+          {
+            "expr": "rate(agent_tokens_total{type=\"input\"}[5m])",
+            "legendFormat": "Input tokens/sec",
+            "refId": "A"
+          },
+          {
+            "expr": "rate(agent_tokens_total{type=\"output\"}[5m])",
+            "legendFormat": "Output tokens/sec",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {"format": "short", "label": "Tokens/sec"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Cache Hit Rate by Type",
+        "type": "bargauge",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16},
+        "targets": [
+          {
+            "expr": "sum by(cache_type) (rate(cache_hits_total[5m])) / (sum by(cache_type) (rate(cache_hits_total[5m])) + sum by(cache_type) (rate(cache_misses_total[5m])))",
+            "legendFormat": "{{cache_type}}",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "displayMode": "gradient",
+          "orientation": "horizontal"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percentunit",
+            "min": 0,
+            "max": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 0.4, "color": "yellow"},
+                {"value": 0.6, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 8,
+        "title": "Response Type Cost Breakdown",
+        "type": "piechart",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16},
+        "targets": [
+          {
+            "expr": "sum by(response_type) (agent_cost_by_type_usd)",
+            "legendFormat": "{{response_type}}",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "title": "Template Match Rate (Cost Optimizer)",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24},
+        "targets": [
+          {
+            "expr": "sum(rate(agent_response_type_total{response_type=\"template\"}[5m])) / sum(rate(agent_response_type_total[5m]))",
+            "legendFormat": "Template match rate",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {"format": "percentunit", "label": "Match Rate", "min": 0, "max": 1},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Embedding Cache Hit Rate",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 24},
+        "targets": [
+          {
+            "expr": "rate(cache_hits_total{cache_type=\"embedding\"}[5m]) / (rate(cache_hits_total{cache_type=\"embedding\"}[5m]) + rate(cache_misses_total{cache_type=\"embedding\"}[5m]))",
+            "legendFormat": "Embedding cache hit rate",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {"format": "percentunit", "label": "Hit Rate", "min": 0, "max": 1},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 11,
+        "title": "Cost Efficiency Score",
+        "type": "gauge",
+        "gridPos": {"h": 8, "w": 8, "x": 0, "y": 32},
+        "targets": [
+          {
+            "expr": "(sum(rate(cache_hits_total[5m])) / (sum(rate(cache_hits_total[5m])) + sum(rate(cache_misses_total[5m])))) * 0.5 + (sum(rate(agent_response_type_total{response_type=\"template\"}[5m])) / sum(rate(agent_response_type_total[5m]))) * 0.5",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percentunit",
+            "min": 0,
+            "max": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 0.5, "color": "yellow"},
+                {"value": 0.7, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 12,
+        "title": "Projected Monthly Cost",
+        "type": "stat",
+        "gridPos": {"h": 8, "w": 8, "x": 8, "y": 32},
+        "targets": [
+          {
+            "expr": "sum(rate(agent_cost_usd_total[1h])) * 24 * 30",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "currencyUSD",
+            "decimals": 2
+          }
+        },
+        "options": {
+          "textMode": "value_and_name",
+          "graphMode": "none"
+        }
+      },
+      {
+        "id": 13,
+        "title": "Cost Saved by Optimization",
+        "type": "stat",
+        "gridPos": {"h": 8, "w": 8, "x": 16, "y": 32},
+        "targets": [
+          {
+            "expr": "(sum(increase(agent_cache_savings_usd[24h])) / (sum(increase(agent_cost_usd_total[24h])) + sum(increase(agent_cache_savings_usd[24h])))) * 100",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "color": {"mode": "fixed", "fixedColor": "green"}
+          }
+        },
+        "options": {
+          "textMode": "value_and_name",
+          "graphMode": "area",
+          "colorMode": "background"
+        }
+      }
+    ]
+  }
+}

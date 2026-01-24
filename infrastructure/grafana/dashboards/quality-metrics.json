@@ -1,0 +1,244 @@
+{
+  "dashboard": {
+    "title": "AI Agent Quality Metrics",
+    "tags": ["agent", "quality", "evaluation"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 0,
+    "refresh": "1m",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Overall Quality Score",
+        "type": "gauge",
+        "gridPos": {"h": 8, "w": 8, "x": 0, "y": 0},
+        "targets": [
+          {
+            "expr": "avg(agent_quality_score)",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "min": 1,
+            "max": 5,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 1, "color": "red"},
+                {"value": 3, "color": "yellow"},
+                {"value": 4, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Relevance Score",
+        "type": "gauge",
+        "gridPos": {"h": 8, "w": 8, "x": 8, "y": 0},
+        "targets": [
+          {
+            "expr": "avg(agent_relevance_score)",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "min": 1,
+            "max": 5,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 1, "color": "red"},
+                {"value": 3, "color": "yellow"},
+                {"value": 4, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 3,
+        "title": "Accuracy Score",
+        "type": "gauge",
+        "gridPos": {"h": 8, "w": 8, "x": 16, "y": 0},
+        "targets": [
+          {
+            "expr": "avg(agent_accuracy_score)",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "min": 1,
+            "max": 5,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 1, "color": "red"},
+                {"value": 3, "color": "yellow"},
+                {"value": 4, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "Quality Scores Over Time",
+        "type": "graph",
+        "gridPos": {"h": 10, "w": 24, "x": 0, "y": 8},
+        "targets": [
+          {
+            "expr": "avg_over_time(agent_relevance_score[5m])",
+            "legendFormat": "Relevance",
+            "refId": "A"
+          },
+          {
+            "expr": "avg_over_time(agent_accuracy_score[5m])",
+            "legendFormat": "Accuracy",
+            "refId": "B"
+          },
+          {
+            "expr": "avg_over_time(agent_safety_score[5m])",
+            "legendFormat": "Safety",
+            "refId": "C"
+          },
+          {
+            "expr": "avg_over_time(agent_quality_score[5m])",
+            "legendFormat": "Overall",
+            "refId": "D"
+          }
+        ],
+        "yaxes": [
+          {"format": "short", "label": "Score (1-5)", "min": 1, "max": 5},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Pass Rate by Category",
+        "type": "bargauge",
+        "gridPos": {"h": 10, "w": 12, "x": 0, "y": 18},
+        "targets": [
+          {
+            "expr": "sum by(category) (agent_evaluation_passed) / sum by(category) (agent_evaluation_total)",
+            "legendFormat": "{{category}}",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "displayMode": "gradient",
+          "orientation": "horizontal",
+          "showUnfilled": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percentunit",
+            "min": 0,
+            "max": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 0.7, "color": "yellow"},
+                {"value": 0.85, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 6,
+        "title": "Failed Evaluations (Recent)",
+        "type": "table",
+        "gridPos": {"h": 10, "w": 12, "x": 12, "y": 18},
+        "targets": [
+          {
+            "expr": "topk(10, agent_failed_evaluations)",
+            "format": "table",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Safety Score",
+        "type": "gauge",
+        "gridPos": {"h": 8, "w": 8, "x": 0, "y": 28},
+        "targets": [
+          {
+            "expr": "avg(agent_safety_score)",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "min": 1,
+            "max": 5,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 1, "color": "red"},
+                {"value": 4, "color": "yellow"},
+                {"value": 4.5, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 8,
+        "title": "Evaluation Volume",
+        "type": "stat",
+        "gridPos": {"h": 8, "w": 8, "x": 8, "y": 28},
+        "targets": [
+          {
+            "expr": "sum(agent_evaluation_total)",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "graphMode": "area",
+          "textMode": "value_and_name"
+        }
+      },
+      {
+        "id": 9,
+        "title": "Current Pass Rate",
+        "type": "stat",
+        "gridPos": {"h": 8, "w": 8, "x": 16, "y": 28},
+        "targets": [
+          {
+            "expr": "sum(agent_evaluation_passed) / sum(agent_evaluation_total)",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percentunit",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 0.7, "color": "yellow"},
+                {"value": 0.85, "color": "green"}
+              ]
+            }
+          }
+        },
+        "options": {
+          "graphMode": "area",
+          "textMode": "value_and_name",
+          "colorMode": "background"
+        }
+      }
+    ]
+  }
+}
