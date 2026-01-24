@@ -2,7 +2,7 @@
 Generate synthetic data for the AI Guest Response Agent.
 
 This script generates:
-- 500 response templates (10 categories)
+- 575 response templates (11 categories)
 - 100 properties with varied attributes
 - 200 reservations
 - 50 annotated test cases
@@ -22,7 +22,7 @@ DATA_DIR = BASE_DIR / "data"
 
 
 def generate_templates() -> list[dict]:
-    """Generate 500 response templates."""
+    """Generate 575 response templates."""
     templates = []
 
     # Check-in templates (150)
@@ -40,6 +40,24 @@ def generate_templates() -> list[dict]:
             "id": f"T{str(i+1).zfill(3)}",
             "category": "check-in",
             "text": template.format(time=random.choice(times)),
+            "metadata": {"language": "en", "tone": "professional"},
+        })
+
+    # Check-out templates (75)
+    check_out_templates = [
+        "Check-out time is {time}. Late check-out may be available upon request.",
+        "You must check out by {time}. Please contact us if you need a late check-out.",
+        "Standard check-out time is {time}. Let us know if you need more time.",
+        "Check-out is at {time}. We'll have your bill ready for you!",
+        "Our check-out time is {time}. Please ensure your room is vacated by then.",
+    ]
+
+    checkout_times = ["11:00 AM", "12:00 PM"]
+    for i, template in enumerate(check_out_templates * 15):  # 75 templates
+        templates.append({
+            "id": f"T{str(len(templates)+1).zfill(3)}",
+            "category": "check-out",
+            "text": template.format(time=random.choice(checkout_times)),
             "metadata": {"language": "en", "tone": "professional"},
         })
 
@@ -315,7 +333,7 @@ def main():
         (DATA_DIR / subdir).mkdir(exist_ok=True)
 
     # Generate templates
-    print("Generating 500 templates...")
+    print("Generating 575 templates...")
     templates = generate_templates()
     with open(DATA_DIR / "templates" / "response_templates.jsonl", "w") as f:
         for template in templates:
