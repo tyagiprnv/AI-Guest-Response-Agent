@@ -51,7 +51,7 @@ class Settings(BaseSettings):
     embedding_dimension: int = Field(default=1536, description="Embedding dimension")
 
     # LLM Configuration
-    llm_model: str = Field(default="deepseek-chat", description="DeepSeek model")
+    llm_model: str = Field(default="deepseek-reasoner", description="DeepSeek model")
     llm_temperature: float = Field(default=0.7, description="LLM temperature")
     llm_max_tokens: int = Field(default=1000, description="LLM max tokens")
 

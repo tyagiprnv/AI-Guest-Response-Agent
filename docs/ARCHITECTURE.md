@@ -129,7 +129,7 @@ class AgentState:
      - If template found with high similarity (>0.75): Use template (fast, cheap)
      - Else if tools returned context: Generate custom response (slower, expensive)
      - Else: Return "cannot help" message
-   - **LLM Generation**: Use DeepSeek R1 for response generation
+   - **LLM Generation**: Use DeepSeek-V3.2 for response generation
    - **Metadata Collection**: Track tokens, cost, latency
 
 5. **Output**
@@ -231,7 +231,7 @@ def select_response_strategy(tools_output):
 - **Savings**: 5-10x cost reduction with 70-80% template match rate
 
 #### Custom Response Generation
-- **Model**: DeepSeek R1 (cost-effective)
+- **Model**: DeepSeek-V3.2 (cost-effective)
 - **Prompt**: Versioned templates with structured output
 - **Context**: Property details, reservation info, retrieved templates
 - **Max Tokens**: 500 for response
@@ -354,7 +354,7 @@ cache_misses = Counter("cache_misses_total", ["cache_type"])
 - **Web Framework**: FastAPI 0.100+
 - **Vector Database**: Qdrant 1.7+
 - **Embeddings**: OpenAI text-embedding-3-small
-- **LLM**: DeepSeek R1
+- **LLM**: DeepSeek-V3.2
 - **Guardrails**: Microsoft Presidio, LangChain
 
 ### Monitoring & Ops
@@ -379,7 +379,7 @@ cache_misses = Counter("cache_misses_total", ["cache_type"])
 - **Modularity**: Easy to add/remove nodes
 - **Type Safety**: TypedDict for state management
 
-### Why DeepSeek R1?
+### Why DeepSeek-V3.2?
 - **Cost**: ~90% cheaper than GPT-4
 - **Quality**: Sufficient for guest response generation
 - **Speed**: Fast enough for real-time responses

@@ -93,7 +93,7 @@ graph TD
 | Component | Technology |
 |-----------|------------|
 | Agent Framework | LangGraph |
-| LLM | DeepSeek R1 |
+| LLM | DeepSeek-V3.2 |
 | Embeddings | OpenAI text-embedding-3-small |
 | Vector DB | Qdrant |
 | API | FastAPI |

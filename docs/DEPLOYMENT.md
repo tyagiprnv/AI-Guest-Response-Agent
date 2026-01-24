@@ -569,7 +569,7 @@ TEMPLATE_SIMILARITY_THRESHOLD = 0.70  # Down from 0.75
 tool_cache_ttl = 600  # 10 minutes instead of 5
 
 # Use cheaper models
-AGENT_MODEL = "deepseek-chat"  # Already optimal
+AGENT_MODEL = "deepseek-reasoner"  # Already optimal
 JUDGE_MODEL = "gpt-4o-mini"    # Instead of gpt-4o
 ```
 
