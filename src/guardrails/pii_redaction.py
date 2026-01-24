@@ -74,6 +74,8 @@ def detect_and_redact_pii(text: str) -> Tuple[str, bool]:
         Tuple of (redacted_text, pii_detected_bool)
     """
     # Analyze text for PII with lower threshold for better detection
+    # Note: We exclude PERSON to avoid false positives (e.g., "WiFi" being detected as a name)
+    # Guest mentioning names in queries is normal and doesn't need redaction
     results = analyzer.analyze(
         text=text,
         language='en',
@@ -83,7 +85,6 @@ def detect_and_redact_pii(text: str) -> Tuple[str, bool]:
             "CREDIT_CARD",
             "US_SSN",
             "IBAN_CODE",
-            "PERSON",
         ],
         score_threshold=0.3,  # Lower threshold for better detection
     )

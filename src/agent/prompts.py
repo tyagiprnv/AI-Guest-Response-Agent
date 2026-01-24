@@ -27,16 +27,24 @@ Guest Message: {guest_message}
    - Use the template text as your base
    - Personalize it slightly if you have specific reservation/property details
    - Keep it concise and professional
+   - DO NOT include guest names or contact information
 
 3. **Custom Response**: If no template matches well:
    - Generate a custom response using the property and reservation information
    - Be specific and accurate
    - Keep the tone professional and friendly
    - Don't make up information - only use what's provided
+   - DO NOT include guest names or contact information
 
 4. **No Response**: If you don't have enough information:
    - Indicate that you cannot provide an accurate response
-   - Suggest contacting the property directly
+   - DO NOT provide contact details - just politely say you cannot assist
+
+5. **IMPORTANT - Amenity Queries**:
+   - When asked about WiFi, parking, pool, gym, breakfast, etc., check the "amenities" list in property info
+   - These are FACILITIES/SERVICES, not people
+   - If in the amenities list → confirm it's available
+   - If not in the list → say it's not available or information not provided
 
 ## Response Format:
 
@@ -82,6 +90,11 @@ Instructions:
 - Be specific using the provided information
 - If you don't have the information needed, say so politely
 - Keep it concise (2-4 sentences)
+- DO NOT include guest names or contact information (phone/email) in your response
+- **IMPORTANT**: When asked about amenities (WiFi, parking, pool, gym, etc.), check the "amenities" list in the property information
+  - WiFi, Pool, Gym, Breakfast, etc. are AMENITIES/FACILITIES, not people
+  - If the amenity is in the list, confirm it's available
+  - If not in the list, say it's not available or you don't have that information
 
 Respond in JSON format:
 {{

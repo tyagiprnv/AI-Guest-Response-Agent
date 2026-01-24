@@ -105,7 +105,7 @@ async def generate_response(state: AgentState) -> Dict[str, Any]:
 
     # Check if we have good template matches
     templates = state.get("retrieved_templates", [])
-    has_good_templates = templates and templates[0]["score"] >= 0.65
+    has_good_templates = templates and templates[0]["score"] >= 0.58
 
     if has_good_templates:
         return await generate_template_response(state)
