@@ -71,9 +71,9 @@ async def search_similar(
     """Search for similar vectors."""
     client = get_async_qdrant_client()
 
-    results = await client.search(
+    response = await client.query_points(
         collection_name=collection_name,
-        query_vector=query_vector,
+        query=query_vector,
         limit=limit,
         score_threshold=score_threshold,
     )
@@ -84,5 +84,5 @@ async def search_similar(
             "score": result.score,
             "payload": result.payload,
         }
-        for result in results
+        for result in response.points
     ]
