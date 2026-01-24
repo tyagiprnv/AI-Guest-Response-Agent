@@ -58,7 +58,7 @@ class Settings(BaseSettings):
     # Retrieval Configuration
     retrieval_top_k: int = Field(default=3, description="Number of templates to retrieve")
     retrieval_similarity_threshold: float = Field(
-        default=0.75, description="Similarity threshold for template matching"
+        default=0.65, description="Similarity threshold for template matching"
     )
 
     # Cache Configuration
