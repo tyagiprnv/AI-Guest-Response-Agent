@@ -70,6 +70,12 @@ guardrail_triggered = Counter(
     ['guardrail_type']
 )
 
+topic_filter_path = Counter(
+    'agent_topic_filter_path_total',
+    'Topic filter path taken',
+    ['path']  # 'fast_path' or 'llm'
+)
+
 pii_detected = Counter(
     'agent_pii_detected_total',
     'PII detection count'

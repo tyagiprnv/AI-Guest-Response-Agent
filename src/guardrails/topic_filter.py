@@ -9,7 +9,7 @@ from langchain_deepseek import ChatDeepSeek
 
 from src.config.settings import get_settings
 from src.monitoring.logging import get_logger
-from src.monitoring.metrics import guardrail_triggered
+from src.monitoring.metrics import guardrail_triggered, topic_filter_path
 
 logger = get_logger(__name__)
 
@@ -21,6 +21,97 @@ RESTRICTED_TOPICS = [
     "financial advice",
     "political discussions",
 ]
+
+# Safe query patterns - these skip LLM classification entirely
+# Patterns are case-insensitive
+SAFE_QUERY_PATTERNS = [
+    # Check-in/out related
+    r"\b(check[- ]?in|check[- ]?out)\b",
+    r"\b(arrival|departure)\s*(time|hour)",
+    r"\bwhat time\b.*\b(arrive|leave|check)",
+    r"\bwhen\b.*\b(check|arrive|leave)",
+    r"\bearly\s*(check[- ]?in|arrival)",
+    r"\blate\s*(check[- ]?out|departure)",
+    # Amenities and facilities
+    r"\b(amenities|facilities|features)\b",
+    r"\b(pool|gym|fitness|spa|sauna|hot tub|jacuzzi)\b",
+    r"\b(wifi|wi-fi|internet|password)\b",
+    r"\b(breakfast|lunch|dinner|restaurant|food|dining)\b",
+    r"\b(parking|garage|valet)\b",
+    r"\b(laundry|washer|dryer|iron)\b",
+    r"\b(kitchen|kitchenette|microwave|fridge|refrigerator)\b",
+    r"\b(towel|linen|bedding|pillow)\b",
+    r"\b(tv|television|netflix|streaming)\b",
+    r"\b(air condition|ac|heating|thermostat)\b",
+    # Room and property info
+    r"\b(room|suite|apartment|unit)\s*(type|size|number|floor)",
+    r"\b(bed|beds|bedroom|king|queen|twin)\b",
+    r"\b(bathroom|shower|bath|toilet)\b",
+    r"\b(balcony|terrace|patio|view)\b",
+    r"\b(floor|elevator|lift|stairs)\b",
+    # Policies
+    r"\b(pet|pets|dog|cat|animal)\b.*\b(allow|policy|permit)",
+    r"\b(smok|vape|vaping)\b",
+    r"\b(cancel|cancellation|refund)\b",
+    r"\b(policy|policies|rules|house rules)\b",
+    r"\b(quiet hours|noise)\b",
+    r"\b(guest|visitor|extra person)\b",
+    # Location and directions
+    r"\b(address|location|where|direction|how to get)\b",
+    r"\b(near|nearby|close to|around)\b",
+    r"\b(airport|station|bus|taxi|uber|transport)\b",
+    # Reservation related
+    r"\b(reservation|booking|confirmation)\b",
+    r"\b(my (stay|trip|visit|booking))\b",
+    r"\b(extend|extension|longer|extra night)\b",
+    # Contact and support
+    r"\b(contact|phone|email|call|reach)\b",
+    r"\b(help|assist|support|question)\b",
+    r"\b(emergency|urgent)\b",
+    # General greetings and simple queries
+    r"^(hi|hello|hey|good morning|good afternoon|good evening)",
+    r"\b(thank|thanks)\b",
+]
+
+# Restricted keyword patterns - these trigger LLM classification
+RESTRICTED_KEYWORD_PATTERNS = [
+    # Legal
+    r"\b(sue|lawsuit|lawyer|attorney|legal action|legal rights|liability)\b",
+    r"\b(contract|terms of service|dispute)\b.*\b(legal|court|lawyer)\b",
+    # Medical
+    r"\b(symptom|diagnos|medication|prescription|doctor|medical advice)\b",
+    r"\b(sick|illness|disease|infection|injury)\b.*\b(what should|recommend)\b",
+    # Pricing negotiation
+    r"\b(discount|lower price|cheaper|negotiate|bargain|deal)\b",
+    r"\b(price match|best price|reduce.*rate)\b",
+    # Financial
+    r"\b(invest|stock|crypto|financial advice|money management)\b",
+    r"\b(tax|taxes)\b.*\b(advice|help|should)\b",
+    # Political
+    r"\b(democrat|republican|liberal|conservative|election|vote|politician)\b",
+    r"\b(political|politics)\b.*\b(opinion|think|believe)\b",
+]
+
+
+def is_safe_query(message: str) -> bool:
+    """
+    Check if a message matches known safe query patterns.
+    Returns True if the query is obviously safe and can skip LLM classification.
+    """
+    message_lower = message.lower()
+
+    # First check if any restricted keywords are present
+    for pattern in RESTRICTED_KEYWORD_PATTERNS:
+        if re.search(pattern, message_lower):
+            return False
+
+    # Then check if it matches safe patterns
+    for pattern in SAFE_QUERY_PATTERNS:
+        if re.search(pattern, message_lower):
+            return True
+
+    # If no patterns matched, it's ambiguous - needs LLM classification
+    return False
 
 TOPIC_FILTER_PROMPT = """You are a topic classifier for a guest accommodation service.
 
@@ -57,12 +148,25 @@ async def check_topic_restriction(message: str) -> Dict[str, Any]:
     """
     Check if message contains restricted topics.
 
+    Uses a fast-path for obviously safe queries to avoid LLM calls.
+    Only calls LLM for ambiguous or potentially restricted queries.
+
     Returns:
         Dict with keys: allowed (bool), reason (str), topic (str)
     """
+    # Fast-path: Skip LLM for obviously safe queries
+    if is_safe_query(message):
+        logger.debug(f"Topic filter fast-path: query is safe - {message[:50]}...")
+        topic_filter_path.labels(path="fast_path").inc()
+        return {
+            "allowed": True,
+            "reason": "Query matches safe patterns",
+            "topic": "general",
+        }
+
     settings = get_settings()
 
-    # Initialize LLM
+    # Initialize LLM for ambiguous/potentially restricted queries
     llm = ChatDeepSeek(
         model=settings.llm_model,
         temperature=0,
@@ -71,9 +175,10 @@ async def check_topic_restriction(message: str) -> Dict[str, Any]:
 
     # Classify topic
     prompt = TOPIC_FILTER_PROMPT.format(message=message)
-    logger.debug(f"Topic filter prompt for message: {message[:50]}...")
+    logger.debug(f"Topic filter LLM classification for message: {message[:50]}...")
 
     response = await llm.ainvoke(prompt)
+    topic_filter_path.labels(path="llm").inc()
     logger.debug(f"Topic filter raw response: {response.content[:200]}")
 
     # Parse response
