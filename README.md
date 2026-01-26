@@ -8,7 +8,7 @@ A production-quality AI agent that generates responses to guest accommodation in
 - **Multi-Tool System**: Template retrieval (RAG), property details, and reservation lookups
 - **Safety Guardrails**: PII redaction and topic filtering
 - **Production Monitoring**: LangSmith tracing, Prometheus metrics, Grafana dashboards
-- **Cost Optimization**: Template-first strategy, multi-layer caching (40-60% cost reduction)
+- **Cost Optimization**: Template-first strategy, direct template substitution (skips LLM), multi-layer caching
 - **Comprehensive Testing**: Unit, integration, and E2E tests
 - **Docker Deployment**: Full stack deployment with Docker Compose
 
@@ -33,12 +33,16 @@ graph LR
     T2 --> Merge
     T3 --> Merge
 
-    Merge --> ResponseDecision{Template<br/>Score ≥ 0.75?}
+    Merge --> ResponseDecision{Template<br/>Score ≥ 0.65?}
 
-    ResponseDecision -->|Yes| TemplateResponse[Template Response<br/>Deepseek-V3.2]
+    ResponseDecision -->|Yes| DirectCheck{All Placeholders<br/>Fillable?}
     ResponseDecision -->|No| CustomResponse[Custom Response<br/>Deepseek-V3.2]
 
+    DirectCheck -->|Yes| DirectTemplate[Direct Template<br/>No LLM Call]
+    DirectCheck -->|No| TemplateResponse[Template Response<br/>Deepseek-V3.2]
+
     NoResponse --> End([Return Response])
+    DirectTemplate --> End
     TemplateResponse --> End
     CustomResponse --> End
 
@@ -53,6 +57,7 @@ graph LR
     %% Decisions
     style Decision fill:#DBEAFE,stroke:#1D4ED8,stroke-width:1.5px,color:#111827
     style ResponseDecision fill:#DBEAFE,stroke:#1D4ED8,stroke-width:1.5px,color:#111827
+    style DirectCheck fill:#DBEAFE,stroke:#1D4ED8,stroke-width:1.5px,color:#111827
 
     %% Tool execution
     style Tools fill:#EDE9FE,stroke:#6D28D9,stroke-width:1.5px,color:#111827
@@ -62,6 +67,7 @@ graph LR
     style Merge fill:#DDD6FE,stroke:#6D28D9,stroke-width:1.5px,color:#111827
 
     %% Successful responses
+    style DirectTemplate fill:#A7F3D0,stroke:#047857,stroke-width:1.5px,color:#111827
     style TemplateResponse fill:#D1FAE5,stroke:#047857,stroke-width:1.5px,color:#111827
     style CustomResponse fill:#D1FAE5,stroke:#047857,stroke-width:1.5px,color:#111827
 
@@ -188,7 +194,7 @@ agentic-project/
 │   │   ├── state.py        # State schema
 │   │   ├── nodes.py        # Graph nodes
 │   │   └── prompts.py      # Versioned prompts
-│   ├── tools/              # Agent tools
+│   ├── tools/              # Agent tools (incl. template_substitution)
 │   ├── guardrails/         # Safety mechanisms
 │   ├── api/                # FastAPI application
 │   ├── retrieval/          # Vector DB operations
@@ -200,6 +206,31 @@ agentic-project/
 ├── tests/                  # Tests
 ├── infrastructure/         # Prometheus/Grafana config
 └── scripts/                # Setup scripts
+```
+
+## Response Generation Strategy
+
+The agent uses a three-tier response strategy to optimize for both quality and cost:
+
+| Response Type | Condition | LLM Call | Description |
+|---------------|-----------|----------|-------------|
+| **Direct Template** | Score ≥ 0.65 + all placeholders fillable | No | High-confidence matches skip LLM entirely. Placeholders are substituted with live property/reservation data. |
+| **Template Response** | Score ≥ 0.65 + missing placeholders | Yes | Good matches use templates as context for LLM generation. |
+| **Custom Response** | Score < 0.65 | Yes | Low matches generate fully custom responses. |
+
+### Direct Template Substitution
+
+For high-confidence template matches, the system performs runtime placeholder substitution:
+
+- Templates contain placeholders like `{check_in_time}`, `{guest_name}`, `{property_name}`
+- The system builds context from property and reservation data
+- If all placeholders can be filled, the response is returned directly without an LLM call
+- This significantly reduces latency and API costs for common queries
+
+Configure via environment variables:
+```bash
+DIRECT_SUBSTITUTION_THRESHOLD=0.55  # Score threshold for direct substitution
+RETRIEVAL_SIMILARITY_THRESHOLD=0.65  # Score threshold for template matching
 ```
 
 ## Testing
@@ -222,8 +253,8 @@ pytest tests/e2e/
 The agent tracks:
 - **Quality**: Relevance, accuracy, safety scores
 - **Performance**: P50/P95/P99 latency, tokens/request
-- **Cost**: Cost per response, template match rate
-- **Operational**: Error rate, cache hit rate, guardrail triggers
+- **Cost**: Cost per response, template match rate, direct substitution rate
+- **Operational**: Error rate, cache hit rate, guardrail triggers, direct substitution success/fallback
 
 ## Development
 
