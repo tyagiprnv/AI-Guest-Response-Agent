@@ -29,15 +29,27 @@ def get_async_qdrant_client() -> AsyncQdrantClient:
     )
 
 
-def create_collection(collection_name: str, vector_size: int) -> None:
-    """Create a Qdrant collection."""
+def create_collection(collection_name: str, vector_size: int, recreate: bool = True) -> None:
+    """Create a Qdrant collection.
+
+    Args:
+        collection_name: Name of the collection
+        vector_size: Dimension of vectors
+        recreate: If True, delete existing collection and recreate it
+    """
     client = get_qdrant_client()
 
     # Check if collection exists
     collections = client.get_collections().collections
-    if any(c.name == collection_name for c in collections):
-        print(f"Collection '{collection_name}' already exists")
-        return
+    exists = any(c.name == collection_name for c in collections)
+
+    if exists:
+        if recreate:
+            print(f"Deleting existing collection '{collection_name}'...")
+            client.delete_collection(collection_name=collection_name)
+        else:
+            print(f"Collection '{collection_name}' already exists")
+            return
 
     # Create collection
     client.create_collection(

@@ -58,7 +58,7 @@ class Settings(BaseSettings):
     # Retrieval Configuration
     retrieval_top_k: int = Field(default=3, description="Number of templates to retrieve")
     retrieval_similarity_threshold: float = Field(
-        default=0.65, description="Similarity threshold for template matching"
+        default=0.70, description="Similarity threshold for template matching (with trigger-query embeddings)"
     )
 
     # Direct Template Substitution
@@ -66,7 +66,7 @@ class Settings(BaseSettings):
         default=True, description="Enable direct template substitution for high-confidence matches"
     )
     direct_substitution_threshold: float = Field(
-        default=0.55, description="Similarity threshold for direct template substitution (skips LLM)"
+        default=0.85, description="Similarity threshold for direct template substitution (skips LLM, requires trigger-query embeddings)"
     )
 
     # Cache Configuration
