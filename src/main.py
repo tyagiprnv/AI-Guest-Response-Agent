@@ -32,6 +32,15 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.warning(f"LangSmith setup failed: {e}")
 
+    # Warm embedding cache for common queries
+    try:
+        from src.data.cache import warm_embedding_cache
+        warmed_count = await warm_embedding_cache()
+        if warmed_count > 0:
+            logger.info(f"Embedding cache warmed with {warmed_count} common queries")
+    except Exception as e:
+        logger.warning(f"Embedding cache warming failed: {e}")
+
     logger.info(f"Environment: {settings.environment}")
     logger.info(f"Qdrant URL: {settings.qdrant_url}")
     logger.info("Application started successfully")
