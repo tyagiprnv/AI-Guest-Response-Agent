@@ -6,9 +6,10 @@ A production-quality AI agent that generates responses to guest accommodation in
 
 - **Agentic Workflow**: LangGraph-based agent with conditional routing and parallel tool execution
 - **Multi-Tool System**: Template retrieval (RAG), property details, and reservation lookups
-- **Safety Guardrails**: PII redaction and topic filtering
+- **Safety Guardrails**: PII redaction and topic filtering with fast-path optimization
 - **Production Monitoring**: LangSmith tracing, Prometheus metrics, Grafana dashboards
 - **Cost Optimization**: Template-first strategy, direct template substitution (skips LLM), multi-layer caching
+- **Latency Optimization**: Topic filter fast-path (~90ms vs ~3.5s), embedding cache warming at startup
 - **Comprehensive Testing**: Unit, integration, and E2E tests
 - **Docker Deployment**: Full stack deployment with Docker Compose
 
@@ -18,14 +19,14 @@ A production-quality AI agent that generates responses to guest accommodation in
 
 ```mermaid
 graph LR
-    Start([Guest Message]) --> Guardrails[Apply Guardrails<br/>Detect & Redact PII<br/>Topic Filter]
+    Start([Guest Message]) --> Guardrails[Apply Guardrails<br/>Detect & Redact PII<br/>Topic Filter ⚡]
 
     Guardrails -->|Topic Allowed?| Decision{Guardrail Check}
 
     Decision -->|Rejected| NoResponse[No Response<br/>Polite Decline]
     Decision -->|Approved| Tools[Execute Tools]
 
-    Tools --> T1[Template Retrieval<br/>Qdrant]
+    Tools --> T1[Template Retrieval<br/>Qdrant ⚡]
     Tools --> T2[Property Details]
     Tools --> T3[Reservation Details]
 
@@ -195,11 +196,11 @@ agentic-project/
 │   │   ├── nodes.py        # Graph nodes
 │   │   └── prompts.py      # Versioned prompts
 │   ├── tools/              # Agent tools (incl. template_substitution)
-│   ├── guardrails/         # Safety mechanisms
+│   ├── guardrails/         # Safety mechanisms (PII, topic filter with fast-path)
 │   ├── api/                # FastAPI application
 │   ├── retrieval/          # Vector DB operations
 │   ├── monitoring/         # Observability
-│   ├── data/               # Data layer
+│   ├── data/               # Data layer (incl. cache warming)
 │   └── config/             # Configuration
 ├── data/                   # Synthetic dataset
 ├── evaluation/             # Eval framework
@@ -248,13 +249,35 @@ pytest tests/integration/
 pytest tests/e2e/
 ```
 
+## Performance Optimizations
+
+The agent includes several optimizations for low-latency responses:
+
+### Topic Filter Fast-Path
+For common safe queries (check-in times, amenities, parking, etc.), the topic filter uses pattern matching instead of an LLM call:
+- **Before**: ~3,500ms (DeepSeek API call)
+- **After**: ~90ms (regex pattern matching)
+
+### Embedding Cache Warming
+At startup, embeddings for 54 common queries are pre-generated:
+- **Cache hit**: ~50ms (no OpenAI API call)
+- **Cache miss**: ~500ms (requires OpenAI API call)
+
+### End-to-End Latency
+
+| Query Type | Latency | Path |
+|------------|---------|------|
+| Common query + template match | **~130ms** | Fast-path + cache hit + direct template |
+| New query + template match | **~700ms** | Fast-path + cache miss + direct template |
+| Query requiring LLM response | **~3,000ms** | Fast-path + custom/template response |
+
 ## Key Metrics
 
 The agent tracks:
 - **Quality**: Relevance, accuracy, safety scores
 - **Performance**: P50/P95/P99 latency, tokens/request
 - **Cost**: Cost per response, template match rate, direct substitution rate
-- **Operational**: Error rate, cache hit rate, guardrail triggers, direct substitution success/fallback
+- **Operational**: Error rate, cache hit rate, guardrail triggers, topic filter path (fast_path/llm), direct substitution success/fallback
 
 ## Development
 
