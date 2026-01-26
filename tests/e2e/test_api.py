@@ -338,7 +338,7 @@ class TestDifferentQueries:
         response = client.post("/api/v1/generate-response", json=payload)
         assert response.status_code == 200
         data = response.json()
-        assert data["response_type"] in ["template", "custom"]
+        assert data["response_type"] in ["template", "custom", "direct_template"]
 
     def test_check_out_query(self, client):
         """Test check-out related query."""
@@ -350,7 +350,7 @@ class TestDifferentQueries:
         response = client.post("/api/v1/generate-response", json=payload)
         assert response.status_code == 200
         data = response.json()
-        assert data["response_type"] in ["template", "custom"]
+        assert data["response_type"] in ["template", "custom", "direct_template"]
 
     def test_parking_query(self, client):
         """Test parking related query."""
@@ -362,7 +362,7 @@ class TestDifferentQueries:
         response = client.post("/api/v1/generate-response", json=payload)
         assert response.status_code == 200
         data = response.json()
-        assert data["response_type"] in ["template", "custom"]
+        assert data["response_type"] in ["template", "custom", "direct_template"]
 
     def test_amenities_query(self, client):
         """Test amenities related query."""
@@ -374,7 +374,7 @@ class TestDifferentQueries:
         response = client.post("/api/v1/generate-response", json=payload)
         assert response.status_code == 200
         data = response.json()
-        assert data["response_type"] in ["template", "custom"]
+        assert data["response_type"] in ["template", "custom", "direct_template"]
 
     def test_policies_query(self, client):
         """Test policies related query."""
@@ -386,4 +386,4 @@ class TestDifferentQueries:
         response = client.post("/api/v1/generate-response", json=payload)
         assert response.status_code == 200
         data = response.json()
-        assert data["response_type"] in ["template", "custom"]
+        assert data["response_type"] in ["template", "custom", "direct_template"]

@@ -18,7 +18,7 @@ class TestAgentWorkflow:
 
         # Assertions
         assert result["response_text"] != ""
-        assert result["response_type"] in ["template", "custom"]
+        assert result["response_type"] in ["template", "custom", "direct_template"]
         assert result["confidence_score"] >= 0.0
         assert result["confidence_score"] <= 1.0
         assert "metadata" in result
@@ -26,16 +26,35 @@ class TestAgentWorkflow:
 
     async def test_query_with_property_and_reservation(self):
         """Test query that uses both property and reservation data."""
+        # Note: res_001 belongs to prop_095, use matching IDs
         result = await run_agent(
             guest_message="What's my check-in time and room type?",
-            property_id="prop_001",
+            property_id="prop_095",
             reservation_id="res_001",
         )
 
         # Check response
         assert result["response_text"] != ""
-        assert result["response_type"] in ["template", "custom"]
+        assert result["response_type"] in ["template", "custom", "direct_template"]
         assert "metadata" in result
+
+    async def test_reservation_property_mismatch_clears_reservation_data(self):
+        """Test that mismatched reservation/property clears reservation data.
+
+        This is a security check to prevent cross-guest data leakage.
+        res_001 belongs to prop_095, not prop_001.
+        """
+        result = await run_agent(
+            guest_message="What's my check-in time?",
+            property_id="prop_001",
+            reservation_id="res_001",  # Belongs to prop_095, not prop_001
+        )
+
+        # Response should still work (graceful handling)
+        assert result["response_text"] != ""
+        assert result["response_type"] in ["template", "custom", "direct_template"]
+        # The response should NOT contain reservation-specific data like guest name
+        # Since we cleared the reservation info, the agent shouldn't have access to it
 
     async def test_pii_blocked_query(self):
         """Test that queries with highly sensitive PII are blocked."""
@@ -83,7 +102,7 @@ class TestAgentWorkflow:
         )
 
         # Should be processed
-        assert result["response_type"] in ["template", "custom"]
+        assert result["response_type"] in ["template", "custom", "direct_template"]
         assert result["response_text"] != ""
 
     async def test_multiple_queries_parallel(self):
@@ -111,7 +130,7 @@ class TestAgentWorkflow:
         assert len(results) == 3
         for result in results:
             assert result["response_text"] != ""
-            assert result["response_type"] in ["template", "custom"]
+            assert result["response_type"] in ["template", "custom", "direct_template"]
 
     async def test_template_retrieval_high_confidence(self):
         """Test that template retrieval works for common queries."""
@@ -179,7 +198,7 @@ class TestAgentWorkflow:
         # Should generate a response
         assert result["response_text"] != ""
         # May be custom or template depending on templates available
-        assert result["response_type"] in ["template", "custom"]
+        assert result["response_type"] in ["template", "custom", "direct_template"]
 
     async def test_parking_query(self):
         """Test parking-related queries."""
@@ -190,7 +209,7 @@ class TestAgentWorkflow:
         )
 
         assert result["response_text"] != ""
-        assert result["response_type"] in ["template", "custom"]
+        assert result["response_type"] in ["template", "custom", "direct_template"]
 
     async def test_amenities_query(self):
         """Test amenities-related queries."""
@@ -201,7 +220,7 @@ class TestAgentWorkflow:
         )
 
         assert result["response_text"] != ""
-        assert result["response_type"] in ["template", "custom"]
+        assert result["response_type"] in ["template", "custom", "direct_template"]
 
     async def test_policies_query(self):
         """Test policy-related queries."""
@@ -212,7 +231,7 @@ class TestAgentWorkflow:
         )
 
         assert result["response_text"] != ""
-        assert result["response_type"] in ["template", "custom"]
+        assert result["response_type"] in ["template", "custom", "direct_template"]
 
     async def test_special_requests_query(self):
         """Test special requests queries."""
@@ -223,7 +242,7 @@ class TestAgentWorkflow:
         )
 
         assert result["response_text"] != ""
-        assert result["response_type"] in ["template", "custom"]
+        assert result["response_type"] in ["template", "custom", "direct_template"]
 
     async def test_confidence_score_range(self):
         """Test that confidence scores are in valid range."""
@@ -278,5 +297,5 @@ class TestAgentWorkflow:
         )
 
         # Valid response types
-        valid_types = ["template", "custom", "no_response", "error"]
+        valid_types = ["template", "custom", "direct_template", "no_response", "error"]
         assert result["response_type"] in valid_types

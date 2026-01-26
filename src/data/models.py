@@ -132,8 +132,11 @@ class TestCase(BaseModel):
     guest_message: str = Field(..., description="Guest message/query")
     property_id: str = Field(..., description="Property ID")
     reservation_id: str | None = Field(None, description="Reservation ID (optional)")
-    expected_response_type: str = Field(
-        ..., description="Expected response type (template/custom/no_response)"
+    expected_response_type: str | None = Field(
+        None, description="Expected response type (deprecated, use expected_response_types)"
+    )
+    expected_response_types: list[str] | None = Field(
+        None, description="Expected response types (template/direct_template/custom/no_response)"
     )
     expected_category: TemplateCategory | None = Field(
         None, description="Expected template category"
@@ -143,6 +146,14 @@ class TestCase(BaseModel):
         default_factory=dict, description="Test case annotations"
     )
 
+    def get_expected_types(self) -> list[str]:
+        """Get list of expected response types (handles both old and new format)."""
+        if self.expected_response_types:
+            return self.expected_response_types
+        elif self.expected_response_type:
+            return [self.expected_response_type]
+        return []
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -150,7 +161,7 @@ class TestCase(BaseModel):
                 "guest_message": "What time is check-in?",
                 "property_id": "prop_001",
                 "reservation_id": None,
-                "expected_response_type": "template",
+                "expected_response_types": ["template", "direct_template"],
                 "expected_category": "check-in",
                 "ground_truth": "Check-in is at 3:00 PM",
                 "annotations": {"difficulty": "easy", "ambiguous": False},

@@ -61,6 +61,14 @@ class Settings(BaseSettings):
         default=0.58, description="Similarity threshold for template matching"
     )
 
+    # Direct Template Substitution
+    direct_substitution_enabled: bool = Field(
+        default=True, description="Enable direct template substitution for high-confidence matches"
+    )
+    direct_substitution_threshold: float = Field(
+        default=0.75, description="Similarity threshold for direct template substitution (skips LLM)"
+    )
+
     # Cache Configuration
     cache_ttl_seconds: int = Field(default=300, description="Cache TTL in seconds")
     embedding_cache_size: int = Field(default=1000, description="Embedding cache size")

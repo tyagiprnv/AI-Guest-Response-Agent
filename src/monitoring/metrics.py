@@ -26,6 +26,12 @@ response_type_count = Counter(
     ['response_type']
 )
 
+direct_substitution_count = Counter(
+    'agent_direct_substitution_total',
+    'Direct substitution attempts',
+    ['status']  # 'success', 'fallback_unfilled', 'fallback_low_score'
+)
+
 template_match_rate = Gauge(
     'agent_template_match_rate',
     'Rate of template matches'

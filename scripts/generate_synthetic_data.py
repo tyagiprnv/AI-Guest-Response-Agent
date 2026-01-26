@@ -22,129 +22,148 @@ DATA_DIR = BASE_DIR / "data"
 
 
 def generate_templates() -> list[dict]:
-    """Generate 575 response templates."""
+    """
+    Generate canonical response templates with placeholders.
+
+    Templates use {placeholder} syntax for dynamic substitution at runtime.
+    This allows direct template responses without LLM calls for high-confidence matches.
+    """
     templates = []
 
-    # Check-in templates (150)
+    # Check-in templates - using {check_in_time} placeholder
     check_in_templates = [
-        "Check-in is available from {time} onwards. Our reception is open 24/7.",
-        "You can check in starting at {time}. Early check-in may be available upon request.",
-        "Standard check-in time is {time}. Please contact us if you need to arrive earlier.",
-        "Check-in begins at {time}. We'll have your room ready for you!",
-        "Our check-in time is {time}. If arriving late, please let us know in advance.",
+        "Check-in is available from {check_in_time} onwards. Our reception is open 24/7.",
+        "You can check in starting at {check_in_time}. Early check-in may be available upon request.",
+        "Standard check-in time is {check_in_time}. Please contact us if you need to arrive earlier.",
+        "Check-in begins at {check_in_time}. We'll have your room ready for you!",
+        "Our check-in time is {check_in_time}. If arriving late, please let us know in advance.",
     ]
 
-    times = ["2:00 PM", "3:00 PM", "4:00 PM"]
-    for i, template in enumerate(check_in_templates * 30):  # 150 templates
+    for i, template in enumerate(check_in_templates):
         templates.append({
-            "id": f"T{str(i+1).zfill(3)}",
+            "id": f"T{str(len(templates)+1).zfill(3)}",
             "category": "check-in",
-            "text": template.format(time=random.choice(times)),
-            "metadata": {"language": "en", "tone": "professional"},
+            "text": template,
+            "metadata": {"language": "en", "tone": "professional", "has_placeholders": True},
         })
 
-    # Check-out templates (75)
+    # Check-out templates - using {check_out_time} placeholder
     check_out_templates = [
-        "Check-out time is {time}. Late check-out may be available upon request.",
-        "You must check out by {time}. Please contact us if you need a late check-out.",
-        "Standard check-out time is {time}. Let us know if you need more time.",
-        "Check-out is at {time}. We'll have your bill ready for you!",
-        "Our check-out time is {time}. Please ensure your room is vacated by then.",
+        "Check-out time is {check_out_time}. Late check-out may be available upon request.",
+        "You must check out by {check_out_time}. Please contact us if you need a late check-out.",
+        "Standard check-out time is {check_out_time}. Let us know if you need more time.",
+        "Check-out is at {check_out_time}. We'll have your bill ready for you!",
+        "Our check-out time is {check_out_time}. Please ensure your room is vacated by then.",
     ]
 
-    checkout_times = ["11:00 AM", "12:00 PM"]
-    for i, template in enumerate(check_out_templates * 15):  # 75 templates
+    for i, template in enumerate(check_out_templates):
         templates.append({
             "id": f"T{str(len(templates)+1).zfill(3)}",
             "category": "check-out",
-            "text": template.format(time=random.choice(checkout_times)),
-            "metadata": {"language": "en", "tone": "professional"},
+            "text": template,
+            "metadata": {"language": "en", "tone": "professional", "has_placeholders": True},
         })
 
-    # Parking templates (75)
+    # Parking templates - using {parking_details} placeholder
     parking_templates = [
-        "Free parking is available on-site for all guests.",
-        "We offer complimentary parking in our secure garage.",
-        "Parking is available for ${price} per day. Spaces are limited.",
-        "Street parking is available nearby. We don't have on-site parking.",
-        "Valet parking is available for ${price} per night.",
+        "{parking_details}",
+        "Regarding parking: {parking_details}",
+        "For parking information: {parking_details}",
+        "Parking at our property: {parking_details}",
+        "About parking - {parking_details}",
     ]
 
-    for i, template in enumerate(parking_templates * 15):  # 75 templates
+    for i, template in enumerate(parking_templates):
         templates.append({
             "id": f"T{str(len(templates)+1).zfill(3)}",
             "category": "parking",
-            "text": template.format(price=random.choice(["15", "20", "25", "30"])),
-            "metadata": {"language": "en", "tone": "professional"},
+            "text": template,
+            "metadata": {"language": "en", "tone": "professional", "has_placeholders": True},
         })
 
-    # Amenities templates (100)
+    # Amenities templates - using {amenities_list} placeholder
     amenity_templates = [
-        "Yes, we offer complimentary {amenity} for all guests.",
-        "{amenity} is available at our property. Please ask the front desk for details.",
-        "We have {amenity} available. It's one of our most popular amenities!",
-        "Unfortunately, we don't offer {amenity} at this location.",
-        "{amenity} is available from {time1} to {time2} daily.",
+        "Our property offers the following amenities: {amenities_list}.",
+        "Available amenities include: {amenities_list}.",
+        "We're happy to offer these amenities: {amenities_list}.",
+        "Guest amenities at our property: {amenities_list}.",
+        "You'll have access to: {amenities_list}.",
     ]
 
-    amenities = ["WiFi", "breakfast", "pool access", "gym facilities", "spa services"]
-    times = [("6:00 AM", "10:00 PM"), ("7:00 AM", "11:00 PM"), ("24/7", "24/7")]
-
-    for i in range(100):
-        time_pair = random.choice(times)
+    for i, template in enumerate(amenity_templates):
         templates.append({
             "id": f"T{str(len(templates)+1).zfill(3)}",
             "category": "amenities",
-            "text": random.choice(amenity_templates).format(
-                amenity=random.choice(amenities),
-                time1=time_pair[0],
-                time2=time_pair[1],
-            ),
-            "metadata": {"language": "en", "tone": "professional"},
+            "text": template,
+            "metadata": {"language": "en", "tone": "professional", "has_placeholders": True},
         })
 
-    # Policies templates (75)
+    # Policies templates - using {cancellation_policy} and {pets_allowed} placeholders
     policy_templates = [
-        "Our cancellation policy allows free cancellation up to {hours} hours before check-in.",
-        "Pets are {allowed} at our property. {details}",
+        "Our cancellation policy: {cancellation_policy}",
+        "Regarding cancellation: {cancellation_policy}",
+        "Pets allowed: {pets_allowed}. Please contact us for more details about our pet policy.",
+        "Our pet policy: Pets allowed - {pets_allowed}.",
         "Smoking is not permitted inside the property. Designated smoking areas are available outside.",
         "We require a valid ID and credit card at check-in for incidentals.",
-        "Children of all ages are welcome. Extra beds can be arranged for ${price} per night.",
+        "Children of all ages are welcome at our property.",
     ]
 
-    for i in range(75):
+    for i, template in enumerate(policy_templates):
+        has_placeholders = "{" in template
         templates.append({
             "id": f"T{str(len(templates)+1).zfill(3)}",
             "category": "policies",
-            "text": random.choice(policy_templates).format(
-                hours=random.choice(["24", "48", "72"]),
-                allowed=random.choice(["welcome", "not allowed"]),
-                details=random.choice(["A pet fee of $50 applies.", "Service animals are always welcome."]),
-                price=random.choice(["25", "30", "35"]),
-            ),
-            "metadata": {"language": "en", "tone": "professional"},
+            "text": template,
+            "metadata": {"language": "en", "tone": "professional", "has_placeholders": has_placeholders},
         })
 
-    # Special requests templates (100)
+    # Special requests templates
     special_request_templates = [
-        "We'll do our best to accommodate your request for {request}. Please note this is subject to availability.",
-        "Thank you for letting us know about {request}. We've noted this on your reservation.",
-        "We'd be happy to arrange {request} for you. This will incur an additional charge of ${price}.",
-        "{request} can be arranged. Please contact us 24 hours before arrival to confirm.",
-        "Unfortunately, we cannot accommodate {request} at this time.",
+        "We'll do our best to accommodate your special requests. Please note this is subject to availability.",
+        "Thank you for letting us know about your request. We've noted this on your reservation.",
+        "Special requests can often be arranged. Please contact us 24 hours before arrival to confirm.",
+        "We'll review your request and do our best to accommodate it.",
+        "Please contact us directly to discuss your special request requirements.",
     ]
 
-    requests = ["a high floor", "early check-in", "late check-out", "a crib", "extra towels", "airport transfer"]
-
-    for i in range(100):
+    for i, template in enumerate(special_request_templates):
         templates.append({
             "id": f"T{str(len(templates)+1).zfill(3)}",
             "category": "special-requests",
-            "text": random.choice(special_request_templates).format(
-                request=random.choice(requests),
-                price=random.choice(["25", "50", "75"]),
-            ),
-            "metadata": {"language": "en", "tone": "professional"},
+            "text": template,
+            "metadata": {"language": "en", "tone": "professional", "has_placeholders": False},
+        })
+
+    # Reservation-specific templates - using reservation placeholders
+    reservation_templates = [
+        "Your reservation check-in date is {reservation_check_in} and check-out is {reservation_check_out}.",
+        "You have a {room_type} room booked from {reservation_check_in} to {reservation_check_out}.",
+        "Your stay is scheduled for {reservation_check_in} through {reservation_check_out}.",
+        "Reservation confirmed: {room_type} room, arriving {reservation_check_in}, departing {reservation_check_out}.",
+    ]
+
+    for i, template in enumerate(reservation_templates):
+        templates.append({
+            "id": f"T{str(len(templates)+1).zfill(3)}",
+            "category": "reservation",
+            "text": template,
+            "metadata": {"language": "en", "tone": "professional", "has_placeholders": True},
+        })
+
+    # WiFi specific templates
+    wifi_templates = [
+        "Yes, complimentary WiFi is available throughout the property.",
+        "Free WiFi is included with your stay. Connection details will be provided at check-in.",
+        "WiFi access is available. Our staff can provide the password at reception.",
+    ]
+
+    for i, template in enumerate(wifi_templates):
+        templates.append({
+            "id": f"T{str(len(templates)+1).zfill(3)}",
+            "category": "amenities",
+            "text": template,
+            "metadata": {"language": "en", "tone": "professional", "has_placeholders": False},
         })
 
     return templates
@@ -239,16 +258,16 @@ def generate_test_cases(properties: list[dict], reservations: list[dict]) -> lis
     property_ids_with_reservations = set(r["property_id"] for r in reservations)
     properties_with_reservations = [p for p in properties if p["id"] in property_ids_with_reservations]
 
-    # Easy cases (20)
+    # Easy cases (20) - these can be answered with template or direct_template
     easy_queries = [
-        ("What time is check-in?", "check-in", "template", False),
-        ("Do you have parking?", "parking", "template", False),
-        ("Is WiFi available?", "amenities", "template", False),
-        ("What is your cancellation policy?", "policies", "template", False),
-        ("What time is check-out?", "check-out", "template", False),
+        ("What time is check-in?", "check-in", ["template", "direct_template"], False),
+        ("Do you have parking?", "parking", ["template", "direct_template"], False),
+        ("Is WiFi available?", "amenities", ["template", "direct_template"], False),
+        ("What is your cancellation policy?", "policies", ["template", "direct_template"], False),
+        ("What time is check-out?", "check-out", ["template", "direct_template"], False),
     ]
 
-    for i, (query, category, response_type, ambiguous) in enumerate(easy_queries * 4):
+    for i, (query, category, response_types, ambiguous) in enumerate(easy_queries * 4):
         prop = random.choice(properties_with_reservations)
         res = random.choice([r for r in reservations if r["property_id"] == prop["id"]])
 
@@ -257,7 +276,7 @@ def generate_test_cases(properties: list[dict], reservations: list[dict]) -> lis
             "guest_message": query,
             "property_id": prop["id"],
             "reservation_id": res["id"] if random.random() > 0.5 else None,
-            "expected_response_type": response_type,
+            "expected_response_types": response_types,  # List of acceptable types
             "expected_category": category,
             "ground_truth": None,  # To be filled by human evaluation
             "annotations": {
@@ -269,13 +288,13 @@ def generate_test_cases(properties: list[dict], reservations: list[dict]) -> lis
 
     # Medium cases (20)
     medium_queries = [
-        ("Can I check in early and do you have parking?", "check-in", "custom", True),
-        ("I'm arriving late tonight, what should I do?", "check-in", "custom", False),
-        ("What amenities do you have for families?", "amenities", "custom", True),
-        ("Can I bring my dog?", "policies", "template", False),
+        ("Can I check in early and do you have parking?", "check-in", ["custom"], True),
+        ("I'm arriving late tonight, what should I do?", "check-in", ["custom"], False),
+        ("What amenities do you have for families?", "amenities", ["custom"], True),
+        ("Can I bring my dog?", "policies", ["template", "direct_template"], False),
     ]
 
-    for query, category, response_type, ambiguous in medium_queries * 5:
+    for query, category, response_types, ambiguous in medium_queries * 5:
         prop = random.choice(properties_with_reservations)
         res = random.choice([r for r in reservations if r["property_id"] == prop["id"]])
 
@@ -284,7 +303,7 @@ def generate_test_cases(properties: list[dict], reservations: list[dict]) -> lis
             "guest_message": query,
             "property_id": prop["id"],
             "reservation_id": res["id"],
-            "expected_response_type": response_type,
+            "expected_response_types": response_types,  # List of acceptable types
             "expected_category": category,
             "ground_truth": None,
             "annotations": {
@@ -297,12 +316,12 @@ def generate_test_cases(properties: list[dict], reservations: list[dict]) -> lis
 
     # Hard cases (10) - edge cases
     hard_queries = [
-        ("Can you give me legal advice about my reservation?", "general", "no_response", False),
-        ("My email is john@example.com and my SSN is 123-45-6789", "general", "no_response", False),
-        ("Can you lower the price for me?", "general", "no_response", False),
+        ("Can you give me legal advice about my reservation?", "general", ["no_response"], False),
+        ("My email is john@example.com and my SSN is 123-45-6789", "general", ["no_response"], False),
+        ("Can you lower the price for me?", "general", ["no_response"], False),
     ]
 
-    for query, category, response_type, ambiguous in hard_queries * 3 + hard_queries[:1]:
+    for query, category, response_types, ambiguous in hard_queries * 3 + hard_queries[:1]:
         prop = random.choice(properties)
 
         test_cases.append({
@@ -310,7 +329,7 @@ def generate_test_cases(properties: list[dict], reservations: list[dict]) -> lis
             "guest_message": query,
             "property_id": prop["id"],
             "reservation_id": None,
-            "expected_response_type": response_type,
+            "expected_response_types": response_types,  # List of acceptable types
             "expected_category": None,
             "ground_truth": None,
             "annotations": {
@@ -333,7 +352,7 @@ def main():
         (DATA_DIR / subdir).mkdir(exist_ok=True)
 
     # Generate templates
-    print("Generating 575 templates...")
+    print("Generating canonical templates with placeholders...")
     templates = generate_templates()
     with open(DATA_DIR / "templates" / "response_templates.jsonl", "w") as f:
         for template in templates:

@@ -19,10 +19,11 @@ from src.config.settings import get_settings
 from src.guardrails.pii_redaction import detect_and_redact_pii, should_block_pii
 from src.guardrails.topic_filter import check_topic_restriction
 from src.monitoring.logging import get_logger
-from src.monitoring.metrics import response_type_count, tokens_used, cost_usd
+from src.monitoring.metrics import response_type_count, tokens_used, cost_usd, direct_substitution_count
 from src.tools.property_details import get_property_info
 from src.tools.reservation_details import get_reservation_info
 from src.tools.template_retrieval import retrieve_templates
+from src.tools.template_substitution import build_context, can_use_direct_substitution
 
 logger = get_logger(__name__)
 
@@ -80,6 +81,14 @@ async def execute_tools(state: AgentState) -> Dict[str, Any]:
         templates_task, property_task, reservation_task
     )
 
+    # Validate reservation belongs to property (security check)
+    if reservation_info and reservation_info.get("property_id") != state["property_id"]:
+        logger.warning(
+            f"Reservation {state.get('reservation_id')} does not belong to property {state['property_id']} "
+            f"(belongs to {reservation_info.get('property_id')}). Clearing reservation data."
+        )
+        reservation_info = None
+
     execution_time = (time() - start_time) * 1000
 
     logger.info(
@@ -105,12 +114,74 @@ async def generate_response(state: AgentState) -> Dict[str, Any]:
 
     # Check if we have good template matches
     templates = state.get("retrieved_templates", [])
-    has_good_templates = templates and templates[0]["score"] >= 0.58
+    has_good_templates = templates and templates[0]["score"] >= settings.retrieval_similarity_threshold
 
     if has_good_templates:
+        # Try direct substitution for very high confidence matches
+        if settings.direct_substitution_enabled:
+            best_template = templates[0]
+            if best_template["score"] >= settings.direct_substitution_threshold:
+                result = await generate_direct_template_response(state)
+                if result is not None:
+                    return result
+                # Fall through to LLM-based template response
+
         return await generate_template_response(state)
     else:
         return await generate_custom_response(state)
+
+
+async def generate_direct_template_response(state: AgentState) -> Dict[str, Any] | None:
+    """
+    Generate response using direct template substitution (no LLM call).
+
+    Returns None if substitution fails, allowing fallback to LLM-based generation.
+    """
+    settings = get_settings()
+    templates = state.get("retrieved_templates", [])
+
+    if not templates:
+        direct_substitution_count.labels(status="fallback_low_score").inc()
+        return None
+
+    best_template = templates[0]
+
+    # Build context from property and reservation data
+    context = build_context(
+        state.get("property_details"),
+        state.get("reservation_details")
+    )
+
+    # Check if we can use direct substitution
+    can_substitute, substituted_text, unfilled = can_use_direct_substitution(
+        best_template,
+        context,
+        score_threshold=settings.direct_substitution_threshold
+    )
+
+    if not can_substitute:
+        if unfilled:
+            logger.info(f"Direct substitution failed - unfilled placeholders: {unfilled}")
+            direct_substitution_count.labels(status="fallback_unfilled").inc()
+        else:
+            logger.info(f"Direct substitution failed - score below threshold")
+            direct_substitution_count.labels(status="fallback_low_score").inc()
+        return None
+
+    logger.info(
+        f"Direct template substitution successful - "
+        f"score: {best_template['score']:.3f}, template: {best_template['payload'].get('id', 'unknown')}"
+    )
+
+    # Update metrics
+    direct_substitution_count.labels(status="success").inc()
+    response_type_count.labels(response_type="direct_template").inc()
+
+    return {
+        "response_type": "direct_template",
+        "final_response": substituted_text,
+        "confidence_score": best_template["score"],
+    }
 
 
 async def generate_template_response(state: AgentState) -> Dict[str, Any]:

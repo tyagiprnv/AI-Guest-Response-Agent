@@ -1,80 +1,80 @@
 [
   {
     "id": "prop_001",
-    "name": "New Karenburgh Lodge",
-    "check_in_time": "3:00 PM",
-    "check_out_time": "12:00 PM",
+    "name": "Dyertown Lodge",
+    "check_in_time": "2:00 PM",
+    "check_out_time": "11:00 AM",
     "parking": "none",
     "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Parking",
+      "Pool",
+      "Gym",
       "Breakfast"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "282-716-3401",
-      "email": "aflores@example.net",
-      "address": "3477 Fitzgerald Extension, Mejiafort, WA 16169"
+      "phone": "906-624-9847",
+      "email": "karenrivera@example.org",
+      "address": "50626 Vickie Harbors, Schwartzton, KY 51785"
     }
   },
   {
     "id": "prop_002",
-    "name": "Jasmineview Resort",
+    "name": "North Kenneth Suites",
     "check_in_time": "4:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "paid",
-    "parking_details": "Parking available for $20 per day",
+    "check_out_time": "11:00 AM",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Business Center",
-      "Meeting Rooms"
+      "Parking",
+      "Breakfast"
     ],
     "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "+1-320-276-2295x4497",
-      "email": "allenderek@example.com",
-      "address": "21327 Bryant Summit, Goodwinburgh, CA 84954"
+      "phone": "869-479-9739x2515",
+      "email": "melissacastillo@example.com",
+      "address": "3582 Diane Fields, Martinezside, MI 49117"
     }
   },
   {
     "id": "prop_003",
-    "name": "Hunterside Lodge",
+    "name": "West Christopherchester Resort",
     "check_in_time": "4:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "paid",
-    "parking_details": "Parking available for $20 per day",
+    "check_out_time": "11:00 AM",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Pet-Friendly",
-      "Breakfast",
-      "Parking"
+      "Business Center",
+      "Meeting Rooms"
     ],
     "policies": {
       "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "(725)718-7416",
-      "email": "teresamontoya@example.org",
-      "address": "3022 Frank Summit, Michaelville, KS 46406"
+      "phone": "(231)891-9798x34235",
+      "email": "johnsmith@example.com",
+      "address": "77105 Jeffrey Walk Apt. 879, Rangelland, NY 55960"
     }
   },
   {
     "id": "prop_004",
-    "name": "Torresfort Hotel",
+    "name": "North Alyssaport Lodge",
     "check_in_time": "4:00 PM",
     "check_out_time": "12:00 PM",
     "parking": "none",
@@ -82,53 +82,54 @@
     "amenities": [
       "WiFi",
       "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
+      "Gym",
+      "Breakfast"
     ],
     "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "690.940.9866x3061",
-      "email": "shawn76@example.org",
-      "address": "0176 Melinda Corner, Roberthaven, MS 33787"
+      "phone": "663.456.0068x524",
+      "email": "marcus44@example.com",
+      "address": "84689 Lonnie Parkways, Patriciamouth, ME 78458"
     }
   },
   {
     "id": "prop_005",
-    "name": "Lake Gary Inn",
+    "name": "North Vanessa Hotel",
     "check_in_time": "4:00 PM",
     "check_out_time": "12:00 PM",
-    "parking": "paid",
-    "parking_details": "Parking available for $25 per day",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Business Center",
-      "Meeting Rooms"
+      "Pool",
+      "Spa",
+      "Restaurant",
+      "Gym"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "(792)697-8909x7081",
-      "email": "rebecca24@example.net",
-      "address": "2834 Katherine Pines, New Debra, NE 72137"
+      "phone": "(891)995-9052x900",
+      "email": "hosborn@example.org",
+      "address": "USCGC Baxter, FPO AP 77926"
     }
   },
   {
     "id": "prop_006",
-    "name": "Danaview Resort",
+    "name": "Amandaberg Resort",
     "check_in_time": "4:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "paid",
-    "parking_details": "Parking available for $20 per day",
+    "check_out_time": "11:00 AM",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
       "Pool",
@@ -136,50 +137,48 @@
       "Breakfast"
     ],
     "policies": {
-      "pets_allowed": true,
+      "pets_allowed": false,
       "smoking_allowed": false,
       "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "3196256778",
-      "email": "kevinmartinez@example.org",
-      "address": "92521 Wells Pine, Lake Patrickborough, WV 94913"
+      "phone": "849-966-3530",
+      "email": "lowemarc@example.net",
+      "address": "184 Cassidy Divide, North Ericberg, ND 13170"
     }
   },
   {
     "id": "prop_007",
-    "name": "Anitabury Lodge",
-    "check_in_time": "4:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "paid",
-    "parking_details": "Parking available for $20 per day",
+    "name": "North Seanfort Lodge",
+    "check_in_time": "2:00 PM",
+    "check_out_time": "11:00 AM",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
+      "Parking",
+      "Breakfast"
     ],
     "policies": {
       "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "4733895216",
-      "email": "emily57@example.com",
-      "address": "4990 Janice Port, Peckside, NM 99707"
+      "phone": "558-892-5772x006",
+      "email": "kelli70@example.org",
+      "address": "95444 Timothy Stream Suite 868, New Davidview, MO 37524"
     }
   },
   {
     "id": "prop_008",
-    "name": "South Andrea Inn",
+    "name": "Port Valerie Suites",
     "check_in_time": "4:00 PM",
     "check_out_time": "12:00 PM",
-    "parking": "paid",
-    "parking_details": "Parking available for $25 per day",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
       "Pool",
@@ -194,94 +193,90 @@
       "min_age": 18
     },
     "contact_info": {
-      "phone": "+1-267-512-9349x65291",
-      "email": "lopeztammy@example.org",
-      "address": "Unit 2255 Box 1564, DPO AA 18451"
+      "phone": "001-237-489-2314x277",
+      "email": "evansallison@example.org",
+      "address": "6602 Allen Common, Luceroport, VA 92202"
     }
   },
   {
     "id": "prop_009",
-    "name": "North Sabrina Inn",
-    "check_in_time": "4:00 PM",
+    "name": "East Kenneth Resort",
+    "check_in_time": "2:00 PM",
     "check_out_time": "12:00 PM",
-    "parking": "paid",
-    "parking_details": "Parking available for $25 per day",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
+      "Business Center",
+      "Meeting Rooms"
     ],
     "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "001-341-585-5445",
-      "email": "codybennett@example.org",
-      "address": "4912 Mcclure Passage Apt. 493, South Mary, RI 60112"
+      "phone": "(271)216-7802x0663",
+      "email": "maylaura@example.org",
+      "address": "0880 Barbara Ranch, South Brenda, PA 96524"
     }
   },
   {
     "id": "prop_010",
-    "name": "New Tracie Suites",
+    "name": "Taylorfurt Lodge",
     "check_in_time": "2:00 PM",
     "check_out_time": "12:00 PM",
     "parking": "paid",
-    "parking_details": "Parking available for $20 per day",
+    "parking_details": "Parking available for $25 per day",
     "amenities": [
       "WiFi",
       "Business Center",
       "Meeting Rooms"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
       "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "449.447.6315",
-      "email": "lisa01@example.net",
-      "address": "016 Michael Vista Suite 382, New Brandon, AS 21073"
+      "phone": "756.939.2415x852",
+      "email": "dbaker@example.net",
+      "address": "6857 Miller Forges, South David, ND 29942"
     }
   },
   {
     "id": "prop_011",
-    "name": "Maxwellfort Lodge",
+    "name": "Port Alan Hotel",
     "check_in_time": "2:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "free",
-    "parking_details": "Free parking available on-site",
+    "check_out_time": "12:00 PM",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
+      "Business Center",
+      "Meeting Rooms"
     ],
     "policies": {
       "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "802.277.7976x636",
-      "email": "fsutton@example.com",
-      "address": "8165 Gardner Pine Suite 386, East Christy, AL 74212"
+      "phone": "(832)611-5041x9412",
+      "email": "tortega@example.org",
+      "address": "509 Jones Isle, Nolanborough, KS 26452"
     }
   },
   {
     "id": "prop_012",
-    "name": "Washingtonmouth Hotel",
+    "name": "New Robert Suites",
     "check_in_time": "4:00 PM",
     "check_out_time": "12:00 PM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "parking": "paid",
+    "parking_details": "Parking available for $15 per day",
     "amenities": [
       "WiFi",
       "Pet-Friendly",
@@ -295,18 +290,18 @@
       "min_age": 18
     },
     "contact_info": {
-      "phone": "001-686-761-0535",
-      "email": "dfrench@example.org",
-      "address": "6726 Jefferson Spur, New Eugene, SC 28799"
+      "phone": "001-894-651-1655x150",
+      "email": "kevans@example.net",
+      "address": "3147 Jason Parks Apt. 473, North Edwardville, IN 68920"
     }
   },
   {
     "id": "prop_013",
-    "name": "Keithmouth Resort",
-    "check_in_time": "3:00 PM",
+    "name": "Petersonburgh Lodge",
+    "check_in_time": "2:00 PM",
     "check_out_time": "12:00 PM",
-    "parking": "free",
-    "parking_details": "Free parking available on-site",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
       "Pool",
@@ -314,28 +309,29 @@
       "Breakfast"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "+1-638-792-7563x779",
-      "email": "bchandler@example.com",
-      "address": "72002 Rebecca Flats Suite 455, Austinshire, PA 02921"
+      "phone": "001-652-922-9307x3938",
+      "email": "ylambert@example.net",
+      "address": "1485 Gill Lock, Tylerfurt, CT 01160"
     }
   },
   {
     "id": "prop_014",
-    "name": "Port Rebeccahaven Resort",
+    "name": "Carterhaven Suites",
     "check_in_time": "2:00 PM",
     "check_out_time": "12:00 PM",
-    "parking": "free",
-    "parking_details": "Free parking available on-site",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Parking",
-      "Breakfast"
+      "Pet-Friendly",
+      "Breakfast",
+      "Parking"
     ],
     "policies": {
       "pets_allowed": false,
@@ -344,118 +340,123 @@
       "min_age": 18
     },
     "contact_info": {
-      "phone": "(821)752-9086x9289",
-      "email": "nicholasmullen@example.com",
-      "address": "0398 Stafford Parkways, Yolandamouth, AZ 34035"
+      "phone": "9005185852",
+      "email": "kwilson@example.org",
+      "address": "6334 Jimenez Mission Apt. 100, East Fernandoville, RI 58885"
     }
   },
   {
     "id": "prop_015",
-    "name": "West Lauraton Lodge",
-    "check_in_time": "4:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "name": "Daymouth Resort",
+    "check_in_time": "2:00 PM",
+    "check_out_time": "11:00 AM",
+    "parking": "paid",
+    "parking_details": "Parking available for $25 per day",
     "amenities": [
       "WiFi",
-      "Business Center",
-      "Meeting Rooms"
+      "Pool",
+      "Gym",
+      "Breakfast"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "(731)820-4331",
-      "email": "markingram@example.net",
-      "address": "972 Wilson Isle Apt. 000, Parkerfort, IN 02744"
+      "phone": "738-651-8658x17089",
+      "email": "fharper@example.com",
+      "address": "0203 Sherri Prairie, Robinsontown, MD 16347"
     }
   },
   {
     "id": "prop_016",
-    "name": "West Coreyville Suites",
-    "check_in_time": "3:00 PM",
+    "name": "North Tiffanyborough Hotel",
+    "check_in_time": "4:00 PM",
     "check_out_time": "11:00 AM",
     "parking": "free",
     "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Parking",
-      "Breakfast"
+      "Pet-Friendly",
+      "Breakfast",
+      "Parking"
     ],
     "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "598.625.9460x2845",
-      "email": "geraldjones@example.com",
-      "address": "1564 Reeves Dam, Lake Morganville, TX 48736"
+      "phone": "001-363-633-8493x828",
+      "email": "michael99@example.com",
+      "address": "721 Calderon Fall, Lake Robertchester, AK 79728"
     }
   },
   {
     "id": "prop_017",
-    "name": "Munozmouth Hotel",
-    "check_in_time": "2:00 PM",
-    "check_out_time": "11:00 AM",
+    "name": "Emilytown Hotel",
+    "check_in_time": "3:00 PM",
+    "check_out_time": "12:00 PM",
     "parking": "free",
     "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Business Center",
-      "Meeting Rooms"
+      "Parking",
+      "Breakfast"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "985.865.1005x3278",
-      "email": "garciacarol@example.net",
-      "address": "Unit 8604 Box 7134, DPO AA 23642"
+      "phone": "610.677.4695",
+      "email": "jonesjacob@example.net",
+      "address": "457 Walter Ridge Apt. 670, Port Erinborough, NJ 33934"
     }
   },
   {
     "id": "prop_018",
-    "name": "Smithtown Resort",
-    "check_in_time": "3:00 PM",
-    "check_out_time": "11:00 AM",
+    "name": "West Jason Inn",
+    "check_in_time": "2:00 PM",
+    "check_out_time": "12:00 PM",
     "parking": "free",
     "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Business Center",
-      "Meeting Rooms"
+      "Pool",
+      "Gym",
+      "Breakfast"
     ],
     "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "+1-679-837-1921x7775",
-      "email": "phyllisbrewer@example.net",
-      "address": "USNV Smith, FPO AP 72363"
+      "phone": "691.202.9325",
+      "email": "bryancooper@example.net",
+      "address": "65428 Lee Springs Suite 707, Marvinburgh, NJ 73450"
     }
   },
   {
     "id": "prop_019",
-    "name": "South Ronald Suites",
-    "check_in_time": "2:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "paid",
-    "parking_details": "Parking available for $20 per day",
+    "name": "Masonchester Inn",
+    "check_in_time": "3:00 PM",
+    "check_out_time": "12:00 PM",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Business Center",
-      "Meeting Rooms"
+      "Pool",
+      "Spa",
+      "Restaurant",
+      "Gym"
     ],
     "policies": {
       "pets_allowed": true,
@@ -464,114 +465,115 @@
       "min_age": 18
     },
     "contact_info": {
-      "phone": "+1-614-488-3781x401",
-      "email": "elizabeth76@example.org",
-      "address": "5530 Chambers Meadows, Lake Maria, CT 85622"
+      "phone": "(515)501-0810",
+      "email": "jessicagarcia@example.com",
+      "address": "USS Miller, FPO AE 23911"
     }
   },
   {
     "id": "prop_020",
-    "name": "Lake Leah Hotel",
-    "check_in_time": "3:00 PM",
+    "name": "Anthonytown Hotel",
+    "check_in_time": "2:00 PM",
     "check_out_time": "11:00 AM",
-    "parking": "paid",
-    "parking_details": "Parking available for $20 per day",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Pet-Friendly",
-      "Breakfast",
-      "Parking"
+      "Business Center",
+      "Meeting Rooms"
     ],
     "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "001-958-530-3893x5417",
-      "email": "lovewilliam@example.net",
-      "address": "45474 Matthew Motorway Suite 670, Lake Carrie, DE 63712"
+      "phone": "261.748.4959",
+      "email": "usalazar@example.net",
+      "address": "Unit 1455 Box 1339, DPO AE 57845"
     }
   },
   {
     "id": "prop_021",
-    "name": "Andreafurt Inn",
-    "check_in_time": "2:00 PM",
-    "check_out_time": "11:00 AM",
+    "name": "Carolineborough Suites",
+    "check_in_time": "4:00 PM",
+    "check_out_time": "12:00 PM",
     "parking": "paid",
-    "parking_details": "Parking available for $20 per day",
+    "parking_details": "Parking available for $25 per day",
     "amenities": [
       "WiFi",
       "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
+      "Gym",
+      "Breakfast"
     ],
     "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "653-319-4028",
-      "email": "leah62@example.org",
-      "address": "Unit 2950 Box 6476, DPO AP 17373"
+      "phone": "(965)957-9761",
+      "email": "brandonjordan@example.com",
+      "address": "6239 Lopez Fields, Sandraville, VT 69819"
     }
   },
   {
     "id": "prop_022",
-    "name": "Michaelside Resort",
-    "check_in_time": "2:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "name": "North Angelafort Inn",
+    "check_in_time": "3:00 PM",
+    "check_out_time": "11:00 AM",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Parking",
-      "Breakfast"
+      "Pool",
+      "Spa",
+      "Restaurant",
+      "Gym"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "842.655.1768",
-      "email": "sarahgarner@example.net",
-      "address": "696 Black Branch, North John, RI 62915"
+      "phone": "901.887.8469x93946",
+      "email": "sarah60@example.com",
+      "address": "75854 Henderson Roads Suite 515, East Pamela, NH 17299"
     }
   },
   {
     "id": "prop_023",
-    "name": "Marshallbury Hotel",
-    "check_in_time": "3:00 PM",
+    "name": "Michaelfort Resort",
+    "check_in_time": "2:00 PM",
     "check_out_time": "11:00 AM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "parking": "paid",
+    "parking_details": "Parking available for $20 per day",
     "amenities": [
       "WiFi",
-      "Business Center",
-      "Meeting Rooms"
+      "Pet-Friendly",
+      "Breakfast",
+      "Parking"
     ],
     "policies": {
       "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "660.223.4244",
-      "email": "herreraraymond@example.org",
-      "address": "0942 Cheryl Highway, Jacobmouth, AZ 60257"
+      "phone": "001-849-894-0208x7943",
+      "email": "johnmata@example.org",
+      "address": "2231 Bobby Court Apt. 449, Courtneyhaven, PW 08690"
     }
   },
   {
     "id": "prop_024",
-    "name": "West Carla Suites",
-    "check_in_time": "2:00 PM",
+    "name": "Dannychester Hotel",
+    "check_in_time": "4:00 PM",
     "check_out_time": "12:00 PM",
     "parking": "free",
     "parking_details": "Free parking available on-site",
@@ -585,377 +587,371 @@
     "policies": {
       "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "634-922-8655",
-      "email": "diana26@example.net",
-      "address": "PSC 9730, Box 6744, APO AE 90977"
+      "phone": "852.326.0342",
+      "email": "bryanbaker@example.com",
+      "address": "1412 Lawrence Glens, Wolfberg, MS 42368"
     }
   },
   {
     "id": "prop_025",
-    "name": "Jameschester Hotel",
-    "check_in_time": "2:00 PM",
+    "name": "Rebeccabury Inn",
+    "check_in_time": "3:00 PM",
     "check_out_time": "12:00 PM",
     "parking": "free",
     "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Pet-Friendly",
-      "Breakfast",
-      "Parking"
+      "Parking",
+      "Breakfast"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
       "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "(828)719-2322x4958",
-      "email": "conniegibson@example.com",
-      "address": "USCGC Perez, FPO AA 52013"
+      "phone": "(642)849-2322x68027",
+      "email": "michael95@example.net",
+      "address": "USS Miller, FPO AE 40447"
     }
   },
   {
     "id": "prop_026",
-    "name": "West Jeffreyshire Resort",
+    "name": "Davischester Hotel",
     "check_in_time": "2:00 PM",
     "check_out_time": "12:00 PM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "parking": "paid",
+    "parking_details": "Parking available for $25 per day",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Gym",
+      "Parking",
       "Breakfast"
     ],
     "policies": {
-      "pets_allowed": true,
+      "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "(322)213-4140",
-      "email": "cassandra45@example.org",
-      "address": "23000 Carolyn Keys, Lake Keith, TN 12509"
+      "phone": "3318328643",
+      "email": "sharris@example.com",
+      "address": "097 Natasha Circles, East Michaelburgh, WI 84772"
     }
   },
   {
     "id": "prop_027",
-    "name": "West Wesleychester Resort",
-    "check_in_time": "4:00 PM",
-    "check_out_time": "12:00 PM",
+    "name": "North George Suites",
+    "check_in_time": "3:00 PM",
+    "check_out_time": "11:00 AM",
     "parking": "free",
     "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Parking",
-      "Breakfast"
+      "Pet-Friendly",
+      "Breakfast",
+      "Parking"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
       "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "001-862-955-0087x96441",
-      "email": "michaelmartinez@example.com",
-      "address": "4936 Kimberly Tunnel, Port Gregorystad, VT 10744"
+      "phone": "941-864-8711",
+      "email": "ashley51@example.com",
+      "address": "66200 Lopez Haven Apt. 133, Lake Danielburgh, WY 44901"
     }
   },
   {
     "id": "prop_028",
-    "name": "Port Christina Suites",
+    "name": "North Jessicaview Hotel",
     "check_in_time": "2:00 PM",
     "check_out_time": "12:00 PM",
-    "parking": "free",
-    "parking_details": "Free parking available on-site",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
+      "Parking",
+      "Breakfast"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "(725)527-7670x399",
-      "email": "edwardfox@example.org",
-      "address": "USNS Howard, FPO AP 97703"
+      "phone": "001-674-676-1915x9592",
+      "email": "jamesberry@example.net",
+      "address": "15115 Kelly Union Apt. 146, Nicholasmouth, NC 09975"
     }
   },
   {
     "id": "prop_029",
-    "name": "Port Robert Inn",
+    "name": "Cisnerostown Resort",
     "check_in_time": "4:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "paid",
-    "parking_details": "Parking available for $15 per day",
+    "check_out_time": "12:00 PM",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Parking",
-      "Breakfast"
+      "Business Center",
+      "Meeting Rooms"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
       "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "+1-990-544-0971",
-      "email": "victoriajones@example.org",
-      "address": "49336 Michael Plains Apt. 998, Gardnermouth, VT 46938"
+      "phone": "645-481-3212x8384",
+      "email": "herreraaaron@example.net",
+      "address": "12333 Shields Crest Apt. 473, Bishopton, IN 27121"
     }
   },
   {
     "id": "prop_030",
-    "name": "North John Suites",
+    "name": "Gordonfurt Resort",
     "check_in_time": "4:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "paid",
-    "parking_details": "Parking available for $25 per day",
+    "check_out_time": "12:00 PM",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Pet-Friendly",
-      "Breakfast",
-      "Parking"
+      "Pool",
+      "Spa",
+      "Restaurant",
+      "Gym"
     ],
     "policies": {
       "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "001-612-866-2367",
-      "email": "asimmons@example.net",
-      "address": "26264 Jackson Corner, Lake Kaylaside, MT 53684"
+      "phone": "488.344.1839x54494",
+      "email": "pmiranda@example.com",
+      "address": "747 Charles Terrace, Brandonchester, DE 31718"
     }
   },
   {
     "id": "prop_031",
-    "name": "Lake Lonnieside Inn",
+    "name": "Paulview Resort",
     "check_in_time": "4:00 PM",
     "check_out_time": "12:00 PM",
-    "parking": "paid",
-    "parking_details": "Parking available for $15 per day",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Parking",
+      "Pool",
+      "Gym",
       "Breakfast"
     ],
     "policies": {
-      "pets_allowed": true,
+      "pets_allowed": false,
       "smoking_allowed": false,
       "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "590.324.4025",
-      "email": "william20@example.org",
-      "address": "4898 Nancy Row Suite 800, Flemingview, FM 59622"
+      "phone": "422.911.0059x4918",
+      "email": "michael06@example.org",
+      "address": "654 Blake Pike Apt. 101, Westport, CO 40491"
     }
   },
   {
     "id": "prop_032",
-    "name": "Port Angela Hotel",
+    "name": "Malonefort Suites",
     "check_in_time": "4:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "check_out_time": "11:00 AM",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
+      "Business Center",
+      "Meeting Rooms"
     ],
     "policies": {
       "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "566-906-1064",
-      "email": "angelaconley@example.org",
-      "address": "6464 Jennifer Drive, Alvarezberg, DE 39109"
+      "phone": "9434951681",
+      "email": "heather39@example.org",
+      "address": "64486 Kristina Alley Apt. 291, West Laurenville, DE 98116"
     }
   },
   {
     "id": "prop_033",
-    "name": "Brandonshire Hotel",
-    "check_in_time": "2:00 PM",
+    "name": "Bakershire Hotel",
+    "check_in_time": "4:00 PM",
     "check_out_time": "11:00 AM",
-    "parking": "free",
-    "parking_details": "Free parking available on-site",
+    "parking": "paid",
+    "parking_details": "Parking available for $15 per day",
     "amenities": [
       "WiFi",
-      "Business Center",
-      "Meeting Rooms"
+      "Pool",
+      "Spa",
+      "Restaurant",
+      "Gym"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
       "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "585.694.2118",
-      "email": "bjenkins@example.org",
-      "address": "550 Gibson Key, East Joanna, ND 43406"
+      "phone": "858-897-0239x33333",
+      "email": "leroyturner@example.com",
+      "address": "Unit 0584 Box 5821, DPO AP 90308"
     }
   },
   {
     "id": "prop_034",
-    "name": "Jenniferville Suites",
-    "check_in_time": "4:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "name": "Lake Meganstad Suites",
+    "check_in_time": "3:00 PM",
+    "check_out_time": "11:00 AM",
+    "parking": "paid",
+    "parking_details": "Parking available for $25 per day",
     "amenities": [
       "WiFi",
-      "Pet-Friendly",
-      "Breakfast",
-      "Parking"
+      "Pool",
+      "Gym",
+      "Breakfast"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
       "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "(543)653-4188x25282",
-      "email": "benjamin83@example.org",
-      "address": "USCGC Romero, FPO AA 84129"
+      "phone": "001-660-256-5781",
+      "email": "hamiltonryan@example.org",
+      "address": "85693 Paul Forges, Joseside, MA 24666"
     }
   },
   {
     "id": "prop_035",
-    "name": "Lake Maryton Suites",
+    "name": "East Robertshire Lodge",
     "check_in_time": "3:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "free",
-    "parking_details": "Free parking available on-site",
+    "check_out_time": "11:00 AM",
+    "parking": "paid",
+    "parking_details": "Parking available for $15 per day",
     "amenities": [
       "WiFi",
       "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
+      "Gym",
+      "Breakfast"
     ],
     "policies": {
-      "pets_allowed": true,
+      "pets_allowed": false,
       "smoking_allowed": false,
       "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "931.351.8711x68244",
-      "email": "jamesevans@example.org",
-      "address": "926 Bailey Plain Apt. 975, West Sallyside, ND 75897"
+      "phone": "524-874-1173x875",
+      "email": "brenda91@example.net",
+      "address": "1522 Bryant Route, East Victoriaport, AL 21403"
     }
   },
   {
     "id": "prop_036",
-    "name": "Lyonsland Hotel",
-    "check_in_time": "2:00 PM",
+    "name": "New Gailtown Resort",
+    "check_in_time": "4:00 PM",
     "check_out_time": "12:00 PM",
     "parking": "free",
     "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Parking",
-      "Breakfast"
+      "Business Center",
+      "Meeting Rooms"
     ],
     "policies": {
-      "pets_allowed": true,
+      "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "+1-475-283-3331x768",
-      "email": "kim48@example.com",
-      "address": "65900 Weaver Bypass Apt. 162, East Matthewtown, ME 17967"
+      "phone": "+1-272-737-2847x72500",
+      "email": "larryfisher@example.net",
+      "address": "39712 Wells Road Apt. 495, Ponceport, WI 24715"
     }
   },
   {
     "id": "prop_037",
-    "name": "Jessicamouth Inn",
-    "check_in_time": "2:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "free",
-    "parking_details": "Free parking available on-site",
+    "name": "Taylorland Resort",
+    "check_in_time": "4:00 PM",
+    "check_out_time": "11:00 AM",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
+      "Business Center",
+      "Meeting Rooms"
     ],
     "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "+1-767-253-6185x404",
-      "email": "jon16@example.com",
-      "address": "4610 Tiffany Points Apt. 877, West Margaretstad, PA 68638"
+      "phone": "+1-843-788-3377x7874",
+      "email": "eileenfigueroa@example.org",
+      "address": "504 Mark Orchard, Hughesbury, OH 44165"
     }
   },
   {
     "id": "prop_038",
-    "name": "East Tiffany Suites",
-    "check_in_time": "4:00 PM",
+    "name": "Lake Nathanstad Inn",
+    "check_in_time": "3:00 PM",
     "check_out_time": "12:00 PM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
+      "Pet-Friendly",
+      "Breakfast",
+      "Parking"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
       "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "575-460-3833x3167",
-      "email": "qreyes@example.com",
-      "address": "0764 Jones Trail, West Sharon, OK 75762"
+      "phone": "+1-786-321-4901",
+      "email": "kennedyapril@example.org",
+      "address": "0644 Stephanie Mills Apt. 211, Moniqueshire, SC 35029"
     }
   },
   {
     "id": "prop_039",
-    "name": "Lake Charlestown Inn",
-    "check_in_time": "4:00 PM",
+    "name": "Robinsontown Inn",
+    "check_in_time": "3:00 PM",
     "check_out_time": "12:00 PM",
     "parking": "none",
     "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Pet-Friendly",
-      "Breakfast",
-      "Parking"
+      "Parking",
+      "Breakfast"
     ],
     "policies": {
       "pets_allowed": true,
@@ -964,49 +960,47 @@
       "min_age": 18
     },
     "contact_info": {
-      "phone": "001-832-341-4124x9862",
-      "email": "ashleyford@example.net",
-      "address": "8419 Kevin Vista, Lake Curtis, PR 12066"
+      "phone": "794-353-6089x22180",
+      "email": "rachel05@example.com",
+      "address": "328 Kristina Stravenue, Cookshire, LA 40560"
     }
   },
   {
     "id": "prop_040",
-    "name": "Shahburgh Resort",
+    "name": "Aprilland Lodge",
     "check_in_time": "4:00 PM",
     "check_out_time": "12:00 PM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
+      "Pet-Friendly",
+      "Breakfast",
+      "Parking"
     ],
     "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "286-947-4566",
-      "email": "diana38@example.org",
-      "address": "0694 Kenneth Estate Apt. 618, Lake Jamesside, UT 30359"
+      "phone": "+1-723-610-3011x161",
+      "email": "christine63@example.net",
+      "address": "5847 Samantha Dam Apt. 226, South Jaimebury, MA 34562"
     }
   },
   {
     "id": "prop_041",
-    "name": "Pittmanstad Lodge",
-    "check_in_time": "2:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "name": "North Laura Hotel",
+    "check_in_time": "3:00 PM",
+    "check_out_time": "12:00 PM",
+    "parking": "paid",
+    "parking_details": "Parking available for $20 per day",
     "amenities": [
       "WiFi",
-      "Pet-Friendly",
-      "Breakfast",
-      "Parking"
+      "Business Center",
+      "Meeting Rooms"
     ],
     "policies": {
       "pets_allowed": true,
@@ -1015,92 +1009,92 @@
       "min_age": 18
     },
     "contact_info": {
-      "phone": "469.506.4915x56539",
-      "email": "joannawest@example.com",
-      "address": "769 Steven Corner, Parkerfort, LA 85048"
+      "phone": "402-290-0821x158",
+      "email": "jameswatson@example.net",
+      "address": "4773 Woods Parks, East Cynthiaport, LA 41605"
     }
   },
   {
     "id": "prop_042",
-    "name": "South Mckenzie Inn",
-    "check_in_time": "3:00 PM",
+    "name": "Brandonborough Inn",
+    "check_in_time": "2:00 PM",
     "check_out_time": "12:00 PM",
-    "parking": "paid",
-    "parking_details": "Parking available for $25 per day",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Gym",
-      "Breakfast"
+      "Business Center",
+      "Meeting Rooms"
     ],
     "policies": {
-      "pets_allowed": true,
+      "pets_allowed": false,
       "smoking_allowed": false,
       "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "001-572-952-5575",
-      "email": "justinbaker@example.org",
-      "address": "4959 Valencia Plaza, Samanthaton, OR 52102"
+      "phone": "001-275-664-0381",
+      "email": "grayangela@example.com",
+      "address": "1848 Michael Port Apt. 978, West Richardfort, PR 54823"
     }
   },
   {
     "id": "prop_043",
-    "name": "Santosbury Suites",
+    "name": "Davisberg Suites",
     "check_in_time": "2:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "free",
-    "parking_details": "Free parking available on-site",
+    "check_out_time": "12:00 PM",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Business Center",
-      "Meeting Rooms"
+      "Pool",
+      "Spa",
+      "Restaurant",
+      "Gym"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
       "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "996-576-4586",
-      "email": "changjohn@example.net",
-      "address": "15798 Beasley Port, Mathisbury, NV 05167"
+      "phone": "841-223-0039",
+      "email": "leslie48@example.org",
+      "address": "3986 Douglas Bypass, West Elizabethborough, DC 22350"
     }
   },
   {
     "id": "prop_044",
-    "name": "South Lynnmouth Suites",
+    "name": "Lake Candice Suites",
     "check_in_time": "3:00 PM",
     "check_out_time": "11:00 AM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Pet-Friendly",
-      "Breakfast",
-      "Parking"
+      "Parking",
+      "Breakfast"
     ],
     "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "(624)866-8206x68628",
-      "email": "jonathan85@example.com",
-      "address": "87725 Taylor Villages, Penningtonmouth, ND 36181"
+      "phone": "210-722-2946x914",
+      "email": "brandilee@example.org",
+      "address": "64505 Wendy Ramp Apt. 360, Port Mary, KS 72635"
     }
   },
   {
     "id": "prop_045",
-    "name": "Newtontown Resort",
-    "check_in_time": "3:00 PM",
+    "name": "Lake Emilyberg Hotel",
+    "check_in_time": "2:00 PM",
     "check_out_time": "11:00 AM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
       "Pool",
@@ -1109,22 +1103,22 @@
       "Gym"
     ],
     "policies": {
-      "pets_allowed": true,
+      "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "001-982-354-7818x56579",
-      "email": "velazquezchristopher@example.com",
-      "address": "Unit 0825 Box 3833, DPO AP 04888"
+      "phone": "202.969.8457",
+      "email": "carriebrown@example.net",
+      "address": "6656 Linda Greens, Clarkbury, WI 73631"
     }
   },
   {
     "id": "prop_046",
-    "name": "Crystalview Hotel",
+    "name": "South Jessica Resort",
     "check_in_time": "3:00 PM",
-    "check_out_time": "11:00 AM",
+    "check_out_time": "12:00 PM",
     "parking": "free",
     "parking_details": "Free parking available on-site",
     "amenities": [
@@ -1139,96 +1133,97 @@
       "min_age": 18
     },
     "contact_info": {
-      "phone": "(943)635-8796",
-      "email": "vhansen@example.org",
-      "address": "49587 Susan Tunnel, North Jasonchester, GU 11669"
+      "phone": "980-494-0769x0432",
+      "email": "njimenez@example.org",
+      "address": "204 James Hill Suite 012, Rodriguezbury, IL 94381"
     }
   },
   {
     "id": "prop_047",
-    "name": "Rhondafurt Inn",
-    "check_in_time": "4:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "name": "North Andrea Inn",
+    "check_in_time": "3:00 PM",
+    "check_out_time": "12:00 PM",
+    "parking": "paid",
+    "parking_details": "Parking available for $25 per day",
     "amenities": [
       "WiFi",
-      "Parking",
+      "Pool",
+      "Gym",
       "Breakfast"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "001-798-772-1749x63858",
-      "email": "aprilrowe@example.net",
-      "address": "315 Melinda Ferry Suite 926, East Bradley, PR 87292"
+      "phone": "+1-787-379-7885x9120",
+      "email": "courtneybarnes@example.net",
+      "address": "Unit 0452 Box 9380, DPO AE 33103"
     }
   },
   {
     "id": "prop_048",
-    "name": "Sanchezview Suites",
+    "name": "Reedfurt Suites",
     "check_in_time": "3:00 PM",
     "check_out_time": "12:00 PM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "parking": "paid",
+    "parking_details": "Parking available for $15 per day",
     "amenities": [
       "WiFi",
-      "Parking",
-      "Breakfast"
+      "Pool",
+      "Spa",
+      "Restaurant",
+      "Gym"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "(597)606-5880x5843",
-      "email": "jeffreysolomon@example.com",
-      "address": "93002 Flores View, New Julieport, FM 06280"
+      "phone": "+1-872-475-8041x2894",
+      "email": "barbarathomas@example.net",
+      "address": "936 Adrian Causeway Suite 579, West Kimberlyhaven, MH 50678"
     }
   },
   {
     "id": "prop_049",
-    "name": "Noblefort Resort",
-    "check_in_time": "3:00 PM",
-    "check_out_time": "11:00 AM",
+    "name": "Hollandberg Suites",
+    "check_in_time": "4:00 PM",
+    "check_out_time": "12:00 PM",
     "parking": "none",
     "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Parking",
-      "Breakfast"
+      "Business Center",
+      "Meeting Rooms"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "786-487-5925x4433",
-      "email": "lkaiser@example.net",
-      "address": "PSC 5275, Box 0465, APO AP 79813"
+      "phone": "+1-581-869-4235x23755",
+      "email": "ucarpenter@example.org",
+      "address": "595 Lori Ways Apt. 308, Stevenfort, NM 06727"
     }
   },
   {
     "id": "prop_050",
-    "name": "Lake Susan Suites",
+    "name": "Jamesview Suites",
     "check_in_time": "3:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "check_out_time": "11:00 AM",
+    "parking": "paid",
+    "parking_details": "Parking available for $20 per day",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
+      "Business Center",
+      "Meeting Rooms"
     ],
     "policies": {
       "pets_allowed": true,
@@ -1237,16 +1232,16 @@
       "min_age": 18
     },
     "contact_info": {
-      "phone": "(598)466-0800x91363",
-      "email": "stephenfrederick@example.org",
-      "address": "2514 Howell Extension Apt. 605, Millerstad, WV 72996"
+      "phone": "(700)514-4487x18769",
+      "email": "toddwilliams@example.org",
+      "address": "PSC 4856, Box 4655, APO AE 31426"
     }
   },
   {
     "id": "prop_051",
-    "name": "New Davidton Lodge",
+    "name": "North Adam Suites",
     "check_in_time": "3:00 PM",
-    "check_out_time": "11:00 AM",
+    "check_out_time": "12:00 PM",
     "parking": "free",
     "parking_details": "Free parking available on-site",
     "amenities": [
@@ -1261,43 +1256,42 @@
       "min_age": 18
     },
     "contact_info": {
-      "phone": "001-373-940-2258",
-      "email": "annewright@example.com",
-      "address": "897 Gerald Fields, East Cindyville, NH 77198"
+      "phone": "603-902-2585",
+      "email": "kruegershannon@example.org",
+      "address": "629 Johnston Spurs Apt. 862, Williamston, AK 16864"
     }
   },
   {
     "id": "prop_052",
-    "name": "Port Rachel Inn",
+    "name": "Smithtown Lodge",
     "check_in_time": "4:00 PM",
-    "check_out_time": "11:00 AM",
+    "check_out_time": "12:00 PM",
     "parking": "paid",
     "parking_details": "Parking available for $15 per day",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Gym",
-      "Breakfast"
+      "Business Center",
+      "Meeting Rooms"
     ],
     "policies": {
       "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "(390)826-6254",
-      "email": "suzanne86@example.net",
-      "address": "3388 Rodriguez Corner Apt. 653, Mitchellton, CA 06126"
+      "phone": "789-849-8308x237",
+      "email": "ysmith@example.org",
+      "address": "PSC 9811, Box 3041, APO AP 99450"
     }
   },
   {
     "id": "prop_053",
-    "name": "Port Michael Lodge",
-    "check_in_time": "2:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "name": "East Juliemouth Lodge",
+    "check_in_time": "3:00 PM",
+    "check_out_time": "11:00 AM",
+    "parking": "paid",
+    "parking_details": "Parking available for $20 per day",
     "amenities": [
       "WiFi",
       "Pool",
@@ -1308,28 +1302,27 @@
     "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "525.905.5999x118",
-      "email": "nmoore@example.org",
-      "address": "812 Smith Turnpike Apt. 400, South Alanmouth, OK 73521"
+      "phone": "7667888756",
+      "email": "mark59@example.org",
+      "address": "768 Scott Cove, Jimmychester, VI 72690"
     }
   },
   {
     "id": "prop_054",
-    "name": "South Jamesshire Lodge",
+    "name": "South Monica Lodge",
     "check_in_time": "4:00 PM",
-    "check_out_time": "12:00 PM",
+    "check_out_time": "11:00 AM",
     "parking": "none",
     "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
+      "Pet-Friendly",
+      "Breakfast",
+      "Parking"
     ],
     "policies": {
       "pets_allowed": false,
@@ -1338,213 +1331,215 @@
       "min_age": 18
     },
     "contact_info": {
-      "phone": "759-310-0142",
-      "email": "jennifer30@example.com",
-      "address": "008 Brooke Forest Suite 167, East Michelleville, AK 63480"
+      "phone": "001-435-275-6327x7656",
+      "email": "stewartrobin@example.com",
+      "address": "395 Johnny Views Suite 906, Port Coreymouth, WI 67777"
     }
   },
   {
     "id": "prop_055",
-    "name": "Lake Timothy Hotel",
-    "check_in_time": "2:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "name": "Aprilview Suites",
+    "check_in_time": "4:00 PM",
+    "check_out_time": "11:00 AM",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Business Center",
-      "Meeting Rooms"
+      "Pool",
+      "Gym",
+      "Breakfast"
     ],
     "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "409.549.1373",
-      "email": "pcoffey@example.com",
-      "address": "158 Owens Valleys Suite 682, Lake Johnland, WV 72667"
+      "phone": "327-209-3373x7873",
+      "email": "rhonda42@example.com",
+      "address": "46996 Justin Center Suite 212, Millerside, VI 58072"
     }
   },
   {
     "id": "prop_056",
-    "name": "Andreaburgh Suites",
-    "check_in_time": "2:00 PM",
-    "check_out_time": "11:00 AM",
+    "name": "Port Nicole Inn",
+    "check_in_time": "4:00 PM",
+    "check_out_time": "12:00 PM",
     "parking": "none",
     "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Business Center",
-      "Meeting Rooms"
+      "Pool",
+      "Spa",
+      "Restaurant",
+      "Gym"
     ],
     "policies": {
-      "pets_allowed": true,
+      "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "+1-695-269-0069x00319",
-      "email": "dylanwilson@example.net",
-      "address": "66669 Margaret Tunnel Suite 902, Lopezside, NY 73339"
+      "phone": "874-814-8847x9730",
+      "email": "annaanderson@example.net",
+      "address": "820 Davis Isle, New Jerome, AR 40431"
     }
   },
   {
     "id": "prop_057",
-    "name": "New Michaelstad Inn",
-    "check_in_time": "4:00 PM",
-    "check_out_time": "11:00 AM",
+    "name": "Nguyenport Resort",
+    "check_in_time": "3:00 PM",
+    "check_out_time": "12:00 PM",
     "parking": "none",
     "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Gym",
-      "Breakfast"
+      "Business Center",
+      "Meeting Rooms"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "+1-809-527-4418x733",
-      "email": "aaronmorris@example.com",
-      "address": "39799 Joshua Via Apt. 542, Lake Jacobton, AZ 96426"
+      "phone": "739.658.3623",
+      "email": "johnsondonald@example.org",
+      "address": "7374 Hannah Island, Kellychester, TX 03830"
     }
   },
   {
     "id": "prop_058",
-    "name": "Austinfort Suites",
-    "check_in_time": "3:00 PM",
+    "name": "Port Robin Lodge",
+    "check_in_time": "2:00 PM",
     "check_out_time": "11:00 AM",
     "parking": "free",
     "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Gym",
-      "Breakfast"
+      "Pet-Friendly",
+      "Breakfast",
+      "Parking"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "001-428-626-6569x4350",
-      "email": "ijoseph@example.com",
-      "address": "Unit 1710 Box 1056, DPO AE 28750"
+      "phone": "001-440-734-7531x47740",
+      "email": "patriciawatson@example.org",
+      "address": "9825 Jennifer Highway, Jamesfort, IN 45267"
     }
   },
   {
     "id": "prop_059",
-    "name": "Juliestad Inn",
-    "check_in_time": "4:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "name": "Port Amy Lodge",
+    "check_in_time": "2:00 PM",
+    "check_out_time": "12:00 PM",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Gym",
+      "Parking",
       "Breakfast"
     ],
     "policies": {
-      "pets_allowed": true,
+      "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "499.740.3982",
-      "email": "mortontyler@example.net",
-      "address": "72787 Meza Ferry Apt. 933, Carpenterstad, MA 97385"
+      "phone": "688-632-4317",
+      "email": "catherine23@example.net",
+      "address": "93300 Alexis Curve, Jennifershire, PW 47474"
     }
   },
   {
     "id": "prop_060",
-    "name": "Lake Monicaberg Resort",
+    "name": "West Steve Inn",
     "check_in_time": "2:00 PM",
     "check_out_time": "12:00 PM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Gym",
+      "Parking",
       "Breakfast"
     ],
     "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "+1-239-200-2382x845",
-      "email": "stephaniemeadows@example.org",
-      "address": "07628 Larson Common, Port Christopher, FL 71661"
+      "phone": "354.913.5782",
+      "email": "robertbutler@example.org",
+      "address": "4649 Robert Inlet Apt. 720, Nicholsonfurt, RI 67659"
     }
   },
   {
     "id": "prop_061",
-    "name": "Anthonyhaven Hotel",
+    "name": "North Ashleymouth Hotel",
     "check_in_time": "4:00 PM",
     "check_out_time": "12:00 PM",
-    "parking": "free",
-    "parking_details": "Free parking available on-site",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Pet-Friendly",
-      "Breakfast",
-      "Parking"
+      "Pool",
+      "Spa",
+      "Restaurant",
+      "Gym"
     ],
     "policies": {
-      "pets_allowed": true,
+      "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "+1-692-287-7395x86775",
-      "email": "kristenmyers@example.net",
-      "address": "2123 Clark Heights, West Debrafurt, TX 50282"
+      "phone": "+1-721-776-5161x70278",
+      "email": "antoniorichardson@example.com",
+      "address": "496 Gomez Harbor Suite 294, Angelaside, MA 84924"
     }
   },
   {
     "id": "prop_062",
-    "name": "North Rachaelland Suites",
+    "name": "Mcdonaldmouth Inn",
     "check_in_time": "4:00 PM",
-    "check_out_time": "12:00 PM",
+    "check_out_time": "11:00 AM",
     "parking": "free",
     "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Business Center",
-      "Meeting Rooms"
+      "Pool",
+      "Gym",
+      "Breakfast"
     ],
     "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "001-964-697-2391x76218",
-      "email": "brittany76@example.net",
-      "address": "421 James Manor Apt. 686, Jamesmouth, TX 67337"
+      "phone": "+1-491-211-7502x04671",
+      "email": "jstewart@example.com",
+      "address": "70874 Cox Squares, East Ebonyland, CT 67782"
     }
   },
   {
     "id": "prop_063",
-    "name": "Port Johnbury Inn",
-    "check_in_time": "2:00 PM",
-    "check_out_time": "11:00 AM",
+    "name": "New Marco Resort",
+    "check_in_time": "4:00 PM",
+    "check_out_time": "12:00 PM",
     "parking": "paid",
     "parking_details": "Parking available for $20 per day",
     "amenities": [
@@ -1559,92 +1554,91 @@
       "min_age": 18
     },
     "contact_info": {
-      "phone": "702.976.5387x230",
-      "email": "cheryl17@example.com",
-      "address": "807 Cameron Coves Suite 646, Laurenbury, VT 16920"
+      "phone": "349.325.4915",
+      "email": "scott74@example.net",
+      "address": "9282 William Falls, New Ashley, AZ 85946"
     }
   },
   {
     "id": "prop_064",
-    "name": "North Devinland Lodge",
-    "check_in_time": "2:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "free",
-    "parking_details": "Free parking available on-site",
-    "amenities": [
-      "WiFi",
-      "Pet-Friendly",
-      "Breakfast",
-      "Parking"
-    ],
-    "policies": {
-      "pets_allowed": false,
-      "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
-      "min_age": 18
-    },
-    "contact_info": {
-      "phone": "(666)713-7644",
-      "email": "sue81@example.org",
-      "address": "Unit 3687 Box 5080, DPO AP 97499"
-    }
-  },
-  {
-    "id": "prop_065",
-    "name": "Brianfort Hotel",
-    "check_in_time": "3:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "paid",
-    "parking_details": "Parking available for $20 per day",
-    "amenities": [
-      "WiFi",
-      "Parking",
-      "Breakfast"
-    ],
-    "policies": {
-      "pets_allowed": false,
-      "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
-      "min_age": 18
-    },
-    "contact_info": {
-      "phone": "965.328.6141",
-      "email": "dana23@example.org",
-      "address": "51548 Morrow Meadow Apt. 603, Patrickshire, UT 86931"
-    }
-  },
-  {
-    "id": "prop_066",
-    "name": "Chelseaside Inn",
+    "name": "Port Lisa Inn",
     "check_in_time": "3:00 PM",
     "check_out_time": "11:00 AM",
     "parking": "paid",
     "parking_details": "Parking available for $25 per day",
     "amenities": [
       "WiFi",
-      "Pet-Friendly",
-      "Breakfast",
-      "Parking"
+      "Pool",
+      "Gym",
+      "Breakfast"
     ],
     "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "474-439-9734x363",
-      "email": "nguyenkevin@example.org",
-      "address": "459 Reyes Lakes Apt. 269, Jameschester, WY 63147"
+      "phone": "001-988-304-9700x2290",
+      "email": "claire01@example.com",
+      "address": "17424 Lisa Circles, Tiffanyland, AZ 65215"
+    }
+  },
+  {
+    "id": "prop_065",
+    "name": "New Barbarastad Suites",
+    "check_in_time": "4:00 PM",
+    "check_out_time": "11:00 AM",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
+    "amenities": [
+      "WiFi",
+      "Parking",
+      "Breakfast"
+    ],
+    "policies": {
+      "pets_allowed": true,
+      "smoking_allowed": false,
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "min_age": 18
+    },
+    "contact_info": {
+      "phone": "602-724-0051",
+      "email": "vmcconnell@example.com",
+      "address": "3347 Michael Plaza, North Kennethport, UT 09268"
+    }
+  },
+  {
+    "id": "prop_066",
+    "name": "Michaelside Hotel",
+    "check_in_time": "3:00 PM",
+    "check_out_time": "12:00 PM",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
+    "amenities": [
+      "WiFi",
+      "Parking",
+      "Breakfast"
+    ],
+    "policies": {
+      "pets_allowed": true,
+      "smoking_allowed": false,
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "min_age": 18
+    },
+    "contact_info": {
+      "phone": "(602)943-5362x581",
+      "email": "annanelson@example.net",
+      "address": "0606 Butler Mews, Horneborough, TX 05845"
     }
   },
   {
     "id": "prop_067",
-    "name": "North William Resort",
-    "check_in_time": "2:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "name": "Zunigaville Hotel",
+    "check_in_time": "4:00 PM",
+    "check_out_time": "12:00 PM",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
       "Pool",
@@ -1655,194 +1649,19 @@
     "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "+1-521-811-4776x28962",
-      "email": "jessicayoung@example.org",
-      "address": "982 Erik Highway, New Michelle, MO 01152"
+      "phone": "976-852-8662",
+      "email": "richardscalvin@example.net",
+      "address": "98175 Wagner Corners Suite 746, Lake Jenniferland, WA 48682"
     }
   },
   {
     "id": "prop_068",
-    "name": "Alexandershire Inn",
+    "name": "West Wyattberg Lodge",
     "check_in_time": "2:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "free",
-    "parking_details": "Free parking available on-site",
-    "amenities": [
-      "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
-    ],
-    "policies": {
-      "pets_allowed": false,
-      "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
-      "min_age": 18
-    },
-    "contact_info": {
-      "phone": "(624)914-5645",
-      "email": "katelyn56@example.net",
-      "address": "023 Molly Ridges Apt. 038, South Danielle, WY 87205"
-    }
-  },
-  {
-    "id": "prop_069",
-    "name": "Carpentermouth Inn",
-    "check_in_time": "3:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "paid",
-    "parking_details": "Parking available for $15 per day",
-    "amenities": [
-      "WiFi",
-      "Parking",
-      "Breakfast"
-    ],
-    "policies": {
-      "pets_allowed": false,
-      "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
-      "min_age": 18
-    },
-    "contact_info": {
-      "phone": "+1-231-379-8650x31673",
-      "email": "ahenson@example.org",
-      "address": "4066 Green Glen Apt. 880, Williamsport, OK 97138"
-    }
-  },
-  {
-    "id": "prop_070",
-    "name": "Port Hannah Suites",
-    "check_in_time": "4:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
-    "amenities": [
-      "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
-    ],
-    "policies": {
-      "pets_allowed": false,
-      "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
-      "min_age": 18
-    },
-    "contact_info": {
-      "phone": "+1-591-663-8112x621",
-      "email": "kennethcollins@example.com",
-      "address": "197 Patterson Glen, West Gary, TN 47084"
-    }
-  },
-  {
-    "id": "prop_071",
-    "name": "Watsonchester Hotel",
-    "check_in_time": "4:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
-    "amenities": [
-      "WiFi",
-      "Parking",
-      "Breakfast"
-    ],
-    "policies": {
-      "pets_allowed": true,
-      "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
-      "min_age": 18
-    },
-    "contact_info": {
-      "phone": "(239)971-1904",
-      "email": "benjamin85@example.com",
-      "address": "8431 Black Views Suite 611, Jakeview, TN 22850"
-    }
-  },
-  {
-    "id": "prop_072",
-    "name": "East Andrewside Hotel",
-    "check_in_time": "2:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
-    "amenities": [
-      "WiFi",
-      "Pet-Friendly",
-      "Breakfast",
-      "Parking"
-    ],
-    "policies": {
-      "pets_allowed": true,
-      "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
-      "min_age": 18
-    },
-    "contact_info": {
-      "phone": "001-250-767-2995x723",
-      "email": "renee78@example.com",
-      "address": "998 Reynolds Plains Apt. 284, Port Rebeccamouth, CA 93259"
-    }
-  },
-  {
-    "id": "prop_073",
-    "name": "Taylorfurt Hotel",
-    "check_in_time": "4:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "free",
-    "parking_details": "Free parking available on-site",
-    "amenities": [
-      "WiFi",
-      "Pet-Friendly",
-      "Breakfast",
-      "Parking"
-    ],
-    "policies": {
-      "pets_allowed": true,
-      "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
-      "min_age": 18
-    },
-    "contact_info": {
-      "phone": "(274)658-6806",
-      "email": "randall87@example.org",
-      "address": "73470 Lewis Dale, Campbellside, RI 72324"
-    }
-  },
-  {
-    "id": "prop_074",
-    "name": "Port Thomaschester Suites",
-    "check_in_time": "2:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "free",
-    "parking_details": "Free parking available on-site",
-    "amenities": [
-      "WiFi",
-      "Pet-Friendly",
-      "Breakfast",
-      "Parking"
-    ],
-    "policies": {
-      "pets_allowed": true,
-      "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
-      "min_age": 18
-    },
-    "contact_info": {
-      "phone": "001-564-410-8311x517",
-      "email": "paulahowe@example.org",
-      "address": "31693 Jacob Stream Apt. 734, West Daniellechester, ID 66197"
-    }
-  },
-  {
-    "id": "prop_075",
-    "name": "East Cindyberg Lodge",
-    "check_in_time": "4:00 PM",
     "check_out_time": "11:00 AM",
     "parking": "none",
     "parking_details": "No on-site parking. Street parking available nearby",
@@ -1852,175 +1671,372 @@
       "Meeting Rooms"
     ],
     "policies": {
+      "pets_allowed": true,
+      "smoking_allowed": false,
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "min_age": 18
+    },
+    "contact_info": {
+      "phone": "+1-744-953-6946x277",
+      "email": "nglover@example.com",
+      "address": "882 Nathan Passage, New Christophershire, IA 12101"
+    }
+  },
+  {
+    "id": "prop_069",
+    "name": "Port Gabrielside Hotel",
+    "check_in_time": "2:00 PM",
+    "check_out_time": "12:00 PM",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
+    "amenities": [
+      "WiFi",
+      "Pool",
+      "Spa",
+      "Restaurant",
+      "Gym"
+    ],
+    "policies": {
+      "pets_allowed": true,
+      "smoking_allowed": false,
+      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "min_age": 18
+    },
+    "contact_info": {
+      "phone": "821.897.2334x439",
+      "email": "keith98@example.net",
+      "address": "8142 Phillips Fords, East Michaelmouth, LA 41371"
+    }
+  },
+  {
+    "id": "prop_070",
+    "name": "Woodardview Inn",
+    "check_in_time": "2:00 PM",
+    "check_out_time": "12:00 PM",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
+    "amenities": [
+      "WiFi",
+      "Pet-Friendly",
+      "Breakfast",
+      "Parking"
+    ],
+    "policies": {
+      "pets_allowed": true,
+      "smoking_allowed": false,
+      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "min_age": 18
+    },
+    "contact_info": {
+      "phone": "8392470462",
+      "email": "andrewphillips@example.com",
+      "address": "72444 Weeks Ways, Petersonstad, VT 43895"
+    }
+  },
+  {
+    "id": "prop_071",
+    "name": "Jamesburgh Suites",
+    "check_in_time": "2:00 PM",
+    "check_out_time": "11:00 AM",
+    "parking": "paid",
+    "parking_details": "Parking available for $15 per day",
+    "amenities": [
+      "WiFi",
+      "Business Center",
+      "Meeting Rooms"
+    ],
+    "policies": {
+      "pets_allowed": true,
+      "smoking_allowed": false,
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "min_age": 18
+    },
+    "contact_info": {
+      "phone": "001-806-302-7545x80395",
+      "email": "kramerbeth@example.net",
+      "address": "4641 Donald Square, Acostashire, NY 36139"
+    }
+  },
+  {
+    "id": "prop_072",
+    "name": "Gilesport Resort",
+    "check_in_time": "3:00 PM",
+    "check_out_time": "11:00 AM",
+    "parking": "paid",
+    "parking_details": "Parking available for $25 per day",
+    "amenities": [
+      "WiFi",
+      "Pool",
+      "Gym",
+      "Breakfast"
+    ],
+    "policies": {
+      "pets_allowed": false,
+      "smoking_allowed": false,
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "min_age": 18
+    },
+    "contact_info": {
+      "phone": "001-565-800-1523x95981",
+      "email": "ibeasley@example.net",
+      "address": "3721 Smith Crossing Suite 929, Kristieville, WI 85998"
+    }
+  },
+  {
+    "id": "prop_073",
+    "name": "Mcconnellside Hotel",
+    "check_in_time": "3:00 PM",
+    "check_out_time": "11:00 AM",
+    "parking": "paid",
+    "parking_details": "Parking available for $25 per day",
+    "amenities": [
+      "WiFi",
+      "Business Center",
+      "Meeting Rooms"
+    ],
+    "policies": {
+      "pets_allowed": true,
+      "smoking_allowed": false,
+      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "min_age": 18
+    },
+    "contact_info": {
+      "phone": "+1-305-419-2152",
+      "email": "hardyamber@example.net",
+      "address": "70619 Young Streets, Sarahhaven, VA 34345"
+    }
+  },
+  {
+    "id": "prop_074",
+    "name": "Lake Sonya Resort",
+    "check_in_time": "4:00 PM",
+    "check_out_time": "11:00 AM",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
+    "amenities": [
+      "WiFi",
+      "Pet-Friendly",
+      "Breakfast",
+      "Parking"
+    ],
+    "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
       "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "001-297-894-6272x97780",
-      "email": "lkline@example.org",
-      "address": "5696 Fields Views Apt. 269, North Hannah, PA 39070"
+      "phone": "(689)527-4114x686",
+      "email": "imccormick@example.org",
+      "address": "6259 Ryan Motorway, East Andrea, MI 76125"
+    }
+  },
+  {
+    "id": "prop_075",
+    "name": "Lake Benjaminland Lodge",
+    "check_in_time": "3:00 PM",
+    "check_out_time": "12:00 PM",
+    "parking": "paid",
+    "parking_details": "Parking available for $25 per day",
+    "amenities": [
+      "WiFi",
+      "Pool",
+      "Spa",
+      "Restaurant",
+      "Gym"
+    ],
+    "policies": {
+      "pets_allowed": true,
+      "smoking_allowed": false,
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "min_age": 18
+    },
+    "contact_info": {
+      "phone": "374-616-1798",
+      "email": "jonathan83@example.com",
+      "address": "20724 Justin Village Suite 484, Steelechester, AL 55589"
     }
   },
   {
     "id": "prop_076",
-    "name": "Dawnstad Hotel",
+    "name": "Port Charles Lodge",
     "check_in_time": "2:00 PM",
     "check_out_time": "11:00 AM",
     "parking": "none",
     "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Gym",
-      "Breakfast"
+      "Pet-Friendly",
+      "Breakfast",
+      "Parking"
     ],
     "policies": {
       "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "329.652.5585",
-      "email": "fernandowarner@example.org",
-      "address": "7689 Dana Pines, Port Jacob, MH 86733"
+      "phone": "729.419.5522x38983",
+      "email": "lindsay26@example.net",
+      "address": "Unit 3926 Box 7137, DPO AE 95984"
     }
   },
   {
     "id": "prop_077",
-    "name": "Hodgeborough Lodge",
+    "name": "Hicksside Suites",
     "check_in_time": "2:00 PM",
     "check_out_time": "11:00 AM",
-    "parking": "free",
-    "parking_details": "Free parking available on-site",
+    "parking": "paid",
+    "parking_details": "Parking available for $25 per day",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
+      "Pet-Friendly",
+      "Breakfast",
+      "Parking"
     ],
     "policies": {
       "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "2882416561",
-      "email": "jessicaking@example.com",
-      "address": "3652 Krista Lane Suite 608, Maldonadomouth, WV 83016"
+      "phone": "637.243.1619x71145",
+      "email": "scottlori@example.com",
+      "address": "8281 Hughes Glen, East Tiffanyton, MS 08174"
     }
   },
   {
     "id": "prop_078",
-    "name": "Vasquezshire Hotel",
+    "name": "Port Nathanmouth Lodge",
     "check_in_time": "3:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
+    "check_out_time": "11:00 AM",
+    "parking": "paid",
+    "parking_details": "Parking available for $20 per day",
     "amenities": [
       "WiFi",
       "Pool",
-      "Gym",
-      "Breakfast"
+      "Spa",
+      "Restaurant",
+      "Gym"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
       "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "001-284-353-6221x040",
-      "email": "dale94@example.net",
-      "address": "972 Simmons Way, Kimmouth, ID 16848"
+      "phone": "295.430.5959x659",
+      "email": "nathanielfernandez@example.com",
+      "address": "71118 Brown Wells Apt. 699, North Larry, AR 19533"
     }
   },
   {
     "id": "prop_079",
-    "name": "Morganstad Suites",
-    "check_in_time": "4:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "free",
-    "parking_details": "Free parking available on-site",
+    "name": "Port Michelle Lodge",
+    "check_in_time": "2:00 PM",
+    "check_out_time": "12:00 PM",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Parking",
-      "Breakfast"
+      "Business Center",
+      "Meeting Rooms"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
       "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "+1-240-724-2369x6310",
-      "email": "ginalutz@example.com",
-      "address": "853 Chad Station, Youngburgh, PR 29690"
+      "phone": "(915)738-9262x451",
+      "email": "carrrichard@example.org",
+      "address": "85518 Brandy Highway, North Joseph, MH 83712"
     }
   },
   {
     "id": "prop_080",
-    "name": "South Jennifer Resort",
+    "name": "South Ryan Hotel",
     "check_in_time": "4:00 PM",
-    "check_out_time": "12:00 PM",
+    "check_out_time": "11:00 AM",
     "parking": "paid",
-    "parking_details": "Parking available for $25 per day",
+    "parking_details": "Parking available for $15 per day",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Gym",
-      "Breakfast"
+      "Pet-Friendly",
+      "Breakfast",
+      "Parking"
     ],
     "policies": {
-      "pets_allowed": true,
+      "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "+1-722-517-6215",
-      "email": "douglas07@example.net",
-      "address": "13099 Freeman Causeway, Antonioland, NY 61622"
+      "phone": "(334)945-5228",
+      "email": "bpetersen@example.org",
+      "address": "35740 Jason Stream Apt. 140, Courtneybury, GU 10844"
     }
   },
   {
     "id": "prop_081",
-    "name": "Port Melissaside Lodge",
+    "name": "Lindsaymouth Suites",
     "check_in_time": "4:00 PM",
     "check_out_time": "11:00 AM",
     "parking": "none",
     "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
+      "Parking",
+      "Breakfast"
     ],
     "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "(966)397-7849",
-      "email": "randypatel@example.org",
-      "address": "81758 Garcia Mews Suite 091, Elizabethburgh, IN 94155"
+      "phone": "(234)472-9647",
+      "email": "jwilliams@example.com",
+      "address": "39016 Carl Mission Apt. 786, Port Nancymouth, ID 66126"
     }
   },
   {
     "id": "prop_082",
-    "name": "South David Hotel",
-    "check_in_time": "4:00 PM",
+    "name": "Lake Brendan Hotel",
+    "check_in_time": "3:00 PM",
+    "check_out_time": "11:00 AM",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
+    "amenities": [
+      "WiFi",
+      "Parking",
+      "Breakfast"
+    ],
+    "policies": {
+      "pets_allowed": false,
+      "smoking_allowed": false,
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "min_age": 18
+    },
+    "contact_info": {
+      "phone": "350.852.3949x402",
+      "email": "sarah02@example.org",
+      "address": "49811 Howard Brooks, Gordonmouth, CT 53323"
+    }
+  },
+  {
+    "id": "prop_083",
+    "name": "Stonemouth Hotel",
+    "check_in_time": "3:00 PM",
     "check_out_time": "12:00 PM",
-    "parking": "paid",
-    "parking_details": "Parking available for $20 per day",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
       "Parking",
@@ -2029,72 +2045,71 @@
     "policies": {
       "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "436.471.2294",
-      "email": "nancy63@example.net",
-      "address": "24450 Dominique Spring Suite 206, Port Paula, PR 58153"
-    }
-  },
-  {
-    "id": "prop_083",
-    "name": "Lake Melanieberg Suites",
-    "check_in_time": "4:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "paid",
-    "parking_details": "Parking available for $20 per day",
-    "amenities": [
-      "WiFi",
-      "Pet-Friendly",
-      "Breakfast",
-      "Parking"
-    ],
-    "policies": {
-      "pets_allowed": false,
-      "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
-      "min_age": 18
-    },
-    "contact_info": {
-      "phone": "819.448.2302x43753",
-      "email": "ryan86@example.com",
-      "address": "78974 Scott Port Apt. 443, East Charleshaven, NJ 10635"
+      "phone": "973-868-9939x7465",
+      "email": "tony90@example.org",
+      "address": "3341 Costa Alley Apt. 814, Charlesburgh, SC 19533"
     }
   },
   {
     "id": "prop_084",
-    "name": "Lake Heidi Suites",
-    "check_in_time": "3:00 PM",
+    "name": "Robinsonton Inn",
+    "check_in_time": "4:00 PM",
     "check_out_time": "12:00 PM",
     "parking": "free",
     "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Pet-Friendly",
-      "Breakfast",
-      "Parking"
+      "Pool",
+      "Gym",
+      "Breakfast"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
+      "smoking_allowed": false,
+      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "min_age": 18
+    },
+    "contact_info": {
+      "phone": "(230)717-8761",
+      "email": "mooremaria@example.net",
+      "address": "PSC 1633, Box 3864, APO AE 63719"
+    }
+  },
+  {
+    "id": "prop_085",
+    "name": "Thomasborough Lodge",
+    "check_in_time": "4:00 PM",
+    "check_out_time": "11:00 AM",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
+    "amenities": [
+      "WiFi",
+      "Business Center",
+      "Meeting Rooms"
+    ],
+    "policies": {
+      "pets_allowed": true,
       "smoking_allowed": false,
       "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "390-722-3410x1871",
-      "email": "johnsonkatherine@example.org",
-      "address": "9956 Brian Brooks Apt. 935, North Andrewfurt, UT 66731"
+      "phone": "(364)436-8268x5407",
+      "email": "alexandraguerrero@example.net",
+      "address": "52661 Miller Turnpike Suite 026, Wheelerland, OH 52040"
     }
   },
   {
-    "id": "prop_085",
-    "name": "Wareborough Resort",
-    "check_in_time": "4:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "free",
-    "parking_details": "Free parking available on-site",
+    "id": "prop_086",
+    "name": "Lake Chrisville Hotel",
+    "check_in_time": "2:00 PM",
+    "check_out_time": "12:00 PM",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
       "WiFi",
       "Pool",
@@ -2108,92 +2123,38 @@
       "min_age": 18
     },
     "contact_info": {
-      "phone": "8095585588",
-      "email": "donaldlam@example.net",
-      "address": "56023 Andrea Lights, New Michelle, CO 45057"
-    }
-  },
-  {
-    "id": "prop_086",
-    "name": "Brandonhaven Resort",
-    "check_in_time": "2:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
-    "amenities": [
-      "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
-    ],
-    "policies": {
-      "pets_allowed": false,
-      "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
-      "min_age": 18
-    },
-    "contact_info": {
-      "phone": "594-708-0119",
-      "email": "michaelmitchell@example.net",
-      "address": "953 Lisa Coves Suite 825, Port Kevinburgh, ID 69542"
+      "phone": "366-299-3385x1550",
+      "email": "rodriguezkatie@example.net",
+      "address": "710 Nunez Square, East Sandra, MS 63361"
     }
   },
   {
     "id": "prop_087",
-    "name": "Port Eric Lodge",
+    "name": "Port Rachelville Suites",
     "check_in_time": "4:00 PM",
     "check_out_time": "12:00 PM",
-    "parking": "free",
-    "parking_details": "Free parking available on-site",
+    "parking": "paid",
+    "parking_details": "Parking available for $20 per day",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
+      "Business Center",
+      "Meeting Rooms"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "389.402.1771",
-      "email": "underwoodmichelle@example.org",
-      "address": "476 Linda Estate Apt. 753, Debraview, ND 78622"
+      "phone": "+1-305-854-1303x37605",
+      "email": "josemanning@example.net",
+      "address": "64987 Davidson Mountains Apt. 531, West Franciscoborough, ND 65009"
     }
   },
   {
     "id": "prop_088",
-    "name": "Port Stephanie Lodge",
-    "check_in_time": "3:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
-    "amenities": [
-      "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
-    ],
-    "policies": {
-      "pets_allowed": false,
-      "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
-      "min_age": 18
-    },
-    "contact_info": {
-      "phone": "9877170374",
-      "email": "renee43@example.com",
-      "address": "70653 Christina Bypass, West Nicole, AZ 73385"
-    }
-  },
-  {
-    "id": "prop_089",
-    "name": "Dustinburgh Suites",
+    "name": "South Davidhaven Lodge",
     "check_in_time": "4:00 PM",
     "check_out_time": "11:00 AM",
     "parking": "none",
@@ -2203,6 +2164,30 @@
       "Pet-Friendly",
       "Breakfast",
       "Parking"
+    ],
+    "policies": {
+      "pets_allowed": true,
+      "smoking_allowed": false,
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "min_age": 18
+    },
+    "contact_info": {
+      "phone": "001-991-980-3432x899",
+      "email": "kentlauren@example.net",
+      "address": "5114 Miguel Tunnel, North Amandashire, IL 22829"
+    }
+  },
+  {
+    "id": "prop_089",
+    "name": "Lake Robertview Hotel",
+    "check_in_time": "2:00 PM",
+    "check_out_time": "11:00 AM",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
+    "amenities": [
+      "WiFi",
+      "Business Center",
+      "Meeting Rooms"
     ],
     "policies": {
       "pets_allowed": false,
@@ -2211,68 +2196,64 @@
       "min_age": 18
     },
     "contact_info": {
-      "phone": "784-433-9425x1030",
-      "email": "samanthawoods@example.com",
-      "address": "753 Veronica Loaf, North Sarahland, IN 84027"
+      "phone": "+1-876-612-4607",
+      "email": "xcooper@example.com",
+      "address": "2809 Ryan Mountain Apt. 180, West Joshuahaven, PR 08032"
     }
   },
   {
     "id": "prop_090",
-    "name": "Reyesside Hotel",
+    "name": "Zacharyview Lodge",
     "check_in_time": "4:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
-    "amenities": [
-      "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
-    ],
-    "policies": {
-      "pets_allowed": true,
-      "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
-      "min_age": 18
-    },
-    "contact_info": {
-      "phone": "001-848-983-2176",
-      "email": "lewisjohn@example.org",
-      "address": "9098 Allen Island Apt. 755, West April, NY 90559"
-    }
-  },
-  {
-    "id": "prop_091",
-    "name": "Marvinshire Inn",
-    "check_in_time": "4:00 PM",
-    "check_out_time": "12:00 PM",
+    "check_out_time": "11:00 AM",
     "parking": "free",
     "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
+      "Parking",
+      "Breakfast"
     ],
     "policies": {
-      "pets_allowed": true,
+      "pets_allowed": false,
       "smoking_allowed": false,
       "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "+1-410-718-7646",
-      "email": "laura93@example.org",
-      "address": "1451 Amanda Branch Apt. 075, Lake Laura, WA 33342"
+      "phone": "377.896.6784x751",
+      "email": "joseph60@example.com",
+      "address": "920 Porter Lakes Suite 902, North Chad, MO 31392"
+    }
+  },
+  {
+    "id": "prop_091",
+    "name": "Brownberg Suites",
+    "check_in_time": "2:00 PM",
+    "check_out_time": "12:00 PM",
+    "parking": "paid",
+    "parking_details": "Parking available for $20 per day",
+    "amenities": [
+      "WiFi",
+      "Parking",
+      "Breakfast"
+    ],
+    "policies": {
+      "pets_allowed": false,
+      "smoking_allowed": false,
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "min_age": 18
+    },
+    "contact_info": {
+      "phone": "882-446-5172",
+      "email": "aaroncooke@example.net",
+      "address": "540 Bradley Mall, Hernandezside, VA 87739"
     }
   },
   {
     "id": "prop_092",
-    "name": "Neilhaven Resort",
-    "check_in_time": "2:00 PM",
-    "check_out_time": "12:00 PM",
+    "name": "New Kristin Inn",
+    "check_in_time": "4:00 PM",
+    "check_out_time": "11:00 AM",
     "parking": "none",
     "parking_details": "No on-site parking. Street parking available nearby",
     "amenities": [
@@ -2282,21 +2263,95 @@
       "Parking"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
       "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "(898)748-8171",
-      "email": "usherman@example.net",
-      "address": "3341 Raymond Walk Suite 897, Anthonyfort, AL 09171"
+      "phone": "+1-365-799-9548x96543",
+      "email": "vjohnson@example.org",
+      "address": "42801 Peterson Port, New Johnland, OH 94764"
     }
   },
   {
     "id": "prop_093",
-    "name": "Bowmanborough Hotel",
+    "name": "Oscarshire Inn",
     "check_in_time": "4:00 PM",
+    "check_out_time": "12:00 PM",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
+    "amenities": [
+      "WiFi",
+      "Pet-Friendly",
+      "Breakfast",
+      "Parking"
+    ],
+    "policies": {
+      "pets_allowed": false,
+      "smoking_allowed": false,
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "min_age": 18
+    },
+    "contact_info": {
+      "phone": "924-316-5269",
+      "email": "tporter@example.net",
+      "address": "236 Sherri Trace Suite 139, Bruceberg, VT 57768"
+    }
+  },
+  {
+    "id": "prop_094",
+    "name": "New Williamberg Lodge",
+    "check_in_time": "3:00 PM",
+    "check_out_time": "12:00 PM",
+    "parking": "paid",
+    "parking_details": "Parking available for $20 per day",
+    "amenities": [
+      "WiFi",
+      "Pool",
+      "Gym",
+      "Breakfast"
+    ],
+    "policies": {
+      "pets_allowed": true,
+      "smoking_allowed": false,
+      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "min_age": 18
+    },
+    "contact_info": {
+      "phone": "(561)295-7514x42877",
+      "email": "russellhenry@example.org",
+      "address": "5878 Rogers Glen Apt. 518, Wilsonborough, MO 78805"
+    }
+  },
+  {
+    "id": "prop_095",
+    "name": "Brownfort Inn",
+    "check_in_time": "4:00 PM",
+    "check_out_time": "12:00 PM",
+    "parking": "none",
+    "parking_details": "No on-site parking. Street parking available nearby",
+    "amenities": [
+      "WiFi",
+      "Business Center",
+      "Meeting Rooms"
+    ],
+    "policies": {
+      "pets_allowed": true,
+      "smoking_allowed": false,
+      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
+      "min_age": 18
+    },
+    "contact_info": {
+      "phone": "+1-408-364-2490x58266",
+      "email": "michaelking@example.com",
+      "address": "2227 Adrian Greens, Destinyville, WY 33854"
+    }
+  },
+  {
+    "id": "prop_096",
+    "name": "South Matthew Resort",
+    "check_in_time": "2:00 PM",
     "check_out_time": "12:00 PM",
     "parking": "paid",
     "parking_details": "Parking available for $25 per day",
@@ -2309,43 +2364,44 @@
     "policies": {
       "pets_allowed": true,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "428.987.3325x240",
-      "email": "vhernandez@example.org",
-      "address": "88016 Chelsea Trail, Crosbyport, NC 52885"
+      "phone": "758-451-0746x9017",
+      "email": "zsmith@example.org",
+      "address": "778 David Prairie Suite 748, Lake Vincent, VA 24893"
     }
   },
   {
-    "id": "prop_094",
-    "name": "North Carol Inn",
-    "check_in_time": "4:00 PM",
+    "id": "prop_097",
+    "name": "Jennifershire Lodge",
+    "check_in_time": "2:00 PM",
     "check_out_time": "11:00 AM",
-    "parking": "paid",
-    "parking_details": "Parking available for $20 per day",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
     "amenities": [
       "WiFi",
-      "Parking",
-      "Breakfast"
+      "Pet-Friendly",
+      "Breakfast",
+      "Parking"
     ],
     "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "(585)239-9718x9959",
-      "email": "chungjohn@example.net",
-      "address": "01675 Mike Station Apt. 285, New Benjaminborough, NJ 96500"
+      "phone": "001-357-938-7595x485",
+      "email": "eedwards@example.org",
+      "address": "Unit 3506 Box 9263, DPO AP 04441"
     }
   },
   {
-    "id": "prop_095",
-    "name": "West Christopher Hotel",
-    "check_in_time": "4:00 PM",
+    "id": "prop_098",
+    "name": "East Priscilla Inn",
+    "check_in_time": "2:00 PM",
     "check_out_time": "11:00 AM",
     "parking": "none",
     "parking_details": "No on-site parking. Street parking available nearby",
@@ -2357,140 +2413,64 @@
       "Gym"
     ],
     "policies": {
-      "pets_allowed": false,
+      "pets_allowed": true,
       "smoking_allowed": false,
       "cancellation_policy": "Free cancellation up to 24 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "(860)275-5337",
-      "email": "phill@example.com",
-      "address": "216 Mary Inlet, East Peter, GA 07092"
+      "phone": "4088477514",
+      "email": "robertrodriguez@example.net",
+      "address": "685 Jones Underpass Apt. 466, New Jeromechester, AR 99329"
     }
   },
   {
-    "id": "prop_096",
-    "name": "Millerport Inn",
+    "id": "prop_099",
+    "name": "Port James Suites",
     "check_in_time": "3:00 PM",
     "check_out_time": "12:00 PM",
     "parking": "paid",
     "parking_details": "Parking available for $15 per day",
     "amenities": [
       "WiFi",
+      "Pool",
+      "Gym",
+      "Breakfast"
+    ],
+    "policies": {
+      "pets_allowed": true,
+      "smoking_allowed": false,
+      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "min_age": 18
+    },
+    "contact_info": {
+      "phone": "(719)374-4744",
+      "email": "sandra90@example.net",
+      "address": "20310 Taylor Ferry, East Martinport, PR 16126"
+    }
+  },
+  {
+    "id": "prop_100",
+    "name": "Wellsside Inn",
+    "check_in_time": "2:00 PM",
+    "check_out_time": "12:00 PM",
+    "parking": "free",
+    "parking_details": "Free parking available on-site",
+    "amenities": [
+      "WiFi",
       "Parking",
       "Breakfast"
     ],
     "policies": {
       "pets_allowed": false,
       "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
+      "cancellation_policy": "Free cancellation up to 48 hours before check-in",
       "min_age": 18
     },
     "contact_info": {
-      "phone": "+1-627-973-0800x04681",
-      "email": "karen08@example.org",
-      "address": "38207 Rodriguez Spurs, Lake Samantha, PW 30607"
-    }
-  },
-  {
-    "id": "prop_097",
-    "name": "East Dustinshire Suites",
-    "check_in_time": "2:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "none",
-    "parking_details": "No on-site parking. Street parking available nearby",
-    "amenities": [
-      "WiFi",
-      "Pool",
-      "Gym",
-      "Breakfast"
-    ],
-    "policies": {
-      "pets_allowed": true,
-      "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 24 hours before check-in",
-      "min_age": 18
-    },
-    "contact_info": {
-      "phone": "(869)843-4956",
-      "email": "xcontreras@example.com",
-      "address": "6907 Julie Shoals Apt. 341, Lake Traviston, RI 17513"
-    }
-  },
-  {
-    "id": "prop_098",
-    "name": "Port Kennethmouth Lodge",
-    "check_in_time": "3:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "free",
-    "parking_details": "Free parking available on-site",
-    "amenities": [
-      "WiFi",
-      "Pool",
-      "Gym",
-      "Breakfast"
-    ],
-    "policies": {
-      "pets_allowed": false,
-      "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
-      "min_age": 18
-    },
-    "contact_info": {
-      "phone": "5359711838",
-      "email": "jessicahall@example.org",
-      "address": "606 William Route Suite 523, Bethbury, AK 71660"
-    }
-  },
-  {
-    "id": "prop_099",
-    "name": "Duaneton Suites",
-    "check_in_time": "4:00 PM",
-    "check_out_time": "12:00 PM",
-    "parking": "free",
-    "parking_details": "Free parking available on-site",
-    "amenities": [
-      "WiFi",
-      "Pool",
-      "Gym",
-      "Breakfast"
-    ],
-    "policies": {
-      "pets_allowed": true,
-      "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
-      "min_age": 18
-    },
-    "contact_info": {
-      "phone": "963.320.2482x82448",
-      "email": "jeffreybarber@example.com",
-      "address": "09307 Michael Hills Apt. 216, Port Danielview, MA 72226"
-    }
-  },
-  {
-    "id": "prop_100",
-    "name": "East William Lodge",
-    "check_in_time": "3:00 PM",
-    "check_out_time": "11:00 AM",
-    "parking": "paid",
-    "parking_details": "Parking available for $25 per day",
-    "amenities": [
-      "WiFi",
-      "Pool",
-      "Spa",
-      "Restaurant",
-      "Gym"
-    ],
-    "policies": {
-      "pets_allowed": false,
-      "smoking_allowed": false,
-      "cancellation_policy": "Free cancellation up to 72 hours before check-in",
-      "min_age": 18
-    },
-    "contact_info": {
-      "phone": "(745)316-4793",
-      "email": "david14@example.net",
-      "address": "PSC 2347, Box 2469, APO AP 67387"
+      "phone": "001-811-623-0820x59101",
+      "email": "websterkatherine@example.com",
+      "address": "8877 Franklin Summit Apt. 439, West Julianburgh, IA 63997"
     }
   }
 ]

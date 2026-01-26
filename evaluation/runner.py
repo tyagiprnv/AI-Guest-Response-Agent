@@ -27,7 +27,8 @@ class TestCase(BaseModel):
     guest_message: str
     property_id: Optional[str] = None
     reservation_id: Optional[str] = None
-    expected_response_type: str
+    expected_response_type: Optional[str] = None  # Deprecated, use expected_response_types
+    expected_response_types: Optional[List[str]] = None  # New format: list of acceptable types
     expected_category: Optional[str] = None
     ground_truth: Optional[str] = None
     annotations: Dict[str, Any] = Field(default_factory=dict)
@@ -43,10 +44,21 @@ class TestCase(BaseModel):
         """Alias for expected_category."""
         return self.expected_category
 
+    def get_expected_types(self) -> List[str]:
+        """Get list of expected response types (handles both old and new format)."""
+        if self.expected_response_types:
+            return self.expected_response_types
+        elif self.expected_response_type:
+            return [self.expected_response_type]
+        return []
+
     @property
     def expected_behavior(self) -> str:
         """Generate expected behavior description."""
-        return f"Expected response type: {self.expected_response_type}"
+        types = self.get_expected_types()
+        if len(types) == 1:
+            return f"Expected response type: {types[0]}"
+        return f"Expected response types: {', '.join(types)}"
 
 
 class EvaluationMetrics(BaseModel):
@@ -172,7 +184,7 @@ class EvaluationRunner:
                 "latency_ms": latency_ms,
                 "tokens_used": total_tokens,
                 "cost_usd": result.get("cost_usd", 0.0),
-                "template_matched": result.get("response_type") == "template",
+                "template_matched": result.get("response_type") in ["template", "direct_template"],
                 "tools_output": {
                     "property_details": result.get("property_details"),
                     "reservation_details": result.get("reservation_details"),

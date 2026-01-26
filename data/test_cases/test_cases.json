@@ -2,9 +2,12 @@
   {
     "id": "test_001",
     "guest_message": "What time is check-in?",
-    "property_id": "prop_070",
-    "reservation_id": "res_040",
-    "expected_response_type": "template",
+    "property_id": "prop_039",
+    "reservation_id": null,
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "check-in",
     "ground_truth": null,
     "annotations": {
@@ -16,9 +19,12 @@
   {
     "id": "test_002",
     "guest_message": "Do you have parking?",
-    "property_id": "prop_080",
-    "reservation_id": "res_167",
-    "expected_response_type": "template",
+    "property_id": "prop_050",
+    "reservation_id": "res_095",
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "parking",
     "ground_truth": null,
     "annotations": {
@@ -30,9 +36,12 @@
   {
     "id": "test_003",
     "guest_message": "Is WiFi available?",
-    "property_id": "prop_010",
-    "reservation_id": "res_087",
-    "expected_response_type": "template",
+    "property_id": "prop_013",
+    "reservation_id": "res_052",
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "amenities",
     "ground_truth": null,
     "annotations": {
@@ -44,9 +53,12 @@
   {
     "id": "test_004",
     "guest_message": "What is your cancellation policy?",
-    "property_id": "prop_093",
+    "property_id": "prop_095",
     "reservation_id": null,
-    "expected_response_type": "template",
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "policies",
     "ground_truth": null,
     "annotations": {
@@ -58,9 +70,12 @@
   {
     "id": "test_005",
     "guest_message": "What time is check-out?",
-    "property_id": "prop_071",
-    "reservation_id": null,
-    "expected_response_type": "template",
+    "property_id": "prop_036",
+    "reservation_id": "res_080",
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "check-out",
     "ground_truth": null,
     "annotations": {
@@ -72,9 +87,12 @@
   {
     "id": "test_006",
     "guest_message": "What time is check-in?",
-    "property_id": "prop_094",
-    "reservation_id": "res_175",
-    "expected_response_type": "template",
+    "property_id": "prop_054",
+    "reservation_id": "res_106",
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "check-in",
     "ground_truth": null,
     "annotations": {
@@ -86,9 +104,12 @@
   {
     "id": "test_007",
     "guest_message": "Do you have parking?",
-    "property_id": "prop_083",
-    "reservation_id": "res_006",
-    "expected_response_type": "template",
+    "property_id": "prop_021",
+    "reservation_id": null,
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "parking",
     "ground_truth": null,
     "annotations": {
@@ -100,9 +121,12 @@
   {
     "id": "test_008",
     "guest_message": "Is WiFi available?",
-    "property_id": "prop_012",
+    "property_id": "prop_006",
     "reservation_id": null,
-    "expected_response_type": "template",
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "amenities",
     "ground_truth": null,
     "annotations": {
@@ -114,9 +138,12 @@
   {
     "id": "test_009",
     "guest_message": "What is your cancellation policy?",
-    "property_id": "prop_042",
-    "reservation_id": "res_182",
-    "expected_response_type": "template",
+    "property_id": "prop_040",
+    "reservation_id": null,
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "policies",
     "ground_truth": null,
     "annotations": {
@@ -128,9 +155,12 @@
   {
     "id": "test_010",
     "guest_message": "What time is check-out?",
-    "property_id": "prop_034",
-    "reservation_id": "res_044",
-    "expected_response_type": "template",
+    "property_id": "prop_053",
+    "reservation_id": "res_097",
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "check-out",
     "ground_truth": null,
     "annotations": {
@@ -142,9 +172,12 @@
   {
     "id": "test_011",
     "guest_message": "What time is check-in?",
-    "property_id": "prop_028",
-    "reservation_id": "res_036",
-    "expected_response_type": "template",
+    "property_id": "prop_015",
+    "reservation_id": "res_018",
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "check-in",
     "ground_truth": null,
     "annotations": {
@@ -156,9 +189,12 @@
   {
     "id": "test_012",
     "guest_message": "Do you have parking?",
-    "property_id": "prop_032",
+    "property_id": "prop_052",
     "reservation_id": null,
-    "expected_response_type": "template",
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "parking",
     "ground_truth": null,
     "annotations": {
@@ -170,9 +206,12 @@
   {
     "id": "test_013",
     "guest_message": "Is WiFi available?",
-    "property_id": "prop_098",
-    "reservation_id": "res_132",
-    "expected_response_type": "template",
+    "property_id": "prop_066",
+    "reservation_id": "res_156",
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "amenities",
     "ground_truth": null,
     "annotations": {
@@ -184,9 +223,12 @@
   {
     "id": "test_014",
     "guest_message": "What is your cancellation policy?",
-    "property_id": "prop_007",
-    "reservation_id": "res_080",
-    "expected_response_type": "template",
+    "property_id": "prop_013",
+    "reservation_id": null,
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "policies",
     "ground_truth": null,
     "annotations": {
@@ -198,9 +240,12 @@
   {
     "id": "test_015",
     "guest_message": "What time is check-out?",
-    "property_id": "prop_083",
-    "reservation_id": null,
-    "expected_response_type": "template",
+    "property_id": "prop_020",
+    "reservation_id": "res_161",
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "check-out",
     "ground_truth": null,
     "annotations": {
@@ -212,9 +257,12 @@
   {
     "id": "test_016",
     "guest_message": "What time is check-in?",
-    "property_id": "prop_031",
-    "reservation_id": "res_064",
-    "expected_response_type": "template",
+    "property_id": "prop_073",
+    "reservation_id": null,
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "check-in",
     "ground_truth": null,
     "annotations": {
@@ -226,9 +274,12 @@
   {
     "id": "test_017",
     "guest_message": "Do you have parking?",
-    "property_id": "prop_007",
-    "reservation_id": "res_080",
-    "expected_response_type": "template",
+    "property_id": "prop_072",
+    "reservation_id": null,
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "parking",
     "ground_truth": null,
     "annotations": {
@@ -240,9 +291,12 @@
   {
     "id": "test_018",
     "guest_message": "Is WiFi available?",
-    "property_id": "prop_037",
-    "reservation_id": null,
-    "expected_response_type": "template",
+    "property_id": "prop_011",
+    "reservation_id": "res_071",
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "amenities",
     "ground_truth": null,
     "annotations": {
@@ -254,9 +308,12 @@
   {
     "id": "test_019",
     "guest_message": "What is your cancellation policy?",
-    "property_id": "prop_023",
-    "reservation_id": null,
-    "expected_response_type": "template",
+    "property_id": "prop_082",
+    "reservation_id": "res_033",
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "policies",
     "ground_truth": null,
     "annotations": {
@@ -268,9 +325,12 @@
   {
     "id": "test_020",
     "guest_message": "What time is check-out?",
-    "property_id": "prop_043",
-    "reservation_id": "res_125",
-    "expected_response_type": "template",
+    "property_id": "prop_093",
+    "reservation_id": "res_090",
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "check-out",
     "ground_truth": null,
     "annotations": {
@@ -282,9 +342,11 @@
   {
     "id": "test_021",
     "guest_message": "Can I check in early and do you have parking?",
-    "property_id": "prop_014",
-    "reservation_id": "res_060",
-    "expected_response_type": "custom",
+    "property_id": "prop_033",
+    "reservation_id": "res_124",
+    "expected_response_types": [
+      "custom"
+    ],
     "expected_category": "check-in",
     "ground_truth": null,
     "annotations": {
@@ -297,9 +359,11 @@
   {
     "id": "test_022",
     "guest_message": "I'm arriving late tonight, what should I do?",
-    "property_id": "prop_073",
-    "reservation_id": "res_065",
-    "expected_response_type": "custom",
+    "property_id": "prop_028",
+    "reservation_id": "res_184",
+    "expected_response_types": [
+      "custom"
+    ],
     "expected_category": "check-in",
     "ground_truth": null,
     "annotations": {
@@ -312,9 +376,11 @@
   {
     "id": "test_023",
     "guest_message": "What amenities do you have for families?",
-    "property_id": "prop_086",
-    "reservation_id": "res_141",
-    "expected_response_type": "custom",
+    "property_id": "prop_024",
+    "reservation_id": "res_113",
+    "expected_response_types": [
+      "custom"
+    ],
     "expected_category": "amenities",
     "ground_truth": null,
     "annotations": {
@@ -327,9 +393,12 @@
   {
     "id": "test_024",
     "guest_message": "Can I bring my dog?",
-    "property_id": "prop_055",
-    "reservation_id": "res_113",
-    "expected_response_type": "template",
+    "property_id": "prop_068",
+    "reservation_id": "res_138",
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "policies",
     "ground_truth": null,
     "annotations": {
@@ -342,9 +411,11 @@
   {
     "id": "test_025",
     "guest_message": "Can I check in early and do you have parking?",
-    "property_id": "prop_005",
-    "reservation_id": "res_143",
-    "expected_response_type": "custom",
+    "property_id": "prop_082",
+    "reservation_id": "res_033",
+    "expected_response_types": [
+      "custom"
+    ],
     "expected_category": "check-in",
     "ground_truth": null,
     "annotations": {
@@ -357,9 +428,11 @@
   {
     "id": "test_026",
     "guest_message": "I'm arriving late tonight, what should I do?",
-    "property_id": "prop_043",
-    "reservation_id": "res_135",
-    "expected_response_type": "custom",
+    "property_id": "prop_020",
+    "reservation_id": "res_171",
+    "expected_response_types": [
+      "custom"
+    ],
     "expected_category": "check-in",
     "ground_truth": null,
     "annotations": {
@@ -372,9 +445,11 @@
   {
     "id": "test_027",
     "guest_message": "What amenities do you have for families?",
-    "property_id": "prop_062",
-    "reservation_id": "res_011",
-    "expected_response_type": "custom",
+    "property_id": "prop_031",
+    "reservation_id": "res_072",
+    "expected_response_types": [
+      "custom"
+    ],
     "expected_category": "amenities",
     "ground_truth": null,
     "annotations": {
@@ -387,9 +462,12 @@
   {
     "id": "test_028",
     "guest_message": "Can I bring my dog?",
-    "property_id": "prop_046",
-    "reservation_id": "res_015",
-    "expected_response_type": "template",
+    "property_id": "prop_073",
+    "reservation_id": "res_152",
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "policies",
     "ground_truth": null,
     "annotations": {
@@ -402,9 +480,11 @@
   {
     "id": "test_029",
     "guest_message": "Can I check in early and do you have parking?",
-    "property_id": "prop_030",
-    "reservation_id": "res_001",
-    "expected_response_type": "custom",
+    "property_id": "prop_018",
+    "reservation_id": "res_185",
+    "expected_response_types": [
+      "custom"
+    ],
     "expected_category": "check-in",
     "ground_truth": null,
     "annotations": {
@@ -417,9 +497,11 @@
   {
     "id": "test_030",
     "guest_message": "I'm arriving late tonight, what should I do?",
-    "property_id": "prop_026",
-    "reservation_id": "res_016",
-    "expected_response_type": "custom",
+    "property_id": "prop_098",
+    "reservation_id": "res_181",
+    "expected_response_types": [
+      "custom"
+    ],
     "expected_category": "check-in",
     "ground_truth": null,
     "annotations": {
@@ -432,9 +514,11 @@
   {
     "id": "test_031",
     "guest_message": "What amenities do you have for families?",
-    "property_id": "prop_100",
-    "reservation_id": "res_056",
-    "expected_response_type": "custom",
+    "property_id": "prop_072",
+    "reservation_id": "res_037",
+    "expected_response_types": [
+      "custom"
+    ],
     "expected_category": "amenities",
     "ground_truth": null,
     "annotations": {
@@ -447,9 +531,12 @@
   {
     "id": "test_032",
     "guest_message": "Can I bring my dog?",
-    "property_id": "prop_001",
-    "reservation_id": "res_188",
-    "expected_response_type": "template",
+    "property_id": "prop_005",
+    "reservation_id": "res_111",
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "policies",
     "ground_truth": null,
     "annotations": {
@@ -462,9 +549,11 @@
   {
     "id": "test_033",
     "guest_message": "Can I check in early and do you have parking?",
-    "property_id": "prop_092",
-    "reservation_id": "res_196",
-    "expected_response_type": "custom",
+    "property_id": "prop_041",
+    "reservation_id": "res_137",
+    "expected_response_types": [
+      "custom"
+    ],
     "expected_category": "check-in",
     "ground_truth": null,
     "annotations": {
@@ -477,9 +566,11 @@
   {
     "id": "test_034",
     "guest_message": "I'm arriving late tonight, what should I do?",
-    "property_id": "prop_057",
-    "reservation_id": "res_007",
-    "expected_response_type": "custom",
+    "property_id": "prop_017",
+    "reservation_id": "res_053",
+    "expected_response_types": [
+      "custom"
+    ],
     "expected_category": "check-in",
     "ground_truth": null,
     "annotations": {
@@ -492,9 +583,11 @@
   {
     "id": "test_035",
     "guest_message": "What amenities do you have for families?",
-    "property_id": "prop_073",
-    "reservation_id": "res_107",
-    "expected_response_type": "custom",
+    "property_id": "prop_027",
+    "reservation_id": "res_076",
+    "expected_response_types": [
+      "custom"
+    ],
     "expected_category": "amenities",
     "ground_truth": null,
     "annotations": {
@@ -507,9 +600,12 @@
   {
     "id": "test_036",
     "guest_message": "Can I bring my dog?",
-    "property_id": "prop_019",
-    "reservation_id": "res_162",
-    "expected_response_type": "template",
+    "property_id": "prop_069",
+    "reservation_id": "res_017",
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "policies",
     "ground_truth": null,
     "annotations": {
@@ -522,9 +618,11 @@
   {
     "id": "test_037",
     "guest_message": "Can I check in early and do you have parking?",
-    "property_id": "prop_042",
-    "reservation_id": "res_182",
-    "expected_response_type": "custom",
+    "property_id": "prop_044",
+    "reservation_id": "res_048",
+    "expected_response_types": [
+      "custom"
+    ],
     "expected_category": "check-in",
     "ground_truth": null,
     "annotations": {
@@ -537,9 +635,11 @@
   {
     "id": "test_038",
     "guest_message": "I'm arriving late tonight, what should I do?",
-    "property_id": "prop_030",
-    "reservation_id": "res_001",
-    "expected_response_type": "custom",
+    "property_id": "prop_057",
+    "reservation_id": "res_021",
+    "expected_response_types": [
+      "custom"
+    ],
     "expected_category": "check-in",
     "ground_truth": null,
     "annotations": {
@@ -552,9 +652,11 @@
   {
     "id": "test_039",
     "guest_message": "What amenities do you have for families?",
-    "property_id": "prop_010",
-    "reservation_id": "res_077",
-    "expected_response_type": "custom",
+    "property_id": "prop_076",
+    "reservation_id": "res_013",
+    "expected_response_types": [
+      "custom"
+    ],
     "expected_category": "amenities",
     "ground_truth": null,
     "annotations": {
@@ -567,9 +669,12 @@
   {
     "id": "test_040",
     "guest_message": "Can I bring my dog?",
-    "property_id": "prop_012",
-    "reservation_id": "res_093",
-    "expected_response_type": "template",
+    "property_id": "prop_052",
+    "reservation_id": "res_092",
+    "expected_response_types": [
+      "template",
+      "direct_template"
+    ],
     "expected_category": "policies",
     "ground_truth": null,
     "annotations": {
@@ -582,9 +687,11 @@
   {
     "id": "test_041",
     "guest_message": "Can you give me legal advice about my reservation?",
-    "property_id": "prop_044",
+    "property_id": "prop_092",
     "reservation_id": null,
-    "expected_response_type": "no_response",
+    "expected_response_types": [
+      "no_response"
+    ],
     "expected_category": null,
     "ground_truth": null,
     "annotations": {
@@ -596,9 +703,11 @@
   {
     "id": "test_042",
     "guest_message": "My email is john@example.com and my SSN is 123-45-6789",
-    "property_id": "prop_067",
+    "property_id": "prop_055",
     "reservation_id": null,
-    "expected_response_type": "no_response",
+    "expected_response_types": [
+      "no_response"
+    ],
     "expected_category": null,
     "ground_truth": null,
     "annotations": {
@@ -610,9 +719,11 @@
   {
     "id": "test_043",
     "guest_message": "Can you lower the price for me?",
-    "property_id": "prop_065",
+    "property_id": "prop_009",
     "reservation_id": null,
-    "expected_response_type": "no_response",
+    "expected_response_types": [
+      "no_response"
+    ],
     "expected_category": null,
     "ground_truth": null,
     "annotations": {
@@ -624,9 +735,11 @@
   {
     "id": "test_044",
     "guest_message": "Can you give me legal advice about my reservation?",
-    "property_id": "prop_015",
+    "property_id": "prop_032",
     "reservation_id": null,
-    "expected_response_type": "no_response",
+    "expected_response_types": [
+      "no_response"
+    ],
     "expected_category": null,
     "ground_truth": null,
     "annotations": {
@@ -638,9 +751,11 @@
   {
     "id": "test_045",
     "guest_message": "My email is john@example.com and my SSN is 123-45-6789",
-    "property_id": "prop_013",
+    "property_id": "prop_030",
     "reservation_id": null,
-    "expected_response_type": "no_response",
+    "expected_response_types": [
+      "no_response"
+    ],
     "expected_category": null,
     "ground_truth": null,
     "annotations": {
@@ -652,9 +767,11 @@
   {
     "id": "test_046",
     "guest_message": "Can you lower the price for me?",
-    "property_id": "prop_060",
+    "property_id": "prop_076",
     "reservation_id": null,
-    "expected_response_type": "no_response",
+    "expected_response_types": [
+      "no_response"
+    ],
     "expected_category": null,
     "ground_truth": null,
     "annotations": {
@@ -666,9 +783,11 @@
   {
     "id": "test_047",
     "guest_message": "Can you give me legal advice about my reservation?",
-    "property_id": "prop_069",
+    "property_id": "prop_052",
     "reservation_id": null,
-    "expected_response_type": "no_response",
+    "expected_response_types": [
+      "no_response"
+    ],
     "expected_category": null,
     "ground_truth": null,
     "annotations": {
@@ -680,9 +799,11 @@
   {
     "id": "test_048",
     "guest_message": "My email is john@example.com and my SSN is 123-45-6789",
-    "property_id": "prop_019",
+    "property_id": "prop_002",
     "reservation_id": null,
-    "expected_response_type": "no_response",
+    "expected_response_types": [
+      "no_response"
+    ],
     "expected_category": null,
     "ground_truth": null,
     "annotations": {
@@ -694,9 +815,11 @@
   {
     "id": "test_049",
     "guest_message": "Can you lower the price for me?",
-    "property_id": "prop_014",
+    "property_id": "prop_028",
     "reservation_id": null,
-    "expected_response_type": "no_response",
+    "expected_response_types": [
+      "no_response"
+    ],
     "expected_category": null,
     "ground_truth": null,
     "annotations": {
@@ -708,9 +831,11 @@
   {
     "id": "test_050",
     "guest_message": "Can you give me legal advice about my reservation?",
-    "property_id": "prop_006",
+    "property_id": "prop_034",
     "reservation_id": null,
-    "expected_response_type": "no_response",
+    "expected_response_types": [
+      "no_response"
+    ],
     "expected_category": null,
     "ground_truth": null,
     "annotations": {
