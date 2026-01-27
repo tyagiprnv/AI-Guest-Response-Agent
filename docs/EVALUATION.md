@@ -280,7 +280,7 @@ Average Scores:
   Overall:   4.37/5.0
 
 Performance:
-  Avg latency: 350ms (with direct template + cache warming)
+  Avg latency: 210ms (with direct template + cache warming)
   Total cost:  $0.15
   Avg cost:    $0.003
   Template match rate: 95%+ (with trigger-query embeddings)
@@ -295,7 +295,7 @@ Performance:
 - **Safety**: Should be > 4.5 on average (stricter)
 
 **Performance Metrics**:
-- **Latency**: P50 ~130ms (direct template), P95 < 700ms (template + LLM)
+- **Latency**: P50 ~50ms (direct template), P95 < 210ms (average response)
 - **Cost**: Should be < $0.005 per request on average (with direct substitution)
 - **Template Match Rate**: Should be 90-100% with trigger-query embeddings
 - **Direct Substitution Rate**: Should be 60-80% of template matches

@@ -265,9 +265,9 @@ def select_response_strategy(tools_output, property_details):
 
 | Tier | Condition | LLM Call? | Latency | Cost |
 |------|-----------|-----------|---------|------|
-| Direct Template | Score ≥ 0.80 + all placeholders filled | NO | ~130ms | $0.00 |
-| Template + LLM | Score ≥ 0.70 | Yes | ~700ms | ~$0.002 |
-| Custom LLM | Score < 0.70 | Yes | ~2-3s | ~$0.005-0.02 |
+| Direct Template | Score ≥ 0.80 + all placeholders filled | NO | ~50ms | $0.00 |
+| Template + LLM | Score ≥ 0.70 | Yes | ~210ms | ~$0.002 |
+| Custom LLM | Score < 0.70 | Yes | ~2.2s | ~$0.005-0.02 |
 
 **Configuration** (`settings.py`):
 - `direct_substitution_enabled`: true
@@ -417,9 +417,9 @@ cache_misses = Counter("cache_misses_total", ["cache_type"])
 ```
 
 **Total Latency**:
-- P50: ~130-150ms (direct template, cache hit)
-- P95: ~700ms (template + LLM)
-- P99: ~3s (custom response, cold cache)
+- P50: ~50ms (direct template, cache hit)
+- P95: ~210ms (average response)
+- P99: ~2.2s (custom response, cold cache)
 
 ## Technology Stack
 
@@ -454,7 +454,7 @@ cache_misses = Counter("cache_misses_total", ["cache_type"])
 - **Type Safety**: TypedDict for state management
 
 ### Why Groq?
-- **Speed**: Ultra-fast inference (~0.4s average latency)
+- **Speed**: Ultra-fast inference (~0.33s average latency)
 - **Cost**: Competitive pricing for LLaMA models
 - **Quality**: LLaMA 3.1 8B sufficient for guest response generation
 - **Reliability**: Stable API with high availability
@@ -480,12 +480,12 @@ cache_misses = Counter("cache_misses_total", ["cache_type"])
 
 ### Latency Profile
 ```
-Guardrails:      ~90ms   (fast-path) / ~500ms (LLM classification)
-Tool Execution:  ~150ms  (parallel, cached)
-LLM Generation:  ~400ms  (Groq) / ~1-2s (if needed)
-Total:           ~130ms  (direct template, cached)
-                 ~700ms  (template + LLM)
-                 ~2-3s   (custom response)
+Guardrails:      ~70ms   (fast-path) / ~300ms (LLM classification)
+Tool Execution:  ~200ms  (parallel, cached)
+LLM Generation:  ~330ms  (Groq) / ~410ms (max observed)
+Total:           ~50ms   (direct template, cached)
+                 ~210ms  (average response)
+                 ~2.2s   (max observed)
 ```
 
 ### Cost Profile

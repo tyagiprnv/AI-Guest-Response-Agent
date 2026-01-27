@@ -120,7 +120,7 @@ While running load tests, monitor:
 
 ## Key Metrics to Watch
 
-- **Response Time**: P50, P95, P99 should stay under 3s
+- **Response Time**: P50 ~50ms, P95 ~210ms, P99 ~2.2s
 - **Error Rate**: Should be < 1%
 - **RPS**: Requests per second sustained
 - **Cache Hit Rate**: Should be 40-60%
@@ -133,9 +133,9 @@ Based on the agent's design:
 
 | Metric | Target | Notes |
 |--------|--------|-------|
-| P50 Latency | < 1s | With caching |
-| P95 Latency | < 2s | Typical |
-| P99 Latency | < 3s | Max acceptable |
+| P50 Latency | ~50ms | With caching |
+| P95 Latency | ~210ms | Average response |
+| P99 Latency | ~2.2s | Max acceptable |
 | Error Rate | < 1% | Excluding rate limits |
 | Throughput | 10-50 RPS | Single instance |
 | Template Match | 70-80% | Cost optimization |

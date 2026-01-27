@@ -435,7 +435,7 @@ curl http://localhost:6333/collections/templates | jq .result.points_count
 
 #### 4. High Latency
 
-**Symptom**: Responses take > 3 seconds (P95 target: ~700ms)
+**Symptom**: Responses take > 3 seconds (P95 target: ~210ms)
 
 **Diagnosis**:
 ```bash
@@ -465,9 +465,9 @@ curl 'http://localhost:9090/api/v1/query?query=direct_substitution_count'
 - **Network issues** → Check latency to external APIs
 
 **Expected latency tiers**:
-- Direct template (cache hit): ~130ms
-- Template + LLM: ~700ms
-- Custom response: ~2-3s
+- Direct template (cache hit): ~50ms
+- Template + LLM: ~210ms
+- Custom response: ~2.2s
 
 #### 5. Memory Issues
 
@@ -588,9 +588,9 @@ EMBEDDING_MODEL = "text-embedding-ada-002"  # Faster than 3-small
 ```
 
 **Latency targets with optimizations:**
-- Direct template (cache hit): ~130ms
-- Template + LLM: ~700ms
-- Custom response: ~2-3s
+- Direct template (cache hit): ~50ms
+- Template + LLM: ~210ms
+- Custom response: ~2.2s
 
 ### Optimize for Cost
 

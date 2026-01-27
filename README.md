@@ -258,27 +258,27 @@ pytest tests/e2e/
 
 | Metric | Value |
 |--------|-------|
-| **Average** | 0.20s |
+| **Average** | 0.21s |
 | **p50** | 0.05s |
-| **p99** | 1.20s |
+| **p99** | 2.18s |
 | **Min** | 0.01s |
-| **Max** | 1.20s |
+| **Max** | 2.18s |
 
 | Speed Tier | Count | Percentage |
 |------------|-------|------------|
-| Fast (<1s) | 23 | 92% |
-| Medium (1-3s) | 2 | 8% |
+| Fast (<1s) | 24 | 96% |
+| Medium (1-3s) | 1 | 4% |
 | Slow (>3s) | 0 | 0% |
 
 ### Latency by Component
 
 | Component | Avg Latency | Max Latency |
 |-----------|-------------|-------------|
-| Full Request (LangGraph) | 0.31s | 1.20s |
-| LLM Call (Groq) | 0.39s | 0.45s |
+| Full Request (LangGraph) | 0.31s | 2.18s |
+| LLM Call (Groq) | 0.33s | 0.44s |
 | Response Generation | 0.09s | 0.61s |
 | Guardrails | 0.07s | 0.32s |
-| Tool Execution | 0.20s | 0.65s |
+| Tool Execution | 0.20s | 1.56s |
 
 ### Optimizations
 
