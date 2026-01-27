@@ -74,7 +74,7 @@ The AI Guest Response Agent is a production-quality system that generates contex
          ▼                   ▼                   ▼
 ┌─────────────────┐  ┌──────────────┐  ┌────────────────┐
 │  Qdrant Vector  │  │  LLM APIs    │  │  Data Stores   │
-│    Database     │  │  - DeepSeek  │  │  - Properties  │
+│    Database     │  │  - Groq      │  │  - Properties  │
 │  - Templates    │  │  - OpenAI    │  │  - Reservations│
 │  - Embeddings   │  │              │  │  - Templates   │
 └─────────────────┘  └──────────────┘  └────────────────┘
@@ -129,7 +129,7 @@ class AgentState:
      - If template found with high similarity (>0.75): Use template (fast, cheap)
      - Else if tools returned context: Generate custom response (slower, expensive)
      - Else: Return "cannot help" message
-   - **LLM Generation**: Use DeepSeek-V3.2 for response generation
+   - **LLM Generation**: Use Groq LLaMA 3.1 8B for response generation
    - **Metadata Collection**: Track tokens, cost, latency
 
 5. **Output**
@@ -231,7 +231,7 @@ def select_response_strategy(tools_output):
 - **Savings**: 5-10x cost reduction with 70-80% template match rate
 
 #### Custom Response Generation
-- **Model**: DeepSeek-V3.2 (cost-effective)
+- **Model**: Groq LLaMA 3.1 8B Instant (fast inference)
 - **Prompt**: Versioned templates with structured output
 - **Context**: Property details, reservation info, retrieved templates
 - **Max Tokens**: 500 for response
@@ -354,7 +354,7 @@ cache_misses = Counter("cache_misses_total", ["cache_type"])
 - **Web Framework**: FastAPI 0.100+
 - **Vector Database**: Qdrant 1.7+
 - **Embeddings**: OpenAI text-embedding-3-small
-- **LLM**: DeepSeek-V3.2
+- **LLM**: Groq (LLaMA 3.1 8B Instant)
 - **Guardrails**: Microsoft Presidio, LangChain
 
 ### Monitoring & Ops
@@ -379,11 +379,11 @@ cache_misses = Counter("cache_misses_total", ["cache_type"])
 - **Modularity**: Easy to add/remove nodes
 - **Type Safety**: TypedDict for state management
 
-### Why DeepSeek-V3.2?
-- **Cost**: ~90% cheaper than GPT-4
-- **Quality**: Sufficient for guest response generation
-- **Speed**: Fast enough for real-time responses
-- **Reliability**: Stable API
+### Why Groq?
+- **Speed**: Ultra-fast inference (~0.4s average latency)
+- **Cost**: Competitive pricing for LLaMA models
+- **Quality**: LLaMA 3.1 8B sufficient for guest response generation
+- **Reliability**: Stable API with high availability
 
 ### Why Template-First?
 - **Speed**: 5-10x faster than generation

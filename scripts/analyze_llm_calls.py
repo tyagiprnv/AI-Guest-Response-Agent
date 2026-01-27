@@ -76,7 +76,7 @@ def analyze_child_spans(project_name: str = None, num_runs: int = 15):
     client = Client()
 
     if project_name is None:
-        project_name = os.getenv("LANGCHAIN_PROJECT", "AIGuestAgent")
+        project_name = os.getenv("LANGCHAIN_PROJECT", "GuestAgentGroq")
 
     # Get root runs
     root_runs = list(client.list_runs(

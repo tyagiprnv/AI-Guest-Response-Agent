@@ -10,7 +10,7 @@ Before you begin, ensure you have:
 2. **Docker and Docker Compose** installed
 3. **API Keys**:
    - OpenAI API key (required)
-   - DeepSeek API key (required)
+   - Groq API key (required)
    - LangSmith API key (optional, for tracing)
 
 ## Step-by-Step Setup
@@ -51,13 +51,13 @@ nano .env  # or vim, code, etc.
 Update these lines with your actual keys:
 ```bash
 OPENAI_API_KEY=sk-your-actual-openai-key-here
-DEEPSEEK_API_KEY=your-actual-deepseek-key-here
+GROQ_API_KEY=your-actual-groq-key-here
 LANGSMITH_API_KEY=your-actual-langsmith-key-here  # Optional
 ```
 
 **Where to get keys:**
 - OpenAI: https://platform.openai.com/api-keys
-- DeepSeek: https://platform.deepseek.com/api_keys
+- Groq: https://console.groq.com/keys
 - LangSmith: https://smith.langchain.com/settings
 
 ### Step 3: Start Docker Services
@@ -305,7 +305,7 @@ docker-compose logs api
 **Solutions**:
 1. Check if caching is working (should see cache hits in metrics)
 2. Verify Qdrant is running smoothly
-3. Check your internet connection (API calls to OpenAI/DeepSeek)
+3. Check your internet connection (API calls to OpenAI/Groq)
 
 ## Next Steps
 

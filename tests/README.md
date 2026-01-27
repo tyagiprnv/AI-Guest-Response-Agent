@@ -139,7 +139,7 @@ Some tests require external services to be running:
 2. **API Keys**: Required for integration tests
    ```bash
    export OPENAI_API_KEY=your-key
-   export DEEPSEEK_API_KEY=your-key
+   export GROQ_API_KEY=your-key
    ```
 
 ### Skipped Tests
@@ -213,7 +213,7 @@ Tests are designed to run in CI/CD pipelines:
 2. **"API key not set" errors**: Set environment variables
    ```bash
    export OPENAI_API_KEY=your-key
-   export DEEPSEEK_API_KEY=your-key
+   export GROQ_API_KEY=your-key
    ```
 
 3. **Slow tests**: Use `-n auto` for parallel execution

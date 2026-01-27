@@ -91,8 +91,8 @@ nano .env  # or vim, code, etc.
 # OpenAI (for embeddings and evaluation)
 OPENAI_API_KEY=sk-...
 
-# DeepSeek (for agent LLM)
-DEEPSEEK_API_KEY=sk-...
+# Groq (for agent LLM)
+GROQ_API_KEY=gsk_...
 
 # LangSmith (optional, for tracing)
 LANGSMITH_API_KEY=lsv2_...
@@ -205,7 +205,7 @@ services:
       - "8000:8000"
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - GROQ_API_KEY=${GROQ_API_KEY}
       - LANGSMITH_API_KEY=${LANGSMITH_API_KEY}
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
@@ -293,7 +293,7 @@ ENVIRONMENT=production
 
 # API Keys (use secrets manager in production)
 OPENAI_API_KEY=${OPENAI_API_KEY_SECRET}
-DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY_SECRET}
+GROQ_API_KEY=${GROQ_API_KEY_SECRET}
 
 # Qdrant
 QDRANT_HOST=qdrant.internal.example.com
@@ -451,7 +451,7 @@ curl 'http://localhost:9090/api/v1/query?query=rate(cache_hits_total[5m])'
 
 **Solutions**:
 - **Low cache hit rate** → Increase cache TTL, warm up cache
-- **Slow LLM API** → Check DeepSeek/OpenAI status pages
+- **Slow LLM API** → Check Groq/OpenAI status pages
 - **Slow Qdrant** → Check Qdrant resource usage, add indexes
 - **High load** → Scale API instances, add load balancer
 - **Network issues** → Check latency to external APIs
@@ -572,7 +572,7 @@ TEMPLATE_SIMILARITY_THRESHOLD = 0.70  # Down from 0.75
 tool_cache_ttl = 600  # 10 minutes instead of 5
 
 # Use cheaper models
-AGENT_MODEL = "deepseek-reasoner"  # Already optimal
+AGENT_MODEL = "llama-3.1-8b-instant"  # Already optimal
 JUDGE_MODEL = "gpt-4o-mini"    # Instead of gpt-4o
 ```
 

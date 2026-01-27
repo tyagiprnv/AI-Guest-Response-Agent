@@ -149,7 +149,7 @@ Based on the agent's design:
 - Check API keys are set in `.env`
 
 ### High Latency
-- Check if LLM API (DeepSeek/OpenAI) is slow
+- Check if LLM API (Groq/OpenAI) is slow
 - Monitor cache hit rates (low = more API calls)
 - Check Qdrant response times
 

@@ -37,10 +37,10 @@ graph LR
     Merge --> ResponseDecision{Template<br/>Score ≥ 0.70?}
 
     ResponseDecision -->|Yes| DirectCheck{All Placeholders<br/>Fillable?}
-    ResponseDecision -->|No| CustomResponse[Custom Response<br/>DeepSeek-V3.2]
+    ResponseDecision -->|No| CustomResponse[Custom Response<br/>Groq LLaMA 3.1]
 
     DirectCheck -->|Yes| DirectTemplate[Direct Template<br/>No LLM Call]
-    DirectCheck -->|No| TemplateResponse[Template Response<br/>Deepseek-V3.2]
+    DirectCheck -->|No| TemplateResponse[Template Response<br/>Groq LLaMA 3.1]
 
     NoResponse --> End([Return Response])
     DirectTemplate --> End
@@ -80,7 +80,7 @@ graph LR
 | Component | Technology |
 |-----------|------------|
 | Agent Framework | LangGraph |
-| LLM | DeepSeek-V3.2 |
+| LLM | Groq (LLaMA 3.1 8B Instant) |
 | Embeddings | OpenAI text-embedding-3-small |
 | Vector DB | Qdrant |
 | API | FastAPI |
@@ -94,7 +94,7 @@ graph LR
 - Python 3.11+
 - Docker and Docker Compose
 - OpenAI API key
-- DeepSeek API key
+- Groq API key
 - LangSmith API key (optional)
 
 ### 1. Clone and Setup
@@ -122,7 +122,7 @@ cp .env.example .env
 # Edit .env and add your API keys
 # Required:
 #   - OPENAI_API_KEY
-#   - DEEPSEEK_API_KEY
+#   - GROQ_API_KEY
 # Optional:
 #   - LANGSMITH_API_KEY
 ```
@@ -258,33 +258,33 @@ pytest tests/e2e/
 
 | Metric | Value |
 |--------|-------|
-| **Average** | 1.31s |
+| **Average** | 0.20s |
 | **p50** | 0.05s |
-| **p99** | 7.53s |
+| **p99** | 1.20s |
 | **Min** | 0.01s |
-| **Max** | 7.53s |
+| **Max** | 1.20s |
 
 | Speed Tier | Count | Percentage |
 |------------|-------|------------|
-| Fast (<1s) | 18 | 72% |
+| Fast (<1s) | 23 | 92% |
 | Medium (1-3s) | 2 | 8% |
-| Slow (>3s) | 5 | 20% |
+| Slow (>3s) | 0 | 0% |
 
 ### LLM Call Analysis
 
-Only 40% of queries require LLM calls (10 out of 25), with the majority resolved through direct template substitution:
+Only 24% of queries require LLM calls (6 out of 25), with the majority resolved through direct template substitution:
 
 | Component | LLM Calls | Avg Latency |
 |-----------|-----------|-------------|
-| Response Generation | 7 | 3.14s |
-| Guardrails (topic filter) | 3 | 2.89s |
+| Response Generation | 3 | 0.45s |
+| Guardrails (topic filter) | 3 | 0.33s |
 
 ### Latency by Component
 
 | Component | Avg Latency | Max Latency |
 |-----------|-------------|-------------|
 | Full Request (LangGraph) | 2.42s | 6.56s |
-| LLM Call (DeepSeek) | 3.15s | 4.12s |
+| LLM Call (Groq) | 0.39s | 0.45s |
 | Response Generation | 1.56s | 4.18s |
 | Guardrails | 0.58s | 3.12s |
 | Tool Execution | 0.37s | 0.65s |
