@@ -270,15 +270,6 @@ pytest tests/e2e/
 | Medium (1-3s) | 2 | 8% |
 | Slow (>3s) | 0 | 0% |
 
-### LLM Call Analysis
-
-Only 24% of queries require LLM calls (6 out of 25), with the majority resolved through direct template substitution:
-
-| Component | LLM Calls | Avg Latency |
-|-----------|-----------|-------------|
-| Response Generation | 3 | 0.45s |
-| Guardrails (topic filter) | 3 | 0.33s |
-
 ### Latency by Component
 
 | Component | Avg Latency | Max Latency |
