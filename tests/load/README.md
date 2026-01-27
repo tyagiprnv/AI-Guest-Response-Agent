@@ -120,7 +120,7 @@ While running load tests, monitor:
 
 ## Key Metrics to Watch
 
-- **Response Time**: P50 ~50ms, P95 ~210ms, P99 ~2.2s
+- **Response Time**: P50 ~90ms, Average ~1.07s, P90 ~5s
 - **Error Rate**: Should be < 1%
 - **RPS**: Requests per second sustained
 - **Cache Hit Rate**: Should be 40-60%
@@ -129,17 +129,23 @@ While running load tests, monitor:
 
 ## Expected Performance
 
-Based on the agent's design:
+Based on the agent's measured performance (n=35 queries):
 
 | Metric | Target | Notes |
 |--------|--------|-------|
-| P50 Latency | ~50ms | With caching |
-| P95 Latency | ~210ms | Average response |
-| P99 Latency | ~2.2s | Max acceptable |
+| P50 Latency | ~90ms | With caching + direct template |
+| Average Latency | ~1.07s | Typical response |
+| P90 Latency | ~5s | LLM guardrails + response |
 | Error Rate | < 1% | Excluding rate limits |
 | Throughput | 10-50 RPS | Single instance |
 | Template Match | 70-80% | Cost optimization |
 | Cache Hit Rate | 40-60% | Typical usage |
+
+| Speed Tier | Percentage | Notes |
+|------------|------------|-------|
+| Fast (<1s) | 60% | Direct template, cache hits |
+| Medium (1-3s) | 26% | LLM response generation |
+| Slow (>3s) | 14% | Full LLM guardrails + response |
 
 ## Troubleshooting
 

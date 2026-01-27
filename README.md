@@ -254,31 +254,32 @@ pytest tests/e2e/
 
 ## Performance
 
-### Measured Latency (n=25 queries)
+### Measured Latency (n=35 queries)
 
 | Metric | Value |
 |--------|-------|
-| **Average** | 0.21s |
-| **p50** | 0.05s |
-| **p99** | 2.18s |
+| **Average** | 1.07s |
+| **p50** | 0.09s |
+| **p90** | 5.03s |
+| **p99** | 5.03s |
 | **Min** | 0.01s |
-| **Max** | 2.18s |
+| **Max** | 5.03s |
 
 | Speed Tier | Count | Percentage |
 |------------|-------|------------|
-| Fast (<1s) | 24 | 96% |
-| Medium (1-3s) | 1 | 4% |
-| Slow (>3s) | 0 | 0% |
+| Fast (<1s) | 21 | 60% |
+| Medium (1-3s) | 9 | 26% |
+| Slow (>3s) | 5 | 14% |
 
 ### Latency by Component
 
 | Component | Avg Latency | Max Latency |
 |-----------|-------------|-------------|
-| Full Request (LangGraph) | 0.31s | 2.18s |
-| LLM Call (Groq) | 0.33s | 0.44s |
-| Response Generation | 0.09s | 0.61s |
-| Guardrails | 0.07s | 0.32s |
-| Tool Execution | 0.20s | 1.56s |
+| Full Request (LangGraph) | 2.22s | 5.03s |
+| LLM Call (Groq) | 1.45s | 4.48s |
+| Response Generation | 1.05s | 4.50s |
+| Guardrails | 0.73s | 3.45s |
+| Tool Execution | 0.59s | 1.16s |
 
 ### Optimizations
 
@@ -294,10 +295,10 @@ The agent includes several optimizations for low-latency responses:
 
 | Query Path | Typical Latency |
 |------------|-----------------|
-| Cache hit + fast-path + direct template | ~50ms |
-| Cache miss + fast-path + direct template | ~400ms |
-| Fast-path + LLM response | ~3s |
-| LLM guardrails + LLM response | ~6s |
+| Cache hit + fast-path + direct template | ~90ms (p50) |
+| Cache miss + fast-path + direct template | ~500ms |
+| Fast-path + LLM response | ~2-3s |
+| LLM guardrails + LLM response | ~5s |
 
 ## Metrics
 

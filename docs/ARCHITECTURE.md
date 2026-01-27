@@ -166,7 +166,7 @@ def route_after_guardrails(state: AgentState) -> str:
 - **Restricted Patterns**: 12 keyword patterns trigger LLM classification (legal, medical, pricing, financial, political)
 - **Restricted Topics**: Legal advice, medical advice, price negotiation, financial advice, political discussions
 - **Strategy**: Pattern matching first, then structured JSON output with reasoning
-- **Performance**: ~90ms (fast-path) / ~500ms (LLM classification)
+- **Performance**: ~90ms (fast-path) / ~1.5s (LLM classification)
 - **Metrics**: `topic_filter_path` tracks fast-path vs LLM usage
 
 ### 2. Tool System
@@ -265,9 +265,9 @@ def select_response_strategy(tools_output, property_details):
 
 | Tier | Condition | LLM Call? | Latency | Cost |
 |------|-----------|-----------|---------|------|
-| Direct Template | Score ≥ 0.80 + all placeholders filled | NO | ~50ms | $0.00 |
-| Template + LLM | Score ≥ 0.70 | Yes | ~210ms | ~$0.002 |
-| Custom LLM | Score < 0.70 | Yes | ~2.2s | ~$0.005-0.02 |
+| Direct Template | Score ≥ 0.80 + all placeholders filled | NO | ~90ms | $0.00 |
+| Template + LLM | Score ≥ 0.70 | Yes | ~1-2s | ~$0.002 |
+| Custom LLM | Score < 0.70 | Yes | ~3-5s | ~$0.005-0.02 |
 
 **Configuration** (`settings.py`):
 - `direct_substitution_enabled`: true
@@ -416,10 +416,10 @@ cache_misses = Counter("cache_misses_total", ["cache_type"])
    └─ Return to client
 ```
 
-**Total Latency**:
-- P50: ~50ms (direct template, cache hit)
-- P95: ~210ms (average response)
-- P99: ~2.2s (custom response, cold cache)
+**Total Latency** (n=35 queries):
+- P50: ~90ms (direct template, cache hit)
+- P90: ~5s (LLM guardrails + LLM response)
+- P99: ~5s (worst case)
 
 ## Technology Stack
 
@@ -454,7 +454,7 @@ cache_misses = Counter("cache_misses_total", ["cache_type"])
 - **Type Safety**: TypedDict for state management
 
 ### Why Groq?
-- **Speed**: Ultra-fast inference (~0.33s average latency)
+- **Speed**: Fast inference (~1.45s average latency)
 - **Cost**: Competitive pricing for LLaMA models
 - **Quality**: LLaMA 3.1 8B sufficient for guest response generation
 - **Reliability**: Stable API with high availability
@@ -478,14 +478,15 @@ cache_misses = Counter("cache_misses_total", ["cache_type"])
 
 ## Performance Characteristics
 
-### Latency Profile
+### Latency Profile (n=35 queries)
 ```
-Guardrails:      ~70ms   (fast-path) / ~300ms (LLM classification)
-Tool Execution:  ~200ms  (parallel, cached)
-LLM Generation:  ~330ms  (Groq) / ~410ms (max observed)
-Total:           ~50ms   (direct template, cached)
-                 ~210ms  (average response)
-                 ~2.2s   (max observed)
+Guardrails:      ~0.73s avg  / ~3.45s max
+Tool Execution:  ~0.59s avg  / ~1.16s max
+LLM Generation:  ~1.05s avg  / ~4.50s max
+LLM Call (Groq): ~1.45s avg  / ~4.48s max
+Total:           ~0.09s (p50, direct template)
+                 ~1.07s (average)
+                 ~5.03s (p90/max)
 ```
 
 ### Cost Profile

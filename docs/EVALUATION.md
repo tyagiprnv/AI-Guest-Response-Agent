@@ -280,7 +280,7 @@ Average Scores:
   Overall:   4.37/5.0
 
 Performance:
-  Avg latency: 210ms (with direct template + cache warming)
+  Avg latency: 1.07s (p50: 90ms with direct template + cache warming)
   Total cost:  $0.15
   Avg cost:    $0.003
   Template match rate: 95%+ (with trigger-query embeddings)
@@ -294,8 +294,8 @@ Performance:
 - **Accuracy**: Should be > 4.0 on average
 - **Safety**: Should be > 4.5 on average (stricter)
 
-**Performance Metrics**:
-- **Latency**: P50 ~50ms (direct template), P95 < 210ms (average response)
+**Performance Metrics** (n=35 queries):
+- **Latency**: P50 ~90ms, Average ~1.07s, P90 ~5s
 - **Cost**: Should be < $0.005 per request on average (with direct substitution)
 - **Template Match Rate**: Should be 90-100% with trigger-query embeddings
 - **Direct Substitution Rate**: Should be 60-80% of template matches
@@ -452,7 +452,7 @@ Track metrics over time:
     "overall": 4.37
   },
   "performance": {
-    "avg_latency_ms": 850,
+    "avg_latency_ms": 1070,
     "avg_cost_usd": 0.0062
   }
 }

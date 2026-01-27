@@ -435,7 +435,7 @@ curl http://localhost:6333/collections/templates | jq .result.points_count
 
 #### 4. High Latency
 
-**Symptom**: Responses take > 3 seconds (P95 target: ~210ms)
+**Symptom**: Responses take > 5 seconds consistently (P90: ~5s, Average: ~1.07s)
 
 **Diagnosis**:
 ```bash
@@ -464,10 +464,11 @@ curl 'http://localhost:9090/api/v1/query?query=direct_substitution_count'
 - **High load** → Scale API instances, add load balancer
 - **Network issues** → Check latency to external APIs
 
-**Expected latency tiers**:
-- Direct template (cache hit): ~50ms
-- Template + LLM: ~210ms
-- Custom response: ~2.2s
+**Expected latency tiers** (n=35 queries):
+- Direct template (cache hit): ~90ms (p50)
+- Fast path queries: <1s (60% of queries)
+- LLM response: ~2-3s (26% of queries)
+- Full LLM guardrails + response: ~5s (14% of queries)
 
 #### 5. Memory Issues
 
@@ -587,10 +588,11 @@ embedding_cache = TTLCache(maxsize=2000, ttl=7200)  # Up from 1000/3600
 EMBEDDING_MODEL = "text-embedding-ada-002"  # Faster than 3-small
 ```
 
-**Latency targets with optimizations:**
-- Direct template (cache hit): ~50ms
-- Template + LLM: ~210ms
-- Custom response: ~2.2s
+**Latency targets with optimizations** (n=35 queries):
+- Direct template (cache hit): ~90ms (p50)
+- Fast path queries: <1s (60% of queries)
+- LLM response: ~2-3s (26% of queries)
+- Full LLM guardrails + response: ~5s (14% of queries)
 
 ### Optimize for Cost
 
@@ -647,10 +649,10 @@ Alerts:
 
   # High latency
   - alert: HighLatency
-    expr: histogram_quantile(0.95, rate(agent_request_duration_seconds_bucket[5m])) > 3
+    expr: histogram_quantile(0.95, rate(agent_request_duration_seconds_bucket[5m])) > 5
     for: 5m
     annotations:
-      summary: "P95 latency above 3s"
+      summary: "P95 latency above 5s"
 
   # Low cache hit rate
   - alert: LowCacheHitRate
