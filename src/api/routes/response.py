@@ -56,10 +56,12 @@ async def generate_response(request: GenerateResponseRequest):
         )
 
         # Build response
+        # Clamp confidence score to [0.0, 1.0] to handle floating-point precision
+        confidence = min(1.0, max(0.0, result["confidence_score"]))
         response = GenerateResponseResponse(
             response_text=result["response_text"],
             response_type=result["response_type"],
-            confidence_score=result["confidence_score"],
+            confidence_score=confidence,
             metadata=ResponseMetadata(**result["metadata"]),
         )
 
