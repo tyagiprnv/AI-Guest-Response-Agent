@@ -9,7 +9,7 @@ A production-quality AI agent that generates responses to guest accommodation in
 - **Safety Guardrails**: PII redaction and topic filtering with fast-path optimization
 - **Production Monitoring**: LangSmith tracing, Prometheus metrics, Grafana dashboards
 - **Cost Optimization**: Template-first strategy, direct template substitution (skips LLM), multi-layer caching
-- **Latency Optimization**: Topic filter fast-path (~90ms vs ~3.5s), embedding cache warming at startup
+- **Latency Optimization**: Topic filter fast-path, embedding cache warming, trigger-query embeddings
 - **Comprehensive Testing**: Unit, integration, and E2E tests
 - **Docker Deployment**: Full stack deployment with Docker Compose
 
@@ -34,10 +34,10 @@ graph LR
     T2 --> Merge
     T3 --> Merge
 
-    Merge --> ResponseDecision{Template<br/>Score ≥ 0.65?}
+    Merge --> ResponseDecision{Template<br/>Score ≥ 0.70?}
 
     ResponseDecision -->|Yes| DirectCheck{All Placeholders<br/>Fillable?}
-    ResponseDecision -->|No| CustomResponse[Custom Response<br/>Deepseek-V3.2]
+    ResponseDecision -->|No| CustomResponse[Custom Response<br/>DeepSeek-V3.2]
 
     DirectCheck -->|Yes| DirectTemplate[Direct Template<br/>No LLM Call]
     DirectCheck -->|No| TemplateResponse[Template Response<br/>Deepseek-V3.2]
@@ -215,9 +215,13 @@ The agent uses a three-tier response strategy to optimize for both quality and c
 
 | Response Type | Condition | LLM Call | Description |
 |---------------|-----------|----------|-------------|
-| **Direct Template** | Score ≥ 0.65 + all placeholders fillable | No | High-confidence matches skip LLM entirely. Placeholders are substituted with live property/reservation data. |
-| **Template Response** | Score ≥ 0.65 + missing placeholders | Yes | Good matches use templates as context for LLM generation. |
-| **Custom Response** | Score < 0.65 | Yes | Low matches generate fully custom responses. |
+| **Direct Template** | Score ≥ 0.80 + all placeholders fillable | No | High-confidence matches skip LLM entirely. Placeholders are substituted with live property/reservation data. |
+| **Template Response** | Score ≥ 0.70 + missing placeholders | Yes | Good matches use templates as context for LLM generation. |
+| **Custom Response** | Score < 0.70 | Yes | Low matches generate fully custom responses. |
+
+### Trigger-Query Embeddings
+
+Templates are indexed using **trigger queries** rather than response text, enabling query-to-query semantic matching. This produces high similarity scores (0.85-1.00) for common accommodation queries, making the direct template path highly effective.
 
 ### Direct Template Substitution
 
@@ -226,12 +230,12 @@ For high-confidence template matches, the system performs runtime placeholder su
 - Templates contain placeholders like `{check_in_time}`, `{guest_name}`, `{property_name}`
 - The system builds context from property and reservation data
 - If all placeholders can be filled, the response is returned directly without an LLM call
-- This significantly reduces latency and API costs for common queries
+- This eliminates LLM latency for the majority of common queries
 
 Configure via environment variables:
 ```bash
-DIRECT_SUBSTITUTION_THRESHOLD=0.55  # Score threshold for direct substitution
-RETRIEVAL_SIMILARITY_THRESHOLD=0.65  # Score threshold for template matching
+DIRECT_SUBSTITUTION_THRESHOLD=0.80   # Score threshold for direct substitution
+RETRIEVAL_SIMILARITY_THRESHOLD=0.70  # Score threshold for template matching
 ```
 
 ## Testing
@@ -249,35 +253,72 @@ pytest tests/integration/
 pytest tests/e2e/
 ```
 
-## Performance Optimizations
+## Performance
+
+### Measured Latency (n=25 queries)
+
+| Metric | Value |
+|--------|-------|
+| **Average** | 1.31s |
+| **p50** | 0.05s |
+| **p99** | 7.53s |
+| **Min** | 0.01s |
+| **Max** | 7.53s |
+
+| Speed Tier | Count | Percentage |
+|------------|-------|------------|
+| Fast (<1s) | 18 | 72% |
+| Medium (1-3s) | 2 | 8% |
+| Slow (>3s) | 5 | 20% |
+
+### LLM Call Analysis
+
+Only 40% of queries require LLM calls (10 out of 25), with the majority resolved through direct template substitution:
+
+| Component | LLM Calls | Avg Latency |
+|-----------|-----------|-------------|
+| Response Generation | 7 | 3.14s |
+| Guardrails (topic filter) | 3 | 2.89s |
+
+### Latency by Component
+
+| Component | Avg Latency | Max Latency |
+|-----------|-------------|-------------|
+| Full Request (LangGraph) | 2.42s | 6.56s |
+| LLM Call (DeepSeek) | 3.15s | 4.12s |
+| Response Generation | 1.56s | 4.18s |
+| Guardrails | 0.58s | 3.12s |
+| Tool Execution | 0.37s | 0.65s |
+
+### Optimizations
 
 The agent includes several optimizations for low-latency responses:
 
-### Topic Filter Fast-Path
-For common safe queries (check-in times, amenities, parking, etc.), the topic filter uses pattern matching instead of an LLM call:
-- **Before**: ~3,500ms (DeepSeek API call)
-- **After**: ~90ms (regex pattern matching)
+**Topic Filter Fast-Path**: For common safe queries (check-in times, amenities, parking, etc.), the topic filter uses regex pattern matching (~90ms) instead of an LLM call, reducing guardrails latency significantly.
 
-### Embedding Cache Warming
-At startup, embeddings for 54 common queries are pre-generated:
-- **Cache hit**: ~50ms (no OpenAI API call)
-- **Cache miss**: ~500ms (requires OpenAI API call)
+**Embedding Cache Warming**: At startup, embeddings for 54 common queries are pre-generated in a single batch API call. Cached queries skip the embedding API call entirely.
 
-### End-to-End Latency
+**Trigger-Query Embeddings**: Templates are indexed by trigger queries, enabling high-confidence semantic matches (0.85-1.00 similarity scores) that qualify for direct template substitution.
 
-| Query Type | Latency | Path |
-|------------|---------|------|
-| Common query + template match | **~130ms** | Fast-path + cache hit + direct template |
-| New query + template match | **~700ms** | Fast-path + cache miss + direct template |
-| Query requiring LLM response | **~3,000ms** | Fast-path + custom/template response |
+### Latency by Path
 
-## Key Metrics
+| Query Path | Typical Latency |
+|------------|-----------------|
+| Cache hit + fast-path + direct template | ~50ms |
+| Cache miss + fast-path + direct template | ~400ms |
+| Fast-path + LLM response | ~3s |
+| LLM guardrails + LLM response | ~6s |
 
-The agent tracks:
-- **Quality**: Relevance, accuracy, safety scores
-- **Performance**: P50/P95/P99 latency, tokens/request
-- **Cost**: Cost per response, template match rate, direct substitution rate
-- **Operational**: Error rate, cache hit rate, guardrail triggers, topic filter path (fast_path/llm), direct substitution success/fallback
+## Metrics
+
+The agent tracks the following via Prometheus:
+
+| Category | Metrics |
+|----------|---------|
+| **Quality** | Relevance score, accuracy score, safety score |
+| **Performance** | P50/P95/P99 latency, tokens per request |
+| **Cost** | Cost per response, template match rate, direct substitution rate |
+| **Operational** | Error rate, cache hit rate, guardrail triggers, topic filter path (fast_path/llm), direct substitution status (success/fallback) |
 
 ## Development
 
