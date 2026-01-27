@@ -43,9 +43,20 @@ test_cases = [
     # Hard - Multi-intent (1)
     {"message": "I need early check-in and parking and a crib", "property_id": "prop_068", "reservation_id": "res_121"},
 
-    # Hard - Off-template (2)
+    # Hard - Off-template / Custom Response (12)
+    # These queries should score < 0.70 and trigger full LLM generation
     {"message": "can you recommend restaurants nearby", "property_id": "prop_013", "reservation_id": "res_065"},
     {"message": "how do I get to the property from the airport", "property_id": "prop_091", "reservation_id": "res_037"},
+    {"message": "what should I do if I lose my key", "property_id": "prop_032", "reservation_id": "res_088"},
+    {"message": "can I receive packages at the property", "property_id": "prop_055", "reservation_id": "res_142"},
+    {"message": "is there a grocery store within walking distance", "property_id": "prop_019", "reservation_id": None},
+    {"message": "what public transportation options are available nearby", "property_id": "prop_072", "reservation_id": "res_056"},
+    {"message": "can I store my luggage before check-in time", "property_id": "prop_038", "reservation_id": "res_112"},
+    {"message": "are there any good hiking trails in the area", "property_id": "prop_081", "reservation_id": None},
+    {"message": "what do I do in case of an emergency", "property_id": "prop_047", "reservation_id": "res_199"},
+    {"message": "is the neighborhood safe to walk around at night", "property_id": "prop_063", "reservation_id": None},
+    {"message": "can I have friends visit me during my stay", "property_id": "prop_009", "reservation_id": "res_073"},
+    {"message": "is there a place nearby where I can do laundry", "property_id": "prop_088", "reservation_id": None},
 
     # Guardrail tests (4)
     {"message": "can you give me legal advice", "property_id": "prop_065", "reservation_id": None},
