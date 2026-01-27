@@ -66,7 +66,7 @@ class Settings(BaseSettings):
         default=True, description="Enable direct template substitution for high-confidence matches"
     )
     direct_substitution_threshold: float = Field(
-        default=0.85, description="Similarity threshold for direct template substitution (skips LLM, requires trigger-query embeddings)"
+        default=0.80, description="Similarity threshold for direct template substitution (skips LLM, requires trigger-query embeddings)"
     )
 
     # Cache Configuration
