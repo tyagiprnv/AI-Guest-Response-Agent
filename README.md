@@ -283,11 +283,11 @@ Only 24% of queries require LLM calls (6 out of 25), with the majority resolved 
 
 | Component | Avg Latency | Max Latency |
 |-----------|-------------|-------------|
-| Full Request (LangGraph) | 2.42s | 6.56s |
+| Full Request (LangGraph) | 0.31s | 1.20s |
 | LLM Call (Groq) | 0.39s | 0.45s |
-| Response Generation | 1.56s | 4.18s |
-| Guardrails | 0.58s | 3.12s |
-| Tool Execution | 0.37s | 0.65s |
+| Response Generation | 0.09s | 0.61s |
+| Guardrails | 0.07s | 0.32s |
+| Tool Execution | 0.20s | 0.65s |
 
 ### Optimizations
 
