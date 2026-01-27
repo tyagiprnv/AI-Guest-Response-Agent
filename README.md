@@ -1,6 +1,6 @@
 # AI Guest Response Agent
 
-A production-quality AI agent that generates responses to guest accommodation inquiries. This project demonstrates AI Engineering and MLOps expertise through LangGraph orchestration, multi-tool agentic workflows, comprehensive evaluation, and production monitoring.
+A production-quality AI agent that generates responses to guest accommodation inquiries.
 
 ## Features
 
@@ -311,4 +311,4 @@ MIT
 
 ## Author
 
-Pranav Tyagi - AI Engineer Portfolio Project
+Pranav Tyagi
