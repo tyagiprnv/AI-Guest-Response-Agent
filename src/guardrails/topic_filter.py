@@ -29,9 +29,13 @@ SAFE_QUERY_PATTERNS = [
     r"\b(check[- ]?in|check[- ]?out)\b",
     r"\b(arrival|departure)\s*(time|hour)",
     r"\bwhat time\b.*\b(arrive|leave|check)",
-    r"\bwhen\b.*\b(check|arrive|leave)",
+    r"\bwhen\b.*\b(check|arrive|leave|get there)",
     r"\bearly\s*(check[- ]?in|arrival)",
     r"\blate\s*(check[- ]?out|departure)",
+    # Casual arrival/departure queries
+    r"\b(get there|getting there|be there)\b",
+    r"\bwhen\s*(can|do|should)\s*(i|we)\b",
+    r"\b(arrive|arriving|arrival)\b",
     # Amenities and facilities
     r"\b(amenities|facilities|features)\b",
     r"\b(pool|gym|fitness|spa|sauna|hot tub|jacuzzi)\b",
@@ -50,12 +54,13 @@ SAFE_QUERY_PATTERNS = [
     r"\b(balcony|terrace|patio|view)\b",
     r"\b(floor|elevator|lift|stairs)\b",
     # Policies
-    r"\b(pet|pets|dog|cat|animal)\b.*\b(allow|policy|permit)",
-    r"\b(smok|vape|vaping)\b",
+    r"\b(pet|pets|dog|cat|animal)\b.*\b(allow|ok|permitted|policy|permit)",
+    r"\b(smoke|smoking|vape|vaping)\b",
     r"\b(cancel|cancellation|refund)\b",
     r"\b(policy|policies|rules|house rules)\b",
     r"\b(quiet hours|noise)\b",
     r"\b(guest|visitor|extra person)\b",
+    r"\b(kids|children|child|infant|baby|crib)\b",
     # Location and directions
     r"\b(address|location|where|direction|how to get)\b",
     r"\b(near|nearby|close to|around)\b",
@@ -64,12 +69,15 @@ SAFE_QUERY_PATTERNS = [
     r"\b(reservation|booking|confirmation)\b",
     r"\b(my (stay|trip|visit|booking))\b",
     r"\b(extend|extension|longer|extra night)\b",
+    # Special requests
+    r"\b(special request|request|arrange|arrangement)\b",
+    r"\b(accommodate|accommodation)\b",
     # Contact and support
     r"\b(contact|phone|email|call|reach)\b",
     r"\b(help|assist|support|question)\b",
     r"\b(emergency|urgent)\b",
     # General greetings and simple queries
-    r"^(hi|hello|hey|good morning|good afternoon|good evening)",
+    r"^(hi|hello|hey|good morning|good afternoon|good evening|yo)\b",
     r"\b(thank|thanks)\b",
 ]
 
