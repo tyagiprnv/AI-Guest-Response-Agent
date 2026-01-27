@@ -10,7 +10,7 @@ load_dotenv()
 from langsmith import Client
 
 
-def fetch_langsmith_data(project_name: str = None, limit: int = 25):
+def fetch_langsmith_data(project_name: str = None, limit: int = 35):
     """Fetch and analyze recent runs from LangSmith."""
     client = Client()
 
