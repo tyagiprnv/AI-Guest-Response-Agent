@@ -49,9 +49,28 @@ class EmbeddingCache(SimpleCache):
         super().__init__(ttl_seconds=settings.cache_ttl_seconds)
 
     @staticmethod
+    def _normalize_text(text: str) -> str:
+        """Normalize text for cache key matching.
+
+        Applies: lowercase, strip whitespace, replace hyphens with spaces, remove punctuation.
+        This allows "What time is check-in?" to match "what time is check in".
+        """
+        import re
+        # Lowercase and strip
+        normalized = text.lower().strip()
+        # Replace hyphens with spaces (so "check-in" becomes "check in")
+        normalized = normalized.replace('-', ' ')
+        # Remove punctuation (keep alphanumeric and spaces)
+        normalized = re.sub(r'[^\w\s]', '', normalized)
+        # Collapse multiple spaces
+        normalized = re.sub(r'\s+', ' ', normalized)
+        return normalized
+
+    @staticmethod
     def _hash_text(text: str) -> str:
-        """Create hash of text for cache key."""
-        return hashlib.sha256(text.encode()).hexdigest()
+        """Create hash of normalized text for cache key."""
+        normalized = EmbeddingCache._normalize_text(text)
+        return hashlib.sha256(normalized.encode()).hexdigest()
 
     def get_embedding(self, text: str) -> Optional[list[float]]:
         """Get cached embedding."""
@@ -108,6 +127,7 @@ response_cache = ResponseCache()
 
 # Common queries for cache warming
 # These cover the most frequent guest inquiries
+# Note: Cache uses normalized keys (lowercase, no punctuation) so variations match
 COMMON_QUERIES = [
     # Check-in/out
     "What time is check-in?",
@@ -122,6 +142,15 @@ COMMON_QUERIES = [
     "What is the checkout time?",
     "Early check-in",
     "Late checkout",
+    "when can I check in",
+    "when do I need to leave",
+    "checkout time please",
+    "what's the earliest arrival time",
+    "can I get a late checkout",
+    "yo when can i get there",
+    "arriving after midnight, ok?",
+    "is early check-in possible",
+    "latest time to leave the room",
     # Parking
     "Is there parking available?",
     "Is there parking?",
@@ -129,6 +158,10 @@ COMMON_QUERIES = [
     "Where can I park?",
     "Is parking free?",
     "How much is parking?",
+    "is there parking",
+    "where can I park my car",
+    "got a garage or something?",
+    "parking cost?",
     # WiFi
     "What is the wifi password?",
     "What's the wifi password?",
@@ -136,6 +169,9 @@ COMMON_QUERIES = [
     "How do I connect to wifi?",
     "Is there wifi?",
     "Do you have internet?",
+    "do you have wifi",
+    "need the wifi password",
+    "is internet included",
     # Amenities
     "What amenities are available?",
     "What amenities do you have?",
@@ -144,12 +180,16 @@ COMMON_QUERIES = [
     "Do you have a fitness center?",
     "Is breakfast included?",
     "Do you serve breakfast?",
+    "what amenities are available",
+    "what do I get with my stay",
+    "is there a pool or gym",
     # Room info
     "What type of bed is in the room?",
     "Is there air conditioning?",
     "Is there a kitchen?",
     "Does the room have a balcony?",
     "How many beds?",
+    "what room type did I book",
     # Policies
     "What is the cancellation policy?",
     "Can I cancel my reservation?",
@@ -157,12 +197,27 @@ COMMON_QUERIES = [
     "Do you allow pets?",
     "Is smoking allowed?",
     "What are the house rules?",
+    "cancellation policy",
+    "are pets allowed",
+    "can I smoke inside",
+    "my dog - is that ok?",
+    "what happens if I need to cancel",
+    "refund if I cancel?",
+    "are kids welcome",
+    "traveling with kids, any issues?",
+    # Reservation
+    "can you confirm my reservation",
+    "when is my booking",
+    # Special requests
+    "can I make a special request",
+    "need to arrange something special",
     # Location
     "What is the address?",
     "Where are you located?",
     "How do I get there?",
     "How far from the airport?",
     "Is there public transport nearby?",
+    "how do I get to the property from the airport",
     # Contact
     "How can I contact you?",
     "What is your phone number?",
