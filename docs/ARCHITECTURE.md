@@ -125,9 +125,10 @@ class AgentState:
    - All tools execute asynchronously in parallel for performance
 
 4. **Response Generation**
-   - **Strategy Selection**:
-     - If template found with high similarity (>0.75): Use template (fast, cheap)
-     - Else if tools returned context: Generate custom response (slower, expensive)
+   - **Strategy Selection** (Three-Tier):
+     - If template found with score ≥0.80: Direct substitution (no LLM)
+     - Else if template score ≥0.70: Template + LLM refinement
+     - Else if tools returned context: Custom LLM response
      - Else: Return "cannot help" message
    - **LLM Generation**: Use Groq LLaMA 3.1 8B for response generation
    - **Metadata Collection**: Track tokens, cost, latency
@@ -159,11 +160,14 @@ def route_after_guardrails(state: AgentState) -> str:
 - **Performance**: ~50ms per check (spaCy model)
 
 #### Topic Filter
-- **Method**: LLM-based classification
-- **Model**: GPT-4o-mini (fast, cheap)
-- **Restricted Topics**: Legal advice, medical advice, price negotiation, unrelated queries
-- **Strategy**: Structured JSON output with reasoning
-- **Performance**: ~500ms per check (cached for similar queries)
+- **Method**: Fast-path regex + LLM fallback classification
+- **Model**: Groq LLaMA 3.1 8B Instant (via `ChatGroq`)
+- **Fast-Path**: 56 safe query patterns skip LLM entirely (check-in, parking, WiFi, amenities, policies, etc.)
+- **Restricted Patterns**: 12 keyword patterns trigger LLM classification (legal, medical, pricing, financial, political)
+- **Restricted Topics**: Legal advice, medical advice, price negotiation, financial advice, political discussions
+- **Strategy**: Pattern matching first, then structured JSON output with reasoning
+- **Performance**: ~90ms (fast-path) / ~500ms (LLM classification)
+- **Metrics**: `topic_filter_path` tracks fast-path vs LLM usage
 
 ### 2. Tool System
 
@@ -175,7 +179,7 @@ class TemplateRetrievalTool:
     def __init__(self):
         self.qdrant_client = QdrantClient()
         self.embedding_service = EmbeddingService()
-        self.similarity_threshold = 0.75
+        self.similarity_threshold = 0.70  # Configurable via settings
 
     async def retrieve(self, query: str) -> List[Template]:
         # 1. Generate embedding (cached)
@@ -189,11 +193,35 @@ class TemplateRetrievalTool:
             score_threshold=self.similarity_threshold
         )
 
-        # 3. Return templates
-        return [Template.from_qdrant(r) for r in results]
+        # 3. Deduplicate by template_id (keep highest score)
+        return deduplicate_by_template_id(results)
 ```
 
 **Performance**: 100-200ms (50ms embedding + 50-150ms search)
+
+**Trigger-Query Embeddings** (Novel Approach):
+
+Instead of embedding template *text*, we embed 3-5 **trigger queries** per template. This enables query-to-query semantic matching which produces much higher similarity scores:
+
+| Matching Type | Typical Score |
+|--------------|---------------|
+| Query-to-Query (trigger) | 0.85-1.00 |
+| Query-to-Answer (traditional) | 0.50-0.60 |
+
+Example template structure:
+```json
+{
+  "id": "T001",
+  "text": "Check-in is available from {check_in_time} onwards.",
+  "trigger_queries": [
+    "What time is check-in?",
+    "When can I check in?",
+    "What are your check-in hours?"
+  ]
+}
+```
+
+**Deduplication**: Since multiple trigger queries map to the same template, results are deduplicated by `template_id`, keeping the highest score per template.
 
 #### Property Details Tool
 - **Data Source**: In-memory repository (JSON files)
@@ -210,25 +238,47 @@ class TemplateRetrievalTool:
 
 ### 3. Response Generation
 
-#### Template-First Strategy
+#### Three-Tier Response Strategy
+
+The system uses a three-tier strategy to optimize for speed and cost:
+
 ```python
-def select_response_strategy(tools_output):
+def select_response_strategy(tools_output, property_details):
     templates = tools_output.get("templates", [])
 
-    if templates and templates[0].similarity > 0.75:
-        return "template", templates[0].template
+    if templates and templates[0].similarity >= 0.80:
+        # Tier 1: Direct Template Substitution (NO LLM)
+        # Fill placeholders with property/reservation data
+        if can_substitute_all_placeholders(templates[0], property_details):
+            return "direct_template", substitute_template(templates[0])
 
-    property_details = tools_output.get("property_details")
+    if templates and templates[0].similarity >= 0.70:
+        # Tier 2: Template + LLM refinement
+        return "template", generate_with_template(templates[0])
+
     if property_details:
+        # Tier 3: Custom LLM generation
         return "custom", generate_custom_response(...)
 
     return "no_response", DEFAULT_MESSAGE
 ```
 
+| Tier | Condition | LLM Call? | Latency | Cost |
+|------|-----------|-----------|---------|------|
+| Direct Template | Score ≥ 0.80 + all placeholders filled | NO | ~130ms | $0.00 |
+| Template + LLM | Score ≥ 0.70 | Yes | ~700ms | ~$0.002 |
+| Custom LLM | Score < 0.70 | Yes | ~2-3s | ~$0.005-0.02 |
+
+**Configuration** (`settings.py`):
+- `direct_substitution_enabled`: true
+- `direct_substitution_threshold`: 0.80
+- `retrieval_similarity_threshold`: 0.70
+
 **Cost Impact**:
-- Template response: ~$0.002 (retrieval + embedding only)
-- Custom response: ~$0.01-0.02 (includes LLM generation)
-- **Savings**: 5-10x cost reduction with 70-80% template match rate
+- Direct template response: $0.00 (no LLM call)
+- Template + LLM response: ~$0.002 (retrieval + minimal generation)
+- Custom response: ~$0.01-0.02 (includes full LLM generation)
+- **Savings**: 10-20x cost reduction with high template match rate
 
 #### Custom Response Generation
 - **Model**: Groq LLaMA 3.1 8B Instant (fast inference)
@@ -261,6 +311,30 @@ class CacheManager:
 - Responses: 20-40%
 
 **Cost Savings**: 40-60% reduction in API costs
+
+#### Embedding Cache Warming
+
+At startup, the application pre-generates embeddings for ~100 common queries to eliminate OpenAI API latency for frequent requests:
+
+```python
+COMMON_QUERIES = [
+    "What time is check-in?",
+    "What time is checkout?",
+    "Is there parking available?",
+    "What is the wifi password?",
+    # ... ~100 queries total covering check-in, parking, WiFi, amenities, policies, etc.
+]
+
+async def warm_embedding_cache() -> int:
+    """Pre-generate embeddings for common queries at startup."""
+    # Batch generation in single OpenAI API call (~4-5s one-time cost)
+    # Embeddings stored in embedding_cache
+```
+
+**Impact**:
+- Startup cost: ~4-5s
+- Runtime benefit: Eliminates ~150-200ms embedding latency per cached query
+- Break-even: ~25 requests
 
 ### 5. Monitoring & Observability
 
@@ -343,8 +417,8 @@ cache_misses = Counter("cache_misses_total", ["cache_type"])
 ```
 
 **Total Latency**:
-- P50: ~800ms (template response, cached)
-- P95: ~2s (custom response, cached)
+- P50: ~130-150ms (direct template, cache hit)
+- P95: ~700ms (template + LLM)
 - P99: ~3s (custom response, cold cache)
 
 ## Technology Stack
@@ -406,10 +480,12 @@ cache_misses = Counter("cache_misses_total", ["cache_type"])
 
 ### Latency Profile
 ```
-Guardrails:      ~550ms  (PII: 50ms, Topic: 500ms)
+Guardrails:      ~90ms   (fast-path) / ~500ms (LLM classification)
 Tool Execution:  ~150ms  (parallel, cached)
-LLM Generation:  ~1.5s   (if needed)
-Total:           ~700ms  (template) to ~2.2s (custom)
+LLM Generation:  ~400ms  (Groq) / ~1-2s (if needed)
+Total:           ~130ms  (direct template, cached)
+                 ~700ms  (template + LLM)
+                 ~2-3s   (custom response)
 ```
 
 ### Cost Profile
@@ -461,6 +537,6 @@ Savings with 70% template rate:
 
 ---
 
-**Version**: 1.0
-**Last Updated**: 2026-01-24
+**Version**: 1.1
+**Last Updated**: 2026-01-27
 **Author**: Pranav Tyagi

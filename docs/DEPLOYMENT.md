@@ -435,7 +435,7 @@ curl http://localhost:6333/collections/templates | jq .result.points_count
 
 #### 4. High Latency
 
-**Symptom**: Responses take > 5 seconds
+**Symptom**: Responses take > 3 seconds (P95 target: ~700ms)
 
 **Diagnosis**:
 ```bash
@@ -447,14 +447,27 @@ curl 'http://localhost:9090/api/v1/query?query=histogram_quantile(0.95,rate(agen
 
 # Check cache hit rate
 curl 'http://localhost:9090/api/v1/query?query=rate(cache_hits_total[5m])'
+
+# Check topic filter fast-path usage
+curl 'http://localhost:9090/api/v1/query?query=topic_filter_path'
+
+# Check direct substitution rate
+curl 'http://localhost:9090/api/v1/query?query=direct_substitution_count'
 ```
 
 **Solutions**:
-- **Low cache hit rate** → Increase cache TTL, warm up cache
+- **Low cache hit rate** → Increase cache TTL, verify cache warming at startup
+- **Topic filter using LLM path** → Add more safe patterns to `SAFE_QUERY_PATTERNS`
+- **Low direct substitution rate** → Verify trigger-query embeddings are indexed
 - **Slow LLM API** → Check Groq/OpenAI status pages
 - **Slow Qdrant** → Check Qdrant resource usage, add indexes
 - **High load** → Scale API instances, add load balancer
 - **Network issues** → Check latency to external APIs
+
+**Expected latency tiers**:
+- Direct template (cache hit): ~130ms
+- Template + LLM: ~700ms
+- Custom response: ~2-3s
 
 #### 5. Memory Issues
 
@@ -547,6 +560,18 @@ docker logs api | grep -i langsmith
 ### Optimize for Latency
 
 ```python
+# Enable topic filter fast-path (already default)
+# 56 safe query patterns skip LLM classification (~90ms vs ~500ms)
+# See src/guardrails/topic_filter.py for SAFE_QUERY_PATTERNS
+
+# Enable embedding cache warming at startup
+# Pre-generates ~100 common query embeddings (~4-5s startup cost)
+# See src/data/cache.py for COMMON_QUERIES list
+
+# Enable direct template substitution (skips LLM for score >= 0.80)
+DIRECT_SUBSTITUTION_ENABLED = True
+DIRECT_SUBSTITUTION_THRESHOLD = 0.80
+
 # Increase parallel execution
 # In src/agent/graph.py
 max_parallel_tools = 5  # Up from 3
@@ -562,18 +587,27 @@ embedding_cache = TTLCache(maxsize=2000, ttl=7200)  # Up from 1000/3600
 EMBEDDING_MODEL = "text-embedding-ada-002"  # Faster than 3-small
 ```
 
+**Latency targets with optimizations:**
+- Direct template (cache hit): ~130ms
+- Template + LLM: ~700ms
+- Custom response: ~2-3s
+
 ### Optimize for Cost
 
 ```python
-# Lower similarity threshold (more template matches)
-TEMPLATE_SIMILARITY_THRESHOLD = 0.70  # Down from 0.75
+# Enable direct template substitution (skips LLM for high-confidence matches)
+DIRECT_SUBSTITUTION_ENABLED = True
+DIRECT_SUBSTITUTION_THRESHOLD = 0.80  # Requires trigger-query embeddings
+
+# Template matching threshold
+RETRIEVAL_SIMILARITY_THRESHOLD = 0.70  # With trigger-query embeddings
 
 # Increase cache TTLs
 tool_cache_ttl = 600  # 10 minutes instead of 5
 
 # Use cheaper models
 AGENT_MODEL = "llama-3.1-8b-instant"  # Already optimal
-JUDGE_MODEL = "gpt-4o-mini"    # Instead of gpt-4o
+JUDGE_MODEL = "deepseek-chat"    # Cost-effective for evaluation
 ```
 
 ### Optimize for Throughput
@@ -661,6 +695,6 @@ api:
 
 ---
 
-**Version**: 1.0
-**Last Updated**: 2026-01-24
+**Version**: 1.1
+**Last Updated**: 2026-01-27
 **Author**: Pranav Tyagi
