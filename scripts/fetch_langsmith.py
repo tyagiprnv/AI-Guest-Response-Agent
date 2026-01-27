@@ -16,7 +16,7 @@ def fetch_langsmith_data(project_name: str = None, limit: int = 25):
 
     # Use provided project name or default
     if project_name is None:
-        project_name = os.getenv("LANGCHAIN_PROJECT", "GuestAgent")
+        project_name = os.getenv("LANGCHAIN_PROJECT", "GuestAgentGroq")
 
     print(f"Fetching runs from project: {project_name}\n")
 

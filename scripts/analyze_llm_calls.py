@@ -17,7 +17,7 @@ def analyze_llm_calls(project_name: str = None, limit: int = 50):
 
     # Use provided project name or default
     if project_name is None:
-        project_name = os.getenv("LANGCHAIN_PROJECT", "GuestAgent")
+        project_name = os.getenv("LANGCHAIN_PROJECT", "GuestAgentGroq")
 
     print(f"Analyzing LLM calls from project: {project_name}\n")
 

@@ -20,7 +20,8 @@ class Settings(BaseSettings):
 
     # API Keys
     openai_api_key: str = Field(..., description="OpenAI API key")
-    deepseek_api_key: str = Field(..., description="DeepSeek API key")
+    deepseek_api_key: str = Field(default="", description="DeepSeek API key (optional)")
+    groq_api_key: str = Field(..., description="Groq API key")
 
     # LangSmith Configuration
     langsmith_api_key: str = Field(..., description="LangSmith API key")
@@ -51,7 +52,7 @@ class Settings(BaseSettings):
     embedding_dimension: int = Field(default=1536, description="Embedding dimension")
 
     # LLM Configuration
-    llm_model: str = Field(default="deepseek-chat", description="DeepSeek model")
+    llm_model: str = Field(default="llama-3.1-8b-instant", description="Groq model")
     llm_temperature: float = Field(default=0.7, description="LLM temperature")
     llm_max_tokens: int = Field(default=1000, description="LLM max tokens")
 

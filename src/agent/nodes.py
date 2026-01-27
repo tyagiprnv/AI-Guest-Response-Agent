@@ -7,11 +7,10 @@ from datetime import datetime, date
 from time import time
 from typing import Any, Dict
 
-from langchain_deepseek import ChatDeepSeek
+from langchain_groq import ChatGroq
 
 from src.agent.prompts import (
     CUSTOM_RESPONSE_PROMPT,
-    NO_RESPONSE_PROMPT,
     RESPONSE_GENERATION_PROMPT,
 )
 from src.agent.state import AgentState
@@ -187,10 +186,10 @@ async def generate_direct_template_response(state: AgentState) -> Dict[str, Any]
 async def generate_template_response(state: AgentState) -> Dict[str, Any]:
     """Generate response using templates."""
     settings = get_settings()
-    llm = ChatDeepSeek(
+    llm = ChatGroq(
         model=settings.llm_model,
         temperature=settings.llm_temperature,
-        api_key=settings.deepseek_api_key,
+        api_key=settings.groq_api_key,
     )
 
     # Format templates
@@ -241,10 +240,10 @@ async def generate_template_response(state: AgentState) -> Dict[str, Any]:
 async def generate_custom_response(state: AgentState) -> Dict[str, Any]:
     """Generate custom response without templates."""
     settings = get_settings()
-    llm = ChatDeepSeek(
+    llm = ChatGroq(
         model=settings.llm_model,
         temperature=settings.llm_temperature,
-        api_key=settings.deepseek_api_key,
+        api_key=settings.groq_api_key,
     )
 
     property_info = json.dumps(state.get("property_details"), indent=2, default=json_serial) if state.get("property_details") else "Not available"
@@ -278,24 +277,8 @@ async def generate_custom_response(state: AgentState) -> Dict[str, Any]:
 
 
 async def generate_no_response(state: AgentState) -> Dict[str, Any]:
-    """Generate polite decline response."""
-    settings = get_settings()
-    llm = ChatDeepSeek(
-        model=settings.llm_model,
-        temperature=settings.llm_temperature,
-        api_key=settings.deepseek_api_key,
-    )
-
-    reason = state["topic_filter_result"]["reason"]
-    prompt = NO_RESPONSE_PROMPT.format(reason=reason)
-
-    response = await llm.ainvoke(prompt)
-
-    try:
-        result = json.loads(response.content)
-        response_text = result["response_text"]
-    except json.JSONDecodeError:
-        response_text = "I apologize, but I'm unable to assist with this type of request. Please contact the property directly for further assistance."
+    """Generate polite decline response without LLM call."""
+    response_text = "I apologize, but I'm unable to assist with this type of request. Please contact the property directly for further assistance."
 
     # Update metrics
     response_type_count.labels(response_type="no_response").inc()

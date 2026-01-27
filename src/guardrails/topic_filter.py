@@ -5,7 +5,7 @@ import json
 import re
 from typing import Any, Dict
 
-from langchain_deepseek import ChatDeepSeek
+from langchain_groq import ChatGroq
 
 from src.config.settings import get_settings
 from src.monitoring.logging import get_logger
@@ -175,10 +175,10 @@ async def check_topic_restriction(message: str) -> Dict[str, Any]:
     settings = get_settings()
 
     # Initialize LLM for ambiguous/potentially restricted queries
-    llm = ChatDeepSeek(
+    llm = ChatGroq(
         model=settings.llm_model,
         temperature=0,
-        api_key=settings.deepseek_api_key,
+        api_key=settings.groq_api_key,
     )
 
     # Classify topic
