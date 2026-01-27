@@ -18,14 +18,17 @@ Before you begin, ensure you have:
 ### Step 1: Install Python Dependencies
 
 ```bash
-# Install the package and dependencies
-uv pip install -e .
+# Sync project dependencies (creates .venv automatically)
+uv sync
+
+# (Optional) Include development tools
+uv sync --extra dev
+
+# Activate virtual environment
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 # Download spaCy model for PII detection
 python -m spacy download en_core_web_sm
-
-# (Optional) Install development tools
-uv pip install -e ".[dev]"
 ```
 
 This will install all required packages including:
@@ -272,7 +275,8 @@ python scripts/setup_qdrant.py
 
 **Solution**: Install dependencies:
 ```bash
-uv pip install -e .
+uv sync
+source .venv/bin/activate
 python -m spacy download en_core_web_sm
 ```
 

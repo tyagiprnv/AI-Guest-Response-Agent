@@ -49,9 +49,9 @@ python --version
 # Docker (for Qdrant, Prometheus, Grafana)
 docker --version
 
-# Virtual environment (recommended)
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+# uv package manager
+uv --version
+# Install if needed: curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 ### Step-by-Step Setup
@@ -64,11 +64,14 @@ cd agentic-project
 
 #### 2. Install Dependencies
 ```bash
-# Install package in editable mode
-uv pip install -e .
+# Sync project dependencies (creates .venv automatically)
+uv sync
 
-# Install development dependencies (optional)
-uv pip install -e ".[dev]"
+# Include development dependencies (optional)
+uv sync --extra dev
+
+# Activate virtual environment
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
 
 # Download spaCy model for PII detection
 python -m spacy download en_core_web_sm
@@ -516,7 +519,7 @@ python -c "from presidio_analyzer import AnalyzerEngine; print(AnalyzerEngine().
 
 **Solutions**:
 - Install spaCy model: `python -m spacy download en_core_web_sm`
-- Update Presidio: `uv pip install --upgrade presidio-analyzer presidio-anonymizer`
+- Update Presidio: `uv add --upgrade presidio-analyzer presidio-anonymizer`
 - Check guardrail is enabled in agent graph
 
 #### 8. LangSmith Traces Not Appearing

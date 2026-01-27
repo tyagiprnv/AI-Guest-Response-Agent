@@ -103,15 +103,14 @@ graph LR
 git clone <repository-url>
 cd agentic-project
 
-# Create virtual environment
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# Install dependencies
-uv pip install -e .
+# Sync dependencies (creates .venv automatically)
+uv sync
 
 # For development tools
-uv pip install -e ".[dev]"
+uv sync --extra dev
+
+# Activate virtual environment
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 
 ### 2. Configure Environment

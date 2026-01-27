@@ -12,16 +12,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install uv for faster dependency installation
-RUN pip install --no-cache-dir uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 # Copy dependency files
-COPY pyproject.toml README.md ./
+COPY pyproject.toml uv.lock README.md ./
 
-# Install Python dependencies
-RUN uv pip install --system --no-cache -e .
+# Sync Python dependencies (frozen for reproducibility)
+RUN uv sync --frozen --no-dev
 
 # Download spaCy model for Presidio
-RUN python -m spacy download en_core_web_sm
+RUN uv run python -m spacy download en_core_web_sm
 
 # Final stage
 FROM python:3.11-slim
