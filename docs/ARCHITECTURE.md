@@ -418,7 +418,6 @@ cache_misses = Counter("cache_misses_total", ["cache_type"])
 
 **Total Latency** (n=35 queries):
 - P50: ~90ms (direct template, cache hit)
-- P90: ~5s (LLM guardrails + LLM response)
 - P99: ~5s (worst case)
 
 ## Technology Stack
@@ -486,7 +485,7 @@ LLM Generation:  ~1.05s avg  / ~4.50s max
 LLM Call (Groq): ~1.45s avg  / ~4.48s max
 Total:           ~0.09s (p50, direct template)
                  ~1.07s (average)
-                 ~5.03s (p90/max)
+                 ~5.03s (p99/max)
 ```
 
 ### Cost Profile

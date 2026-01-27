@@ -295,7 +295,7 @@ Performance:
 - **Safety**: Should be > 4.5 on average (stricter)
 
 **Performance Metrics** (n=35 queries):
-- **Latency**: P50 ~90ms, Average ~1.07s, P90 ~5s
+- **Latency**: P50 ~99ms, Average ~1.07s, P99 ~5s
 - **Cost**: Should be < $0.005 per request on average (with direct substitution)
 - **Template Match Rate**: Should be 90-100% with trigger-query embeddings
 - **Direct Substitution Rate**: Should be 60-80% of template matches

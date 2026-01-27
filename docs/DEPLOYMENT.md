@@ -435,7 +435,7 @@ curl http://localhost:6333/collections/templates | jq .result.points_count
 
 #### 4. High Latency
 
-**Symptom**: Responses take > 5 seconds consistently (P90: ~5s, Average: ~1.07s)
+**Symptom**: Responses take > 5 seconds consistently (P99: ~5s, Average: ~1.07s)
 
 **Diagnosis**:
 ```bash
