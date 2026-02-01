@@ -17,63 +17,8 @@ A production-quality AI agent that generates responses to guest accommodation in
 
 ### Agent Workflow
 
-```mermaid
-graph LR
-    Start([Guest Message]) --> Guardrails[Apply Guardrails<br/>Detect & Redact PII<br/>Topic Filter ⚡]
+![Agent Workflow](data/img/arch_diag.png)
 
-    Guardrails -->|Topic Allowed?| Decision{Guardrail Check}
-
-    Decision -->|Rejected| NoResponse[No Response<br/>Polite Decline]
-    Decision -->|Approved| Tools[Execute Tools]
-
-    Tools --> T1[Template Retrieval<br/>Qdrant ⚡]
-    Tools --> T2[Property Details]
-    Tools --> T3[Reservation Details]
-
-    T1 --> Merge[Merge Results]
-    T2 --> Merge
-    T3 --> Merge
-
-    Merge --> ResponseDecision{Template<br/>Score ≥ 0.70?}
-
-    ResponseDecision -->|Yes| DirectCheck{All Placeholders<br/>Fillable?}
-    ResponseDecision -->|No| CustomResponse[Custom Response<br/>Groq LLaMA 3.1]
-
-    DirectCheck -->|Yes| DirectTemplate[Direct Template<br/>No LLM Call]
-    DirectCheck -->|No| TemplateResponse[Template Response<br/>Groq LLaMA 3.1]
-
-    NoResponse --> End([Return Response])
-    DirectTemplate --> End
-    TemplateResponse --> End
-    CustomResponse --> End
-
-    %% Entry / Exit
-    style Start fill:#E5E7EB,stroke:#374151,stroke-width:1.5px,color:#111827
-    style End fill:#E5E7EB,stroke:#374151,stroke-width:1.5px,color:#111827
-
-    %% Guardrails / Safety
-    style Guardrails fill:#FFEDD5,stroke:#C2410C,stroke-width:1.5px,color:#111827
-    style NoResponse fill:#FECACA,stroke:#B91C1C,stroke-width:1.5px,color:#111827
-
-    %% Decisions
-    style Decision fill:#DBEAFE,stroke:#1D4ED8,stroke-width:1.5px,color:#111827
-    style ResponseDecision fill:#DBEAFE,stroke:#1D4ED8,stroke-width:1.5px,color:#111827
-    style DirectCheck fill:#DBEAFE,stroke:#1D4ED8,stroke-width:1.5px,color:#111827
-
-    %% Tool execution
-    style Tools fill:#EDE9FE,stroke:#6D28D9,stroke-width:1.5px,color:#111827
-    style T1 fill:#EDE9FE,stroke:#6D28D9,stroke-width:1.2px,color:#111827
-    style T2 fill:#EDE9FE,stroke:#6D28D9,stroke-width:1.2px,color:#111827
-    style T3 fill:#EDE9FE,stroke:#6D28D9,stroke-width:1.2px,color:#111827
-    style Merge fill:#DDD6FE,stroke:#6D28D9,stroke-width:1.5px,color:#111827
-
-    %% Successful responses
-    style DirectTemplate fill:#A7F3D0,stroke:#047857,stroke-width:1.5px,color:#111827
-    style TemplateResponse fill:#D1FAE5,stroke:#047857,stroke-width:1.5px,color:#111827
-    style CustomResponse fill:#D1FAE5,stroke:#047857,stroke-width:1.5px,color:#111827
-
-
-```
 
 ## Tech Stack
 
