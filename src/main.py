@@ -4,6 +4,7 @@ FastAPI application entry point.
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.openapi.utils import get_openapi
 from fastapi.responses import PlainTextResponse
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 
@@ -65,6 +66,51 @@ setup_middleware(app)
 # Include routers
 app.include_router(health.router, tags=["Health"])
 app.include_router(response.router, prefix="/api/v1", tags=["Response"])
+
+
+def custom_openapi():
+    """
+    Customize OpenAPI schema to include API key authentication.
+    """
+    if app.openapi_schema:
+        return app.openapi_schema
+
+    openapi_schema = get_openapi(
+        title=app.title,
+        version=app.version,
+        description=app.description,
+        routes=app.routes,
+    )
+
+    # Define API key security scheme
+    openapi_schema["components"]["securitySchemes"] = {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "in": "header",
+            "name": "X-API-Key",
+            "description": (
+                "API key for authentication. "
+                "Get your key from the .env file (API_KEYS) or generate one using: "
+                "`python scripts/generate_api_key.py`"
+            ),
+        }
+    }
+
+    # Apply security to specific endpoints that use it
+    # The /generate-response endpoint already has dependencies=[Depends(get_api_key)]
+    # so we just need to mark it in the OpenAPI schema
+    for path in openapi_schema["paths"]:
+        for method in openapi_schema["paths"][path]:
+            # Check if endpoint uses authentication (has the dependency)
+            if path == "/api/v1/generate-response" and method == "post":
+                openapi_schema["paths"][path][method]["security"] = [{"ApiKeyAuth": []}]
+
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
+
+
+# Set custom OpenAPI schema
+app.openapi = custom_openapi
 
 
 @app.get("/", include_in_schema=False)
