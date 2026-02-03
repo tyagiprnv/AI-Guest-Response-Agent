@@ -39,7 +39,7 @@ This will install all required packages including:
 - Prometheus client for metrics
 - And more...
 
-### Step 2: Configure API Keys
+### Step 2: Configure API Keys and Generate Authentication
 
 Edit the `.env` file and add your API keys:
 
@@ -53,6 +53,12 @@ Update these lines with your actual keys:
 OPENAI_API_KEY=sk-your-actual-openai-key-here
 GROQ_API_KEY=your-actual-groq-key-here
 LANGSMITH_API_KEY=your-actual-langsmith-key-here  # Optional
+
+# Set database password
+DATABASE_PASSWORD=your_secure_password_here
+
+# Enable authentication
+AUTH_ENABLED=true
 ```
 
 **Where to get keys:**
@@ -60,12 +66,22 @@ LANGSMITH_API_KEY=your-actual-langsmith-key-here  # Optional
 - Groq: https://console.groq.com/keys
 - LangSmith: https://smith.langchain.com/settings
 
-### Step 3: Start Docker Services
+**Generate API keys for authentication:**
+```bash
+python scripts/generate_api_key.py
+```
 
-Start Qdrant (vector database) and monitoring services:
+Add the generated keys to your `.env`:
+```bash
+API_KEYS=dev-key-12345,test-key-67890
+```
+
+### Step 3: Start Infrastructure Services
+
+Start all infrastructure services (PostgreSQL, Redis, Qdrant, Prometheus, Grafana):
 
 ```bash
-docker-compose up -d qdrant prometheus grafana
+docker-compose up -d postgres redis qdrant prometheus grafana
 ```
 
 Verify services are running:
@@ -73,9 +89,23 @@ Verify services are running:
 docker-compose ps
 ```
 
-You should see all services with status "Up".
+You should see all services with status "Up" (healthy).
 
-### Step 4: Generate Synthetic Data
+### Step 4: Setup Database
+
+Run database migrations to create the schema:
+
+```bash
+alembic upgrade head
+```
+
+Expected output:
+```
+INFO  [alembic.runtime.migration] Running upgrade -> 001_initial_schema
+INFO  [alembic.runtime.migration] Migration complete
+```
+
+### Step 5: Generate Synthetic Data
 
 Generate the training data (templates, properties, reservations):
 
@@ -89,7 +119,20 @@ This creates:
 - 200 reservations
 - 50 test cases
 
-### Step 5: Index Templates in Qdrant
+### Step 6: Migrate Data to PostgreSQL
+
+Migrate the generated data from JSON files to PostgreSQL:
+
+```bash
+python scripts/migrate_json_to_postgres.py
+```
+
+This will:
+1. Read data from JSON files
+2. Insert into PostgreSQL tables
+3. Verify row counts match
+
+### Step 7: Index Templates in Qdrant
 
 Index the templates into the vector database:
 
@@ -102,17 +145,17 @@ This will:
 2. Generate embeddings for all templates
 3. Index them for semantic search
 
-### Step 6: Verify Setup
+### Step 8: Verify Setup
 
 Run the verification script:
 
 ```bash
-python scripts/verify_setup.py
+python scripts/verify_implementation.py
 ```
 
-This checks that all necessary files and data are in place.
+This checks that all services, data, and features are properly configured.
 
-### Step 7: Start the Application
+### Step 9: Start the Application
 
 Run the FastAPI application:
 
@@ -133,23 +176,27 @@ INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000
 ```
 
-### Step 8: Test the API
+### Step 10: Test the API
 
 #### Via Swagger UI (Interactive)
 
 Open your browser to: http://localhost:8000/docs
 
 You'll see the interactive API documentation where you can:
-1. Click on the `/api/v1/generate-response` endpoint
-2. Click "Try it out"
-3. Enter a test request
-4. Click "Execute"
+1. Click on the lock icon to add your API key
+2. Click on the `/api/v1/generate-response` endpoint
+3. Click "Try it out"
+4. Enter a test request
+5. Click "Execute"
 
 #### Via cURL (Command Line)
+
+**Important**: Include your API key in the `X-API-Key` header:
 
 ```bash
 curl -X POST http://localhost:8000/api/v1/generate-response \
   -H "Content-Type: application/json" \
+  -H "X-API-Key: dev-key-12345" \
   -d '{
     "message": "What time is check-in?",
     "property_id": "prop_001"
@@ -180,6 +227,7 @@ async def test_agent():
     async with httpx.AsyncClient() as client:
         response = await client.post(
             "http://localhost:8000/api/v1/generate-response",
+            headers={"X-API-Key": "dev-key-12345"},
             json={
                 "message": "What time is check-in?",
                 "property_id": "prop_001"
@@ -214,6 +262,17 @@ asyncio.run(test_agent())
 - View collections
 - Inspect indexed vectors
 - Search interface
+
+### PostgreSQL Database
+- Host: localhost:5432
+- Database: guest_response_agent
+- User: agent_user
+- Connect via: `docker exec -it postgres psql -U agent_user -d guest_response_agent`
+
+### Redis Cache
+- Host: localhost:6379
+- Connect via: `docker exec -it redis redis-cli`
+- Commands: `KEYS *`, `GET <key>`, `TTL <key>`
 
 ### LangSmith (if configured)
 - URL: https://smith.langchain.com

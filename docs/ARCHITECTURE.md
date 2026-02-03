@@ -18,7 +18,10 @@ The AI Guest Response Agent is a production-quality system that generates contex
 - **LangGraph Agent**: State machine with conditional routing
 - **Multi-Tool Orchestration**: Parallel execution of templates, property, and reservation lookups
 - **Safety First**: PII redaction and topic filtering
-- **Cost Optimized**: Template-first strategy with multi-layer caching
+- **Cost Optimized**: Template-first strategy with multi-layer caching and real-time cost tracking
+- **Production Data Layer**: PostgreSQL database with async operations and Redis distributed caching
+- **Secure API**: API key authentication with multi-tier rate limiting
+- **Input Validation**: Spam detection, ID format validation, and rate limiting by tier
 - **Production Ready**: Monitoring, metrics, error handling, deployment
 
 ## System Architecture
@@ -34,8 +37,10 @@ The AI Guest Response Agent is a production-quality system that generates contex
 │                       FastAPI Application                        │
 │  ┌────────────────────────────────────────────────────────────┐ │
 │  │                    API Routes & Middleware                  │ │
-│  │  - CORS          - Rate Limiting      - Request Logging    │ │
-│  │  - Auth (future) - Error Handling     - Metrics Export     │ │
+│  │  - CORS               - Multi-tier Rate Limiting            │ │
+│  │  - API Key Auth       - Error Handling                      │ │
+│  │  - Input Validation   - Request Logging                     │ │
+│  │  - Spam Detection     - Metrics Export                      │ │
 │  └───────────────────────────┬────────────────────────────────┘ │
 │                              │                                   │
 │  ┌───────────────────────────▼────────────────────────────────┐ │
@@ -69,15 +74,16 @@ The AI Guest Response Agent is a production-quality system that generates contex
 │  └──────────────────────────────────────────────────────────┘  │
 └────────────────────────────┬────────────────────────────────────┘
                              │
-         ┌───────────────────┼───────────────────┐
-         │                   │                   │
-         ▼                   ▼                   ▼
-┌─────────────────┐  ┌──────────────┐  ┌────────────────┐
-│  Qdrant Vector  │  │  LLM APIs    │  │  Data Stores   │
-│    Database     │  │  - Groq      │  │  - Properties  │
-│  - Templates    │  │  - OpenAI    │  │  - Reservations│
-│  - Embeddings   │  │              │  │  - Templates   │
-└─────────────────┘  └──────────────┘  └────────────────┘
+         ┌────────────────┼────────────────┼────────────────┐
+         │                │                │                │
+         ▼                ▼                ▼                ▼
+┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+│   Qdrant     │  │  PostgreSQL  │  │    Redis     │  │  LLM APIs    │
+│   Vector DB  │  │   Database   │  │    Cache     │  │  - Groq      │
+│ - Templates  │  │ - Properties │  │ - Embeddings │  │  - OpenAI    │
+│ - Embeddings │  │ - Reservations│ │ - Tools      │  │              │
+│              │  │ - Async Ops  │  │ - Responses  │  │              │
+└──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘
 
                              │
          ┌───────────────────┼───────────────────┐
@@ -224,16 +230,16 @@ Example template structure:
 **Deduplication**: Since multiple trigger queries map to the same template, results are deduplicated by `template_id`, keeping the highest score per template.
 
 #### Property Details Tool
-- **Data Source**: In-memory repository (JSON files)
-- **Caching**: 5-minute TTL on lookups
+- **Data Source**: PostgreSQL database (configurable: JSON files or PostgreSQL)
+- **Caching**: Redis cache with 5-minute TTL
 - **Fields**: check_in_time, check_out_time, amenities, policies, parking
-- **Performance**: <10ms (cached), ~50ms (cold)
+- **Performance**: <10ms (cached), ~50ms (database query)
 
 #### Reservation Details Tool
-- **Data Source**: In-memory repository
-- **Caching**: 5-minute TTL
+- **Data Source**: PostgreSQL database (configurable: JSON files or PostgreSQL)
+- **Caching**: Redis cache with 5-minute TTL
 - **Fields**: guest_name, dates, room_type, special_requests
-- **Performance**: <10ms (cached), ~50ms (cold)
+- **Performance**: <10ms (cached), ~50ms (database query)
 - **Graceful**: Optional tool, continues if reservation not found
 
 ### 3. Response Generation
@@ -287,9 +293,108 @@ def select_response_strategy(tools_output, property_details):
 - **Max Tokens**: 500 for response
 - **Temperature**: 0.7 for natural variation
 
-### 4. Caching System
+### 4. Authentication & Input Validation
 
-Three-layer cache architecture:
+#### API Key Authentication
+```python
+class APIKeyAuth:
+    """Multi-tier API key authentication."""
+
+    def validate_key(self, key: str) -> Optional[str]:
+        """Returns tier (standard/premium/enterprise) if valid."""
+        if key in settings.api_keys:
+            return self._get_tier(key)
+        return None
+```
+
+**Features**:
+- API key validation via `X-API-Key` header
+- Multi-tier rate limiting (standard: 60/min, premium: 300/min, enterprise: 1000/min)
+- Public endpoints: `/health`, `/metrics`, `/ready`
+- Protected endpoints: `/api/v1/generate-response`
+
+**Configuration**:
+```bash
+AUTH_ENABLED=true
+API_KEYS=dev-key-12345,test-key-67890
+```
+
+#### Enhanced Input Validation
+```python
+class GenerateResponseRequest(BaseModel):
+    """Request with comprehensive validation."""
+
+    message: str = Field(min_length=3, max_length=1000)
+    property_id: Optional[str] = Field(pattern=r"^prop_\d{3}$")
+    reservation_id: Optional[str] = Field(pattern=r"^res_\d{3}$")
+
+    @field_validator("message")
+    def validate_message(cls, v: str) -> str:
+        """Check for spam patterns and excessive URLs."""
+        # Reject repeated characters (spam)
+        # Limit URLs to 2 per message
+        # Normalize unicode (NFKC)
+        return validated_message
+```
+
+**Validations**:
+- Message: 3-1000 characters, spam pattern rejection, max 2 URLs
+- Property ID: `prop_XXX` format (3 digits)
+- Reservation ID: `res_XXX` format (3 digits)
+- Rate limiting by API key tier
+
+### 5. Data Layer
+
+#### PostgreSQL Database
+- **Models**: SQLAlchemy ORM with async support
+- **Connection**: Connection pooling with asyncpg
+- **Migrations**: Alembic for schema versioning
+- **Tables**: properties, reservations
+- **Performance**: Async queries with connection pooling
+
+**Configuration**:
+```bash
+DATA_BACKEND=postgres  # or json
+DATABASE_HOST=postgres
+DATABASE_NAME=guest_response_agent
+DATABASE_USER=agent_user
+```
+
+#### Redis Cache
+Distributed caching replacing in-memory TTL cache:
+
+```python
+class RedisCache:
+    """Redis-backed cache with TTL support."""
+
+    # Embedding Cache (1h TTL)
+    # Tool Result Cache (5min TTL)
+    # Response Cache (1min TTL)
+```
+
+**Features**:
+- Distributed caching across API instances
+- Automatic expiration with TTL
+- Serialization with pickle
+- Connection pooling
+
+**Configuration**:
+```bash
+CACHE_BACKEND=redis  # or memory
+REDIS_HOST=redis
+REDIS_PORT=6379
+```
+
+**Cache Hit Rates** (typical):
+- Embeddings: 60-80%
+- Tool results: 40-60%
+- Responses: 20-40%
+
+**Cost Savings**: 40-60% reduction in API costs
+
+### 6. Caching System (Legacy)
+
+In-memory cache is still supported for development:
 
 ```python
 class CacheManager:
@@ -304,13 +409,6 @@ class CacheManager:
     # Layer 3: Response Cache
     response_cache: TTLCache = TTLCache(maxsize=100, ttl=60)
 ```
-
-**Cache Hit Rates** (typical):
-- Embeddings: 60-80%
-- Tool results: 40-60%
-- Responses: 20-40%
-
-**Cost Savings**: 40-60% reduction in API costs
 
 #### Embedding Cache Warming
 
@@ -336,7 +434,7 @@ async def warm_embedding_cache() -> int:
 - Runtime benefit: Eliminates ~150-200ms embedding latency per cached query
 - Break-even: ~25 requests
 
-### 5. Monitoring & Observability
+### 7. Monitoring & Observability
 
 #### LangSmith Integration
 ```python
@@ -365,14 +463,52 @@ agent_request_duration = Histogram("agent_request_duration_seconds")
 agent_response_type = Counter("agent_response_type_total", ["response_type"])
 agent_guardrail_triggers = Counter("agent_guardrail_triggers_total", ["guardrail_type"])
 
-# Cost metrics
-agent_tokens_used = Counter("agent_tokens_total", ["type"])
-agent_cost_usd = Counter("agent_cost_usd_total")
+# Cost metrics (with labels)
+agent_tokens_used = Counter("agent_tokens_total", ["type", "model"])
+agent_cost_usd = Counter("agent_cost_usd_total", ["response_type", "model"])
 
 # Performance metrics
 agent_tool_duration = Histogram("agent_tool_duration_seconds", ["tool_name"])
 cache_hits = Counter("cache_hits_total", ["cache_type"])
 cache_misses = Counter("cache_misses_total", ["cache_type"])
+
+# Authentication metrics
+agent_auth_failures = Counter("agent_errors_total", ["error_type"])
+
+# Validation metrics
+agent_validation_errors = Counter("agent_errors_total", ["error_type"])
+```
+
+#### Cost Tracking
+Real-time cost tracking for LLM usage:
+
+```python
+class CostTracker:
+    """Track LLM costs per request."""
+
+    PRICING = {
+        "llama-3.1-8b-instant": {
+            "input": 0.05 / 1_000_000,   # $0.05 per 1M tokens
+            "output": 0.08 / 1_000_000,  # $0.08 per 1M tokens
+        }
+    }
+
+    def calculate_cost(self, model: str, input_tokens: int, output_tokens: int) -> float:
+        """Calculate cost in USD."""
+        pricing = self.PRICING[model]
+        return (input_tokens * pricing["input"]) + (output_tokens * pricing["output"])
+```
+
+**Features**:
+- Per-request cost calculation
+- Cost breakdown by response type (template/custom)
+- Cost breakdown by model
+- Cumulative cost tracking in Prometheus
+- Cost metrics exported to Grafana
+
+**Configuration**:
+```bash
+ENABLE_COST_TRACKING=true
 ```
 
 ## Data Flow
@@ -425,10 +561,14 @@ cache_misses = Counter("cache_misses_total", ["cache_type"])
 ### Core Technologies
 - **Agent Framework**: LangGraph 0.2.x
 - **Web Framework**: FastAPI 0.100+
+- **Database**: PostgreSQL 16 with asyncpg
+- **Cache**: Redis 7 with hiredis
 - **Vector Database**: Qdrant 1.7+
 - **Embeddings**: OpenAI text-embedding-3-small
 - **LLM**: Groq (LLaMA 3.1 8B Instant)
 - **Guardrails**: Microsoft Presidio, LangChain
+- **Authentication**: API key-based with multi-tier rate limiting
+- **Migrations**: Alembic
 
 ### Monitoring & Ops
 - **Tracing**: LangSmith

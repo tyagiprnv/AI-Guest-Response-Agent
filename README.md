@@ -9,7 +9,12 @@ A production-quality AI agent that generates responses to guest accommodation in
 - **Safety Guardrails**: PII redaction and topic filtering with fast-path optimization
 - **Production Monitoring**: LangSmith tracing, Prometheus metrics, Grafana dashboards
 - **Cost Optimization**: Template-first strategy, direct template substitution (skips LLM), multi-layer caching
+- **Cost Tracking**: Real-time LLM usage cost monitoring via Prometheus metrics
 - **Latency Optimization**: Topic filter fast-path, embedding cache warming, trigger-query embeddings
+- **PostgreSQL Database**: Production-grade database with async operations and migrations
+- **Redis Cache**: Distributed caching for improved performance and scalability
+- **API Key Authentication**: Secure endpoints with multi-tier API key validation
+- **Enhanced Input Validation**: Spam detection, ID format validation, multi-tier rate limiting
 - **Comprehensive Testing**: Unit, integration, and E2E tests
 - **Docker Deployment**: Full stack deployment with Docker Compose
 
@@ -28,6 +33,8 @@ A production-quality AI agent that generates responses to guest accommodation in
 | LLM | Groq (LLaMA 3.1 8B Instant) |
 | Embeddings | OpenAI text-embedding-3-small |
 | Vector DB | Qdrant |
+| Database | PostgreSQL 16 |
+| Cache | Redis 7 |
 | API | FastAPI |
 | Monitoring | LangSmith + Prometheus + Grafana |
 | Deployment | Docker Compose |
@@ -68,28 +75,45 @@ cp .env.example .env
 # Required:
 #   - OPENAI_API_KEY
 #   - GROQ_API_KEY
+#   - DATABASE_PASSWORD (for PostgreSQL)
 # Optional:
 #   - LANGSMITH_API_KEY
+
+# Generate API keys for authentication
+python scripts/generate_api_key.py
+
+# Add generated keys to .env
+# API_KEYS=dev-xxx,test-xxx
+# AUTH_ENABLED=true
 ```
 
-### 3. Start Services
+### 3. Start Infrastructure Services
 
 ```bash
-# Start Qdrant and monitoring stack
-docker-compose up -d qdrant prometheus grafana
+# Start all infrastructure services
+docker-compose up -d postgres redis qdrant prometheus grafana
 
 # Wait for services to be ready
 sleep 10
 ```
 
-### 4. Generate Data and Setup
+### 4. Setup Database and Generate Data
 
 ```bash
+# Run database migrations
+alembic upgrade head
+
 # Generate synthetic data (500 templates, 100 properties, 200 reservations)
 python scripts/generate_synthetic_data.py
 
+# Migrate data to PostgreSQL
+python scripts/migrate_json_to_postgres.py
+
 # Index templates in Qdrant
 python scripts/setup_qdrant.py
+
+# Verify setup
+python scripts/verify_implementation.py
 ```
 
 ### 5. Run the Application
@@ -105,12 +129,13 @@ docker-compose up
 ### 6. Test the API
 
 ```bash
-# Health check
+# Health check (public endpoint)
 curl http://localhost:8000/health
 
-# Generate a response
+# Generate a response (requires API key)
 curl -X POST http://localhost:8000/api/v1/generate-response \
   -H "Content-Type: application/json" \
+  -H "X-API-Key: your-api-key-here" \
   -d '{
     "message": "What time is check-in?",
     "property_id": "prop_001"
@@ -127,6 +152,8 @@ open http://localhost:8000/docs
 - **Prometheus**: http://localhost:9090
 - **Grafana**: http://localhost:3000 (admin/admin)
 - **Qdrant**: http://localhost:6333/dashboard
+- **PostgreSQL**: localhost:5432 (agent_user/guest_response_agent)
+- **Redis**: localhost:6379
 - **LangSmith**: https://smith.langchain.com
 
 ## Project Structure
@@ -252,8 +279,10 @@ The agent tracks the following via Prometheus:
 |----------|---------|
 | **Quality** | Relevance score, accuracy score, safety score |
 | **Performance** | P50/P95/P99 latency, tokens per request |
-| **Cost** | Cost per response, template match rate, direct substitution rate |
+| **Cost** | Cost per response (by response type and model), template match rate, direct substitution rate, total USD cost |
 | **Operational** | Error rate, cache hit rate, guardrail triggers, topic filter path (fast_path/llm), direct substitution status (success/fallback) |
+| **Authentication** | Auth failures, requests by API key tier |
+| **Validation** | Validation errors, spam detection, rate limit hits by tier |
 
 ## Development
 

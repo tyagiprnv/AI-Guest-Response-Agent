@@ -16,17 +16,36 @@ Tests for individual components in isolation.
   - Date calculations and field validations
 
 - **test_cache.py**: Tests for the caching layer
-  - SimpleCache: Basic TTL-based caching
+  - SimpleCache: Basic TTL-based caching (in-memory)
+  - Redis cache: Distributed caching with TTL
   - EmbeddingCache: Text embedding caching with SHA256 hashing
   - ToolResultCache: Caching for tool execution results
   - ResponseCache: Full response caching with composite keys
   - TTL expiration and cache clearing
 
 - **test_tools.py**: Tests for tool functions
-  - Property details retrieval
-  - Reservation details retrieval
+  - Property details retrieval (JSON and PostgreSQL backends)
+  - Reservation details retrieval (JSON and PostgreSQL backends)
   - Template retrieval from vector database
   - Graceful handling of missing data
+
+- **test_auth.py**: Tests for API key authentication
+  - API key validation
+  - Rate limiting by tier (standard/premium/enterprise)
+  - Protected vs public endpoints
+  - Invalid API key handling
+
+- **test_database.py**: Tests for PostgreSQL database layer
+  - Connection management
+  - Async CRUD operations
+  - Database migrations with Alembic
+  - Repository pattern
+
+- **test_validation.py**: Tests for enhanced input validation
+  - Message validation (length, spam detection, URL limits)
+  - ID format validation (property_id, reservation_id)
+  - Unicode normalization
+  - Spam pattern detection
 
 ### 2. Integration Tests (`tests/integration/`)
 
@@ -52,16 +71,19 @@ Tests for component interactions and workflows.
 Tests for the complete API.
 
 - **test_api.py**: FastAPI endpoint tests
-  - Health endpoints (/health, /ready, /)
-  - Response generation endpoint (/api/v1/generate-response)
+  - Health endpoints (/health, /ready, /) - public
+  - Response generation endpoint (/api/v1/generate-response) - requires API key
+  - API key authentication (valid, invalid, missing)
   - Request validation (missing fields, empty messages, max length)
+  - Enhanced input validation (spam patterns, ID formats, URL limits)
   - PII handling in requests
   - Confidence score validation
-  - Response caching behavior
-  - Error handling (invalid JSON, 404, 405)
+  - Response caching behavior (Redis and in-memory)
+  - Rate limiting by tier
+  - Error handling (invalid JSON, 404, 405, 401, 403, 422, 429)
   - API documentation (OpenAPI, Swagger UI, ReDoc)
   - CORS configuration
-  - Prometheus metrics endpoint
+  - Prometheus metrics endpoint (cost tracking metrics)
 
 ### 4. Load Tests (`tests/load/`)
 
@@ -131,15 +153,29 @@ Shared fixtures are defined in `tests/conftest.py`:
 
 Some tests require external services to be running:
 
-1. **Qdrant**: Vector database for template retrieval tests
+1. **PostgreSQL**: Database for data layer tests
+   ```bash
+   docker-compose up -d postgres
+   alembic upgrade head  # Run migrations
+   ```
+
+2. **Redis**: Cache for caching tests
+   ```bash
+   docker-compose up -d redis
+   ```
+
+3. **Qdrant**: Vector database for template retrieval tests
    ```bash
    docker-compose up -d qdrant
    ```
 
-2. **API Keys**: Required for integration tests
+4. **API Keys**: Required for integration tests
    ```bash
    export OPENAI_API_KEY=your-key
    export GROQ_API_KEY=your-key
+   # Generate test API keys
+   python scripts/generate_api_key.py
+   export API_KEYS=test-key-12345
    ```
 
 ### Skipped Tests

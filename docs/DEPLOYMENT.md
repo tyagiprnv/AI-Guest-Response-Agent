@@ -100,10 +100,21 @@ LANGCHAIN_TRACING_V2=true
 LANGCHAIN_PROJECT=ai-guest-response-agent
 ```
 
-#### 4. Start Infrastructure Services
+#### 4. Generate API Keys
+
 ```bash
-# Start Qdrant, Prometheus, Grafana
-docker-compose up -d qdrant prometheus grafana
+# Generate API keys for authentication
+python scripts/generate_api_key.py
+
+# Add generated keys to .env
+# API_KEYS=dev-key-12345,test-key-67890
+# AUTH_ENABLED=true
+```
+
+#### 5. Start Infrastructure Services
+```bash
+# Start all infrastructure services
+docker-compose up -d postgres redis qdrant prometheus grafana
 
 # Wait for services to be ready
 sleep 10
@@ -115,15 +126,34 @@ docker-compose ps
 Expected output:
 ```
 NAME                STATUS    PORTS
+postgres            running   5432->5432
+redis               running   6379->6379
 qdrant              running   6333->6333, 6334->6334
 prometheus          running   9090->9090
 grafana             running   3000->3000
 ```
 
-#### 5. Generate Data and Setup
+#### 6. Database Setup
+
+```bash
+# Run database migrations
+alembic upgrade head
+```
+
+Expected output:
+```
+INFO  [alembic.runtime.migration] Running upgrade -> 001_initial_schema
+INFO  [alembic.runtime.migration] Migration complete
+```
+
+#### 7. Generate Data and Migrate
+
 ```bash
 # Generate synthetic data
 python scripts/generate_synthetic_data.py
+
+# Migrate data to PostgreSQL
+python scripts/migrate_json_to_postgres.py
 
 # Index templates in Qdrant
 python scripts/setup_qdrant.py
@@ -137,13 +167,17 @@ Generated 200 reservations
 Generated 50 test cases
 ✓ Data saved to data/
 
+Migrating to PostgreSQL...
+✓ Migrated 100 properties
+✓ Migrated 200 reservations
+
 Connecting to Qdrant...
 Creating collection 'templates'...
 Indexing 500 templates...
 ✓ Templates indexed successfully
 ```
 
-#### 6. Run the Application
+#### 8. Run the Application
 ```bash
 # Development mode
 python src/main.py
@@ -160,14 +194,15 @@ INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000
 ```
 
-#### 7. Verify Setup
+#### 9. Verify Setup
 ```bash
-# Health check
+# Health check (public endpoint)
 curl http://localhost:8000/health
 
-# Test query
+# Test query (requires API key)
 curl -X POST http://localhost:8000/api/v1/generate-response \
   -H "Content-Type: application/json" \
+  -H "X-API-Key: dev-key-12345" \
   -d '{"message": "What time is check-in?", "property_id": "prop_001"}'
 
 # Open Swagger docs
@@ -184,6 +219,36 @@ open http://localhost:8000/docs
 version: '3.8'
 
 services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=agent_user
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=guest_response_agent
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agent_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   # Vector Database
   qdrant:
     image: qdrant/qdrant:v1.7.4
@@ -207,9 +272,18 @@ services:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - GROQ_API_KEY=${GROQ_API_KEY}
       - LANGSMITH_API_KEY=${LANGSMITH_API_KEY}
+      - AUTH_ENABLED=${AUTH_ENABLED}
+      - API_KEYS=${API_KEYS}
+      - DATA_BACKEND=postgres
+      - DATABASE_HOST=postgres
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - CACHE_BACKEND=redis
+      - REDIS_HOST=redis
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
     depends_on:
+      - postgres
+      - redis
       - qdrant
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
@@ -246,6 +320,8 @@ services:
       - prometheus
 
 volumes:
+  postgres_data:
+  redis_data:
   qdrant_data:
   prometheus_data:
   grafana_data:
@@ -295,6 +371,24 @@ ENVIRONMENT=production
 OPENAI_API_KEY=${OPENAI_API_KEY_SECRET}
 GROQ_API_KEY=${GROQ_API_KEY_SECRET}
 
+# Authentication
+AUTH_ENABLED=true
+API_KEYS=${API_KEYS_SECRET}
+
+# Database
+DATA_BACKEND=postgres
+DATABASE_HOST=postgres.internal.example.com
+DATABASE_PORT=5432
+DATABASE_NAME=guest_response_agent
+DATABASE_USER=agent_user
+DATABASE_PASSWORD=${DATABASE_PASSWORD_SECRET}
+
+# Cache
+CACHE_BACKEND=redis
+REDIS_HOST=redis.internal.example.com
+REDIS_PORT=6379
+REDIS_PASSWORD=${REDIS_PASSWORD_SECRET}
+
 # Qdrant
 QDRANT_HOST=qdrant.internal.example.com
 QDRANT_PORT=6333
@@ -306,7 +400,12 @@ LANGCHAIN_TRACING_V2=true
 LANGCHAIN_PROJECT=ai-guest-response-prod
 
 # Rate Limiting
-RATE_LIMIT_PER_MINUTE=100
+RATE_LIMIT_STANDARD=60
+RATE_LIMIT_PREMIUM=300
+RATE_LIMIT_ENTERPRISE=1000
+
+# Cost Tracking
+ENABLE_COST_TRACKING=true
 
 # Logging
 LOG_LEVEL=INFO
@@ -345,7 +444,9 @@ ALLOWED_ORIGINS=https://yourdomain.com,https://app.yourdomain.com
    - Monitor logs aggregation (ELK, Datadog)
 
 5. **Backup & Recovery**
+   - Backup PostgreSQL database regularly (pg_dump)
    - Backup Qdrant data regularly
+   - Redis persistence (RDB/AOF)
    - Test restore procedures
    - Document recovery steps
 
@@ -353,13 +454,43 @@ ALLOWED_ORIGINS=https://yourdomain.com,https://app.yourdomain.com
    - Run as non-root user
    - Scan images for vulnerabilities
    - Enable network policies
-   - Use API authentication (JWT, OAuth)
+   - Use strong API keys (generate with scripts/generate_api_key.py)
+   - Rotate API keys regularly
+   - Use secrets manager for credentials
+   - Enable PostgreSQL SSL connections in production
 
 ## Troubleshooting
 
 ### Common Issues
 
-#### 1. API Key Errors
+#### 1. Authentication Errors
+
+**Symptom**:
+```
+HTTP 401: Unauthorized
+HTTP 403: API key required
+```
+
+**Diagnosis**:
+```bash
+# Check if authentication is enabled
+grep AUTH_ENABLED .env
+
+# Check if API keys are set
+grep API_KEYS .env
+
+# In Docker, check container env
+docker exec api env | grep API_KEYS
+```
+
+**Solutions**:
+- Generate API keys: `python scripts/generate_api_key.py`
+- Add keys to `.env`: `API_KEYS=dev-key-12345,test-key-67890`
+- Set `AUTH_ENABLED=true` in `.env`
+- Restart application: `docker-compose restart api`
+- Include `X-API-Key` header in requests
+
+#### 2. LLM API Key Errors
 
 **Symptom**:
 ```
@@ -385,7 +516,67 @@ docker exec <container-id> env | grep API_KEY
     -H "Authorization: Bearer $OPENAI_API_KEY"
   ```
 
-#### 2. Qdrant Connection Failed
+#### 3. PostgreSQL Connection Failed
+
+**Symptom**:
+```
+OperationalError: Could not connect to PostgreSQL
+sqlalchemy.exc.OperationalError: connection refused
+```
+
+**Diagnosis**:
+```bash
+# Check if PostgreSQL is running
+docker-compose ps postgres
+
+# Check PostgreSQL health
+docker exec postgres pg_isready -U agent_user
+
+# Test connection
+docker exec postgres psql -U agent_user -d guest_response_agent -c "SELECT 1;"
+
+# Check logs
+docker logs postgres
+```
+
+**Solutions**:
+- Start PostgreSQL: `docker-compose up -d postgres`
+- Wait for PostgreSQL to be ready (can take 10-30s)
+- Run migrations: `alembic upgrade head`
+- Check credentials in `.env` match `docker-compose.yml`
+- If using Docker network, use service name: `DATABASE_HOST=postgres`
+- Check if port 5432 is available
+
+#### 4. Redis Connection Failed
+
+**Symptom**:
+```
+ConnectionError: Error connecting to Redis
+redis.exceptions.ConnectionError
+```
+
+**Diagnosis**:
+```bash
+# Check if Redis is running
+docker-compose ps redis
+
+# Check Redis health
+docker exec redis redis-cli ping
+
+# Check keys
+docker exec redis redis-cli KEYS '*'
+
+# Check logs
+docker logs redis
+```
+
+**Solutions**:
+- Start Redis: `docker-compose up -d redis`
+- If using Docker network, use service name: `REDIS_HOST=redis`
+- Check port mapping in `docker-compose.yml`
+- Test connection: `docker exec redis redis-cli KEYS '*'`
+
+#### 5. Qdrant Connection Failed
 
 **Symptom**:
 ```
@@ -411,7 +602,7 @@ curl http://localhost:6333/collections
 - If using Docker network, use service name: `QDRANT_HOST=qdrant`
 - Check firewall rules
 
-#### 3. Templates Not Found
+#### 6. Templates Not Found
 
 **Symptom**:
 ```
@@ -433,7 +624,7 @@ curl http://localhost:6333/collections/templates | jq .result.points_count
 - Generate data if missing: `python scripts/generate_synthetic_data.py`
 - Check Qdrant logs: `docker logs qdrant`
 
-#### 4. High Latency
+#### 7. High Latency
 
 **Symptom**: Responses take > 5 seconds consistently (P99: ~5s, Average: ~1.07s)
 
@@ -470,7 +661,7 @@ curl 'http://localhost:9090/api/v1/query?query=direct_substitution_count'
 - LLM response: ~2-3s (26% of queries)
 - Full LLM guardrails + response: ~5s (14% of queries)
 
-#### 5. Memory Issues
+#### 8. Memory Issues
 
 **Symptom**:
 ```
@@ -488,7 +679,8 @@ docker logs api | grep -i memory
 
 **Solutions**:
 - Increase Docker memory limit
-- Reduce cache sizes in `src/data/cache.py`
+- Reduce cache sizes (if using memory backend)
+- Switch to Redis cache: `CACHE_BACKEND=redis`
 - Limit concurrent requests
 - Enable memory profiling:
   ```python
@@ -496,7 +688,7 @@ docker logs api | grep -i memory
   tracemalloc.start()
   ```
 
-#### 6. Rate Limiting Issues
+#### 9. Rate Limiting Issues
 
 **Symptom**:
 ```
@@ -513,12 +705,13 @@ curl 'http://localhost:9090/api/v1/query?query=rate(http_requests_total[1m])'
 ```
 
 **Solutions**:
-- Increase rate limit: Edit `RATE_LIMIT_PER_MINUTE` in `.env`
+- Increase rate limit tiers: Edit `RATE_LIMIT_STANDARD`, `RATE_LIMIT_PREMIUM`, `RATE_LIMIT_ENTERPRISE` in `.env`
 - Use exponential backoff in clients
 - Implement request queuing
 - Scale API instances
+- Use premium or enterprise tier API keys
 
-#### 7. PII Detection Not Working
+#### 10. PII Detection Not Working
 
 **Symptom**: PII not being detected/blocked
 
@@ -536,7 +729,7 @@ python -c "from presidio_analyzer import AnalyzerEngine; print(AnalyzerEngine().
 - Update Presidio: `uv add --upgrade presidio-analyzer presidio-anonymizer`
 - Check guardrail is enabled in agent graph
 
-#### 8. LangSmith Traces Not Appearing
+#### 11. LangSmith Traces Not Appearing
 
 **Symptom**: No traces in LangSmith dashboard
 
