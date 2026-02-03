@@ -1,17 +1,50 @@
 """
 API request and response schemas.
 """
+import re
+import unicodedata
 from typing import Any, Dict
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class GenerateResponseRequest(BaseModel):
     """Request schema for generating a response."""
 
-    message: str = Field(..., description="Guest message/query", min_length=1, max_length=1000)
-    property_id: str = Field(..., description="Property ID")
-    reservation_id: str | None = Field(None, description="Optional reservation ID")
+    message: str = Field(
+        ...,
+        description="Guest message/query",
+        min_length=3,
+        max_length=1000,
+    )
+    property_id: str = Field(
+        ...,
+        description="Property ID",
+        pattern=r"^prop_\d{3}$",
+    )
+    reservation_id: str | None = Field(
+        None,
+        description="Optional reservation ID",
+        pattern=r"^res_\d{3}$",
+    )
+
+    @field_validator("message")
+    @classmethod
+    def validate_message_content(cls, v: str) -> str:
+        """Validate message content."""
+        # Reject spam patterns (repeated characters)
+        if re.match(r"^(.)\1{10,}$", v):
+            raise ValueError("Message contains spam pattern (repeated characters)")
+
+        # Count URLs in message
+        url_count = len(re.findall(r"https?://", v))
+        if url_count > 2:
+            raise ValueError("Too many URLs in message (maximum 2 allowed)")
+
+        # Unicode normalization (NFKC form)
+        normalized = unicodedata.normalize("NFKC", v)
+
+        return normalized
 
     class Config:
         json_schema_extra = {
