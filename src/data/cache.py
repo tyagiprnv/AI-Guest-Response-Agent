@@ -2,13 +2,38 @@
 Multi-layer caching for embeddings, tool results, and responses.
 """
 import hashlib
+from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
 from typing import Any, Dict, Optional
 
 from src.config.settings import get_settings
 
 
-class SimpleCache:
+class BaseCache(ABC):
+    """Base class for cache implementations."""
+
+    @abstractmethod
+    def get(self, key: str) -> Optional[Any]:
+        """Get value from cache."""
+        pass
+
+    @abstractmethod
+    def set(self, key: str, value: Any) -> None:
+        """Set value in cache."""
+        pass
+
+    @abstractmethod
+    def clear(self) -> None:
+        """Clear all cache."""
+        pass
+
+    @abstractmethod
+    def size(self) -> int:
+        """Get cache size."""
+        pass
+
+
+class SimpleCache(BaseCache):
     """Simple in-memory cache with TTL."""
 
     def __init__(self, ttl_seconds: int = 300):
@@ -119,10 +144,17 @@ class ResponseCache(SimpleCache):
         self.set(key, response)
 
 
-# Global cache instances
-embedding_cache = EmbeddingCache()
-tool_result_cache = ToolResultCache()
-response_cache = ResponseCache()
+# Global cache instances (use factory to support both memory and Redis)
+# Import at module level to maintain backward compatibility
+from src.data.cache_factory import (
+    get_embedding_cache,
+    get_response_cache,
+    get_tool_result_cache,
+)
+
+embedding_cache = get_embedding_cache()
+tool_result_cache = get_tool_result_cache()
+response_cache = get_response_cache()
 
 
 # Common queries for cache warming
