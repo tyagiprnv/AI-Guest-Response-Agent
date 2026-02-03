@@ -38,7 +38,7 @@ class PropertyDetailsTool(BaseTool):
 
         # Get property from repository
         repo = get_property_repository()
-        property = repo.get_by_id(property_id)
+        property = await repo.get_by_id(property_id)
 
         if not property:
             result = f"Property {property_id} not found."
@@ -86,7 +86,7 @@ async def get_property_info(property_id: str) -> Dict[str, Any] | None:
 
     # Get property from repository
     repo = get_property_repository()
-    property = repo.get_by_id(property_id)
+    property = await repo.get_by_id(property_id)
 
     if not property:
         return None

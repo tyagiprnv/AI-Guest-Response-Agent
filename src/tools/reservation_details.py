@@ -38,7 +38,7 @@ class ReservationDetailsTool(BaseTool):
 
         # Get reservation from repository
         repo = get_reservation_repository()
-        reservation = repo.get_by_id(reservation_id)
+        reservation = await repo.get_by_id(reservation_id)
 
         if not reservation:
             result = f"Reservation {reservation_id} not found."
@@ -83,7 +83,7 @@ async def get_reservation_info(reservation_id: str | None) -> Dict[str, Any] | N
 
     # Get reservation from repository
     repo = get_reservation_repository()
-    reservation = repo.get_by_id(reservation_id)
+    reservation = await repo.get_by_id(reservation_id)
 
     if not reservation:
         return None

@@ -26,6 +26,11 @@ services:
       - ENVIRONMENT=production
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=guest_response_agent
+      - DATABASE_USER=agent_user
+      - DATABASE_PASSWORD=${POSTGRES_PASSWORD:-changeme}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
       - LANGSMITH_API_KEY=${LANGSMITH_API_KEY}
@@ -34,6 +39,7 @@ services:
       - .env
     depends_on:
       - qdrant
+      - postgres
     volumes:
       - ./data:/app/data
       - ./logs:/app/logs

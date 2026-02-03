@@ -8,30 +8,35 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.connection import get_session_context
-from src.database.models import Property, Reservation
+from src.database.models import Property as DBProperty
+from src.database.models import Reservation as DBReservation
+from src.data.models import Property, Reservation
 
 
 class PostgresPropertyRepository:
     """PostgreSQL-backed property repository."""
 
-    async def get(self, property_id: str) -> dict[str, Any] | None:
+    async def get_by_id(self, property_id: str) -> Property | None:
         """Get property by ID."""
         async with get_session_context() as session:
-            result = await session.execute(select(Property).where(Property.id == property_id))
-            property_obj = result.scalar_one_or_none()
-            return property_obj.to_dict() if property_obj else None
+            result = await session.execute(select(DBProperty).where(DBProperty.id == property_id))
+            db_property = result.scalar_one_or_none()
+            if not db_property:
+                return None
+            # Convert SQLAlchemy model to Pydantic model
+            return Property(**db_property.to_dict())
 
     async def get_all(self) -> list[dict[str, Any]]:
         """Get all properties."""
         async with get_session_context() as session:
-            result = await session.execute(select(Property))
+            result = await session.execute(select(DBProperty))
             properties = result.scalars().all()
             return [prop.to_dict() for prop in properties]
 
     async def create(self, property_data: dict[str, Any]) -> dict[str, Any]:
         """Create a new property."""
         async with get_session_context() as session:
-            property_obj = Property(**property_data)
+            property_obj = DBProperty(**property_data)
             session.add(property_obj)
             await session.flush()
             return property_obj.to_dict()
@@ -39,7 +44,7 @@ class PostgresPropertyRepository:
     async def update(self, property_id: str, property_data: dict[str, Any]) -> dict[str, Any] | None:
         """Update a property."""
         async with get_session_context() as session:
-            result = await session.execute(select(Property).where(Property.id == property_id))
+            result = await session.execute(select(DBProperty).where(DBProperty.id == property_id))
             property_obj = result.scalar_one_or_none()
             if not property_obj:
                 return None
@@ -54,7 +59,7 @@ class PostgresPropertyRepository:
     async def delete(self, property_id: str) -> bool:
         """Delete a property."""
         async with get_session_context() as session:
-            result = await session.execute(select(Property).where(Property.id == property_id))
+            result = await session.execute(select(DBProperty).where(DBProperty.id == property_id))
             property_obj = result.scalar_one_or_none()
             if not property_obj:
                 return False
@@ -66,19 +71,22 @@ class PostgresPropertyRepository:
 class PostgresReservationRepository:
     """PostgreSQL-backed reservation repository."""
 
-    async def get(self, reservation_id: str) -> dict[str, Any] | None:
+    async def get_by_id(self, reservation_id: str) -> Reservation | None:
         """Get reservation by ID."""
         async with get_session_context() as session:
             result = await session.execute(
-                select(Reservation).where(Reservation.id == reservation_id)
+                select(DBReservation).where(DBReservation.id == reservation_id)
             )
-            reservation_obj = result.scalar_one_or_none()
-            return reservation_obj.to_dict() if reservation_obj else None
+            db_reservation = result.scalar_one_or_none()
+            if not db_reservation:
+                return None
+            # Convert SQLAlchemy model to Pydantic model
+            return Reservation(**db_reservation.to_dict())
 
     async def get_all(self) -> list[dict[str, Any]]:
         """Get all reservations."""
         async with get_session_context() as session:
-            result = await session.execute(select(Reservation))
+            result = await session.execute(select(DBReservation))
             reservations = result.scalars().all()
             return [res.to_dict() for res in reservations]
 
@@ -86,7 +94,7 @@ class PostgresReservationRepository:
         """Get all reservations for a property."""
         async with get_session_context() as session:
             result = await session.execute(
-                select(Reservation).where(Reservation.property_id == property_id)
+                select(DBReservation).where(DBReservation.property_id == property_id)
             )
             reservations = result.scalars().all()
             return [res.to_dict() for res in reservations]
@@ -108,7 +116,7 @@ class PostgresReservationRepository:
                     reservation_data["booking_date"]
                 )
 
-            reservation_obj = Reservation(**reservation_data)
+            reservation_obj = DBReservation(**reservation_data)
             session.add(reservation_obj)
             await session.flush()
             return reservation_obj.to_dict()
@@ -119,7 +127,7 @@ class PostgresReservationRepository:
         """Update a reservation."""
         async with get_session_context() as session:
             result = await session.execute(
-                select(Reservation).where(Reservation.id == reservation_id)
+                select(DBReservation).where(DBReservation.id == reservation_id)
             )
             reservation_obj = result.scalar_one_or_none()
             if not reservation_obj:
@@ -145,7 +153,7 @@ class PostgresReservationRepository:
         """Delete a reservation."""
         async with get_session_context() as session:
             result = await session.execute(
-                select(Reservation).where(Reservation.id == reservation_id)
+                select(DBReservation).where(DBReservation.id == reservation_id)
             )
             reservation_obj = result.scalar_one_or_none()
             if not reservation_obj:

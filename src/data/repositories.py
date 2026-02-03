@@ -30,7 +30,7 @@ class PropertyRepository:
                     prop = Property(**prop_data)
                     self._properties[prop.id] = prop
 
-    def get_by_id(self, property_id: str) -> Property | None:
+    async def get_by_id(self, property_id: str) -> Property | None:
         """Get property by ID."""
         return self._properties.get(property_id)
 
@@ -56,7 +56,7 @@ class ReservationRepository:
                     res = Reservation(**res_data)
                     self._reservations[res.id] = res
 
-    def get_by_id(self, reservation_id: str) -> Reservation | None:
+    async def get_by_id(self, reservation_id: str) -> Reservation | None:
         """Get reservation by ID."""
         return self._reservations.get(reservation_id)
 
