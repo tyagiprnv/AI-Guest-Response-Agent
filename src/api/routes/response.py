@@ -1,10 +1,11 @@
 """
 Response generation endpoint.
 """
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from src.agent.graph import run_agent
 from src.api.schemas import GenerateResponseRequest, GenerateResponseResponse, ResponseMetadata
+from src.auth.dependencies import get_api_key
 from src.data.cache import response_cache
 from src.monitoring.logging import get_logger
 from src.monitoring.metrics import cache_hit, cache_miss
@@ -17,6 +18,7 @@ logger = get_logger(__name__)
     "/generate-response",
     response_model=GenerateResponseResponse,
     status_code=status.HTTP_200_OK,
+    dependencies=[Depends(get_api_key)],
 )
 async def generate_response(request: GenerateResponseRequest):
     """
