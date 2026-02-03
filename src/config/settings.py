@@ -73,14 +73,58 @@ class Settings(BaseSettings):
     # Cache Configuration
     cache_ttl_seconds: int = Field(default=300, description="Cache TTL in seconds")
     embedding_cache_size: int = Field(default=1000, description="Embedding cache size")
+    cache_backend: Literal["memory", "redis"] = Field(
+        default="memory", description="Cache backend (memory or redis)"
+    )
+
+    # Redis Configuration
+    redis_host: str = Field(default="localhost", description="Redis host")
+    redis_port: int = Field(default=6379, description="Redis port")
+    redis_password: str = Field(default="", description="Redis password")
+    redis_db: int = Field(default=0, description="Redis database number")
+
+    # Database Configuration
+    data_backend: Literal["json", "postgres"] = Field(
+        default="json", description="Data backend (json or postgres)"
+    )
+    database_host: str = Field(default="localhost", description="PostgreSQL host")
+    database_port: int = Field(default=5432, description="PostgreSQL port")
+    database_name: str = Field(default="guest_response_agent", description="Database name")
+    database_user: str = Field(default="agent_user", description="Database user")
+    database_password: str = Field(default="", description="Database password")
+
+    # Authentication
+    auth_enabled: bool = Field(default=True, description="Enable API key authentication")
+    api_keys: str = Field(default="", description="Comma-separated API keys (dev only)")
 
     # Rate Limiting
     rate_limit_per_minute: int = Field(default=60, description="Rate limit per minute")
+    rate_limit_standard: int = Field(default=60, description="Standard tier rate limit")
+    rate_limit_premium: int = Field(default=300, description="Premium tier rate limit")
+    rate_limit_enterprise: int = Field(default=1000, description="Enterprise tier rate limit")
+
+    # Cost Tracking
+    enable_cost_tracking: bool = Field(default=True, description="Enable LLM cost tracking")
 
     @property
     def qdrant_url(self) -> str:
         """Get Qdrant URL."""
         return f"http://{self.qdrant_host}:{self.qdrant_port}"
+
+    @property
+    def redis_url(self) -> str:
+        """Get Redis URL."""
+        if self.redis_password:
+            return f"redis://:{self.redis_password}@{self.redis_host}:{self.redis_port}/{self.redis_db}"
+        return f"redis://{self.redis_host}:{self.redis_port}/{self.redis_db}"
+
+    @property
+    def database_url(self) -> str:
+        """Get database URL."""
+        return (
+            f"postgresql+asyncpg://{self.database_user}:{self.database_password}"
+            f"@{self.database_host}:{self.database_port}/{self.database_name}"
+        )
 
     @property
     def is_production(self) -> bool:
