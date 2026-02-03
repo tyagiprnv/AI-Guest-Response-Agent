@@ -27,6 +27,7 @@ dependencies = [
     { name = "langgraph" },
     { name = "langsmith" },
     { name = "passlib", extra = ["bcrypt"] },
+    { name = "pip" },
     { name = "presidio-analyzer" },
     { name = "presidio-anonymizer" },
     { name = "prometheus-client" },
@@ -74,6 +75,7 @@ requires-dist = [
     { name = "langsmith", specifier = ">=0.1.0" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.11.0" },
     { name = "passlib", extras = ["bcrypt"], specifier = ">=1.7.4" },
+    { name = "pip", specifier = ">=26.0" },
     { name = "presidio-analyzer", specifier = ">=2.2.0" },
     { name = "presidio-anonymizer", specifier = ">=2.2.0" },
     { name = "prometheus-client", specifier = ">=0.21.0" },
@@ -2443,6 +2445,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/16/12/8583ba0f327cebf42e4c1a63f394332f42d86a5cc16e0f578bb29d17b524/phonenumbers-9.0.22.tar.gz", hash = "sha256:eff985c65575749d1d54e07c56c3517d5243e03e08e4a6191761df9aab2278f2", size = 2297728, upload-time = "2026-01-16T06:31:02.211Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/1e/95/a958da5ca5ae35b3a0d4a1ce88b001b4360fd6b48b97339dba2815ec10d4/phonenumbers-9.0.22-py2.py3-none-any.whl", hash = "sha256:645e66cd9a136b3b257b5f941fa97d324124114d31ad3c9f2488682f47ad7ee1", size = 2584081, upload-time = "2026-01-16T06:30:58.43Z" },
+]
+
+[[package]]
+name = "pip"
+version = "26.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/44/c2/65686a7783a7c27a329706207147e82f23c41221ee9ae33128fc331670a0/pip-26.0.tar.gz", hash = "sha256:3ce220a0a17915972fbf1ab451baae1521c4539e778b28127efa79b974aff0fa", size = 1812654, upload-time = "2026-01-31T01:40:54.361Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/69/00/5ac7aa77688ec4d34148b423d34dc0c9bc4febe0d872a9a1ad9860b2f6f1/pip-26.0-py3-none-any.whl", hash = "sha256:98436feffb9e31bc9339cf369fd55d3331b1580b6a6f1173bacacddcf9c34754", size = 1787564, upload-time = "2026-01-31T01:40:52.252Z" },
 ]
 
 [[package]]
