@@ -6,6 +6,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Dict
 
+from src.config.settings import get_settings
 from src.data.models import Property, Reservation
 
 BASE_DIR = Path(__file__).parent.parent.parent
@@ -72,12 +73,22 @@ class ReservationRepository:
 
 
 @lru_cache(maxsize=1)
-def get_property_repository() -> PropertyRepository:
-    """Get cached property repository."""
+def get_property_repository():
+    """Get cached property repository (JSON or PostgreSQL based on config)."""
+    settings = get_settings()
+    if settings.data_backend == "postgres":
+        from src.database.repositories import PostgresPropertyRepository
+
+        return PostgresPropertyRepository()
     return PropertyRepository()
 
 
 @lru_cache(maxsize=1)
-def get_reservation_repository() -> ReservationRepository:
-    """Get cached reservation repository."""
+def get_reservation_repository():
+    """Get cached reservation repository (JSON or PostgreSQL based on config)."""
+    settings = get_settings()
+    if settings.data_backend == "postgres":
+        from src.database.repositories import PostgresReservationRepository
+
+        return PostgresReservationRepository()
     return ReservationRepository()
