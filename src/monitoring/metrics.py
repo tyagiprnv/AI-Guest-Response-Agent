@@ -46,7 +46,8 @@ tokens_used = Counter(
 
 cost_usd = Counter(
     'agent_cost_usd_total',
-    'Total cost in USD'
+    'Total cost in USD',
+    ['response_type', 'model']
 )
 
 # Tool metrics

@@ -17,6 +17,7 @@ from src.agent.state import AgentState
 from src.config.settings import get_settings
 from src.guardrails.pii_redaction import detect_and_redact_pii, should_block_pii
 from src.guardrails.topic_filter import check_topic_restriction
+from src.monitoring.cost import calculate_llm_cost
 from src.monitoring.logging import get_logger
 from src.monitoring.metrics import response_type_count, tokens_used, cost_usd, direct_substitution_count
 from src.tools.property_details import get_property_info
@@ -220,8 +221,17 @@ async def generate_template_response(state: AgentState) -> Dict[str, Any]:
         # Update metrics
         response_type_count.labels(response_type="template").inc()
         if hasattr(response, 'usage_metadata'):
-            tokens_used.labels(token_type="prompt").inc(response.usage_metadata.get('input_tokens', 0))
-            tokens_used.labels(token_type="completion").inc(response.usage_metadata.get('output_tokens', 0))
+            input_tokens = response.usage_metadata.get('input_tokens', 0)
+            output_tokens = response.usage_metadata.get('output_tokens', 0)
+
+            tokens_used.labels(token_type="prompt").inc(input_tokens)
+            tokens_used.labels(token_type="completion").inc(output_tokens)
+
+            # Calculate and track cost
+            settings = get_settings()
+            if settings.enable_cost_tracking:
+                cost = calculate_llm_cost(input_tokens, output_tokens, settings.llm_model)
+                cost_usd.labels(response_type="template", model=settings.llm_model).inc(cost)
 
         return {
             "response_type": "template",
@@ -266,8 +276,17 @@ async def generate_custom_response(state: AgentState) -> Dict[str, Any]:
     # Update metrics
     response_type_count.labels(response_type="custom").inc()
     if hasattr(response, 'usage_metadata'):
-        tokens_used.labels(token_type="prompt").inc(response.usage_metadata.get('input_tokens', 0))
-        tokens_used.labels(token_type="completion").inc(response.usage_metadata.get('output_tokens', 0))
+        input_tokens = response.usage_metadata.get('input_tokens', 0)
+        output_tokens = response.usage_metadata.get('output_tokens', 0)
+
+        tokens_used.labels(token_type="prompt").inc(input_tokens)
+        tokens_used.labels(token_type="completion").inc(output_tokens)
+
+        # Calculate and track cost
+        settings = get_settings()
+        if settings.enable_cost_tracking:
+            cost = calculate_llm_cost(input_tokens, output_tokens, settings.llm_model)
+            cost_usd.labels(response_type="custom", model=settings.llm_model).inc(cost)
 
     return {
         "response_type": "custom",
