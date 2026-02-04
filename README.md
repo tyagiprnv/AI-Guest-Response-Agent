@@ -193,7 +193,7 @@ The agent uses a three-tier response strategy to optimize for both quality and c
 
 | Response Type | Condition | LLM Call | Description |
 |---------------|-----------|----------|-------------|
-| **Direct Template** | Score ≥ 0.80 + all placeholders fillable | No | High-confidence matches skip LLM entirely. Placeholders are substituted with live property/reservation data. |
+| **Direct Template** | Score ≥ 0.75 + all placeholders fillable | No | High-confidence matches skip LLM entirely. Placeholders are substituted with live property/reservation data. |
 | **Template Response** | Score ≥ 0.70 + missing placeholders | Yes | Good matches use templates as context for LLM generation. |
 | **Custom Response** | Score < 0.70 | Yes | Low matches generate fully custom responses. |
 
@@ -212,7 +212,7 @@ For high-confidence template matches, the system performs runtime placeholder su
 
 Configure via environment variables:
 ```bash
-DIRECT_SUBSTITUTION_THRESHOLD=0.80   # Score threshold for direct substitution
+DIRECT_SUBSTITUTION_THRESHOLD=0.75   # Score threshold for direct substitution
 RETRIEVAL_SIMILARITY_THRESHOLD=0.70  # Score threshold for template matching
 ```
 
