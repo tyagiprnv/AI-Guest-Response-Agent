@@ -74,6 +74,7 @@
       border-radius: 24px;
       padding: 24px 28px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      position: relative;
     }
 
     /* Avatar */
@@ -151,40 +152,6 @@
       outline: none;
     }
 
-    /* Loading dots */
-    .loading-dots {
-      display: flex;
-      gap: 6px;
-      padding: 20px;
-      justify-content: center;
-    }
-
-    .loading-dots span {
-      width: 10px;
-      height: 10px;
-      background: #cbd5e1;
-      border-radius: 50%;
-      animation: bounce 1.4s infinite ease-in-out both;
-    }
-
-    .loading-dots span:nth-child(1) {
-      animation-delay: -0.32s;
-    }
-
-    .loading-dots span:nth-child(2) {
-      animation-delay: -0.16s;
-    }
-
-    @keyframes bounce {
-      0%, 80%, 100% {
-        transform: scale(0);
-        opacity: 0.5;
-      }
-      40% {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
 
     /* Toast notifications */
     .toast {
@@ -320,6 +287,11 @@
 
     .chat-input-field::placeholder {
       color: #94a3b8;
+    }
+
+    .chat-input-field:read-only {
+      cursor: default;
+      background: white;
     }
 
     .chat-input-field:disabled {
@@ -517,13 +489,6 @@
     <!-- Agent Response (appears after generation) -->
     <div id="agentMessageContainer" class="agent-message" style="display: none;">
       <div class="bubble">
-        <!-- Loading state -->
-        <div id="loadingIndicator" class="loading-dots" style="display: none;">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-
         <!-- Single editable textarea -->
         <textarea
           id="chatInput"
@@ -653,7 +618,6 @@
     // Clear response only
     function clearResponse() {
       document.getElementById('chatInput').value = '';
-      document.getElementById('chatInput').disabled = false;
       document.getElementById('responseMetadata').style.display = 'none';
     }
 
@@ -687,9 +651,7 @@
         return;
       }
 
-      // Show loading state
-      document.getElementById('loadingIndicator').style.display = 'flex';
-      document.getElementById('chatInput').disabled = true;
+      // Disable button during request
       document.getElementById('responseMetadata').style.display = 'none';
       document.getElementById('helpReplyBtn').disabled = true;
 
@@ -714,10 +676,8 @@
 
         const data = await response.json();
 
-        // Hide loading, populate textarea, re-enable and auto-focus
-        document.getElementById('loadingIndicator').style.display = 'none';
+        // Populate textarea and auto-focus
         document.getElementById('chatInput').value = data.response_text;
-        document.getElementById('chatInput').disabled = false;
         document.getElementById('chatInput').focus();
 
         // Display metadata
@@ -752,7 +712,6 @@
         showToast('Response generated successfully!', 'success');
 
       } catch (error) {
-        document.getElementById('loadingIndicator').style.display = 'none';
         showToast(`Error: ${error.message}`, 'error');
       } finally {
         document.getElementById('helpReplyBtn').disabled = false;
