@@ -342,6 +342,74 @@
       color: #475569;
     }
 
+    /* Loading spinner keyframes */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(167, 139, 250, 0.3);
+      border-top-color: #8b5cf6;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    /* Textarea loading overlay */
+    .textarea-loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      z-index: 10;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .loading-text {
+      color: #8b5cf6;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .loading-subtext {
+      color: #94a3b8;
+      font-size: 13px;
+    }
+
+    /* Button loading state */
+    .action-buttons button.loading {
+      opacity: 0.7;
+      cursor: wait;
+    }
+
+    .action-buttons button.loading .button-text {
+      display: none;
+    }
+
+    .action-buttons button.loading .button-spinner {
+      display: inline-block;
+    }
+
+    .button-spinner {
+      display: none;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .chat-container {
@@ -496,6 +564,13 @@
           placeholder="Type your message or click 'Help me reply' to generate a response..."
         ></textarea>
 
+        <!-- Loading overlay (hidden by default) -->
+        <div id="loadingOverlay" class="textarea-loading-overlay" style="display: none;">
+          <div class="loading-spinner"></div>
+          <div class="loading-text">Generating response...</div>
+          <div class="loading-subtext">Coming right up!</div>
+        </div>
+
         <!-- Textarea actions (Copy, Clear) -->
         <div id="textareaActions" class="textarea-actions" style="display: flex;">
           <button id="copyBtn" aria-label="Copy response">
@@ -520,7 +595,12 @@
             <span>💬</span> Templates
           </button>
           <button id="helpReplyBtn" aria-label="Generate AI response">
-            <span>✨</span> Help me reply
+            <span class="button-text">
+              <span>✨</span> Help me reply
+            </span>
+            <span class="button-spinner">
+              <span class="loading-spinner"></span> Generating...
+            </span>
           </button>
         </div>
       </div>
@@ -655,6 +735,11 @@
       document.getElementById('responseMetadata').style.display = 'none';
       document.getElementById('helpReplyBtn').disabled = true;
 
+      // Show loading indicators
+      document.getElementById('helpReplyBtn').classList.add('loading');
+      document.getElementById('loadingOverlay').style.display = 'flex';
+      document.getElementById('chatInput').setAttribute('aria-busy', 'true');
+
       try {
         const response = await fetch(`${API_URL}/api/v1/generate-response`, {
           method: 'POST',
@@ -714,6 +799,10 @@
       } catch (error) {
         showToast(`Error: ${error.message}`, 'error');
       } finally {
+        // Hide loading indicators
+        document.getElementById('helpReplyBtn').classList.remove('loading');
+        document.getElementById('loadingOverlay').style.display = 'none';
+        document.getElementById('chatInput').setAttribute('aria-busy', 'false');
         document.getElementById('helpReplyBtn').disabled = false;
       }
     }
