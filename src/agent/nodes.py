@@ -61,6 +61,10 @@ def filter_property_context(property_data: dict | None) -> str:
         "parking_details": property_data.get("parking_details"),
         "amenities": property_data.get("amenities", []),
         "policies": property_data.get("policies", {}),
+        "contact_info": {
+            "phone": property_data.get("contact_info", {}).get("phone"),
+            "email": property_data.get("contact_info", {}).get("email"),
+        },
     }
     return json.dumps(filtered, default=json_serial)
 
@@ -294,7 +298,11 @@ async def generate_template_response(state: AgentState) -> Dict[str, Any]:
     property_info = filter_property_context(state.get("property_details"))
     reservation_info = filter_reservation_context(state.get("reservation_details"))
 
+    # Extract property name for persona
+    property_name = state.get("property_details", {}).get("name", "our property")
+
     prompt = RESPONSE_GENERATION_PROMPT.format(
+        property_name=property_name,
         guest_message=state["redacted_message"],
         templates=templates_text,
         property_info=property_info,
@@ -345,7 +353,11 @@ async def generate_custom_response(state: AgentState) -> Dict[str, Any]:
     property_info = filter_property_context(state.get("property_details"))
     reservation_info = filter_reservation_context(state.get("reservation_details"))
 
+    # Extract property name for persona
+    property_name = state.get("property_details", {}).get("name", "our property")
+
     prompt = CUSTOM_RESPONSE_PROMPT.format(
+        property_name=property_name,
         guest_message=state["redacted_message"],
         property_info=property_info,
         reservation_info=reservation_info,

@@ -41,6 +41,7 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 COPY src/ ./src/
 COPY data/ ./data/
 COPY scripts/ ./scripts/
+COPY frontend/ ./frontend/
 
 # Create logs directory
 RUN mkdir -p /app/logs

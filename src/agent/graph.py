@@ -138,6 +138,8 @@ async def run_agent(
             "confidence_score": 0.0,
             "metadata": {
                 "execution_time_ms": execution_time,
+                "pii_detected": initial_state.get("pii_detected", False),
+                "templates_found": len(initial_state.get("retrieved_templates", [])),
                 "error": str(e),
             },
         }

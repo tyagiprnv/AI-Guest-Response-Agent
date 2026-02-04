@@ -54,7 +54,7 @@ class Settings(BaseSettings):
     # LLM Configuration
     llm_model: str = Field(default="llama-3.1-8b-instant", description="Groq model")
     llm_temperature: float = Field(default=0.3, description="LLM temperature")
-    llm_max_tokens: int = Field(default=300, description="LLM max tokens")
+    llm_max_tokens: int = Field(default=400, description="LLM max tokens (allows 3-sentence responses)")
 
     # Retrieval Configuration
     retrieval_top_k: int = Field(default=3, description="Number of templates to retrieve")

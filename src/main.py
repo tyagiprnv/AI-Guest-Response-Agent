@@ -2,10 +2,12 @@
 FastAPI application entry point.
 """
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from fastapi.responses import PlainTextResponse
+from fastapi.staticfiles import StaticFiles
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 
 from src.api.middleware import setup_middleware
@@ -67,6 +69,11 @@ setup_middleware(app)
 app.include_router(health.router, tags=["Health"])
 app.include_router(response.router, prefix="/api/v1", tags=["Response"])
 
+# Mount data directory for serving JSON files (test_cases.json)
+data_dir = Path(__file__).parent.parent / "data"
+if data_dir.exists():
+    app.mount("/data", StaticFiles(directory=str(data_dir)), name="data")
+
 
 def custom_openapi():
     """
@@ -115,7 +122,11 @@ app.openapi = custom_openapi
 
 @app.get("/", include_in_schema=False)
 async def root():
-    """Root endpoint redirects to docs."""
+    """Root endpoint serves the frontend demo."""
+    from fastapi.responses import FileResponse
+    frontend_file = Path(__file__).parent.parent / "frontend" / "index.html"
+    if frontend_file.exists():
+        return FileResponse(frontend_file)
     return {
         "message": "AI Guest Response Agent API",
         "docs": "/docs",

@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guest Response Agent</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Custom styles -->
+  <style>
+    /* Light purple gradient background */
+    body {
+      background: linear-gradient(135deg, #e9d5ff 0%, #c4b5fd 50%, #a78bfa 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Chat container */
+    .chat-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 80px 20px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      min-height: calc(100vh - 120px);
+    }
+
+    /* Message bubbles */
+    .message {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      animation: slideInFromBottom 0.4s ease-out;
+    }
+
+    @keyframes slideInFromBottom {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .guest-message {
+      justify-content: flex-start;
+    }
+
+    .agent-message {
+      justify-content: center;
+      margin-left: 10%;
+    }
+
+    .message .bubble {
+      background: white;
+      padding: 20px 24px;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      max-width: 60%;
+      color: #475569;
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    .agent-message .bubble {
+      max-width: 75%;
+      border-radius: 24px;
+      padding: 24px 28px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Avatar */
+    .avatar {
+      width: 48px;
+      height: 48px;
+      min-width: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Action buttons */
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+      flex-wrap: wrap;
+    }
+
+    .action-buttons button {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      color: #475569;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 500;
+    }
+
+    .action-buttons button:hover:not(:disabled) {
+      background: #f1e9fe;
+      border-color: #c4b5fd;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .action-buttons button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .action-buttons button:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    /* Response textarea */
+    .agent-message textarea {
+      width: 100%;
+      border: none;
+      background: transparent;
+      resize: vertical;
+      min-height: 100px;
+      color: #475569;
+      font-size: 16px;
+      line-height: 1.6;
+      font-family: inherit;
+      padding: 0;
+    }
+
+    .agent-message textarea:focus {
+      outline: none;
+    }
+
+    /* Loading dots */
+    .loading-dots {
+      display: flex;
+      gap: 6px;
+      padding: 20px;
+      justify-content: center;
+    }
+
+    .loading-dots span {
+      width: 10px;
+      height: 10px;
+      background: #cbd5e1;
+      border-radius: 50%;
+      animation: bounce 1.4s infinite ease-in-out both;
+    }
+
+    .loading-dots span:nth-child(1) {
+      animation-delay: -0.32s;
+    }
+
+    .loading-dots span:nth-child(2) {
+      animation-delay: -0.16s;
+    }
+
+    @keyframes bounce {
+      0%, 80%, 100% {
+        transform: scale(0);
+        opacity: 0.5;
+      }
+      40% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Toast notifications */
+    .toast {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 14px 28px;
+      background: #10b981;
+      color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      animation: slideInUp 0.3s ease-out;
+      font-weight: 500;
+      max-width: 90%;
+    }
+
+    @keyframes slideInUp {
+      from {
+        transform: translateX(-50%) translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .toast.error {
+      background: #ef4444;
+    }
+
+    .toast.info {
+      background: #3b82f6;
+    }
+
+    /* Custom scrollbar */
+    textarea::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    textarea::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+
+    textarea::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    textarea::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Response metadata */
+    .response-metadata {
+      margin-top: 16px;
+      padding: 12px 16px;
+      background: #f8fafc;
+      border-radius: 10px;
+      font-size: 13px;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
+    }
+
+    .response-metadata .metadata-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .response-metadata .metadata-item {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .response-metadata .metadata-label {
+      font-weight: 600;
+      color: #475569;
+    }
+
+    /* Settings panel enhanced */
+    .settings-panel-wide {
+      width: 420px;
+    }
+
+    .settings-divider {
+      height: 1px;
+      background: #e2e8f0;
+      margin: 20px 0;
+    }
+
+    /* Top bar */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 20px;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .top-bar button {
+      pointer-events: all;
+    }
+
+    /* Single editable textarea */
+    .chat-input-field {
+      width: 100%;
+      min-height: 200px;
+      max-height: 400px;
+      padding: 14px 18px;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      font-size: 15px;
+      line-height: 1.6;
+      resize: vertical;
+      transition: all 0.2s;
+      background: white;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+    }
+
+    .chat-input-field:focus {
+      outline: none;
+      border-color: #a78bfa;
+      box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.1);
+    }
+
+    .chat-input-field::placeholder {
+      color: #94a3b8;
+    }
+
+    .chat-input-field:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background: #f8fafc;
+    }
+
+
+    /* Animations */
+    .animate-slide-in {
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(-10px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* Textarea actions (Copy, Clear buttons) */
+    .textarea-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .textarea-actions button {
+      padding: 6px 12px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      color: #64748b;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 500;
+    }
+
+    .textarea-actions button:hover {
+      background: #e2e8f0;
+      color: #475569;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .chat-container {
+        padding: 70px 16px 80px;
+      }
+
+      .message .bubble {
+        max-width: 85%;
+        font-size: 15px;
+      }
+
+      .agent-message .bubble {
+        max-width: 90%;
+      }
+
+      .agent-message {
+        margin-left: 0;
+      }
+
+      .settings-panel-wide {
+        width: calc(100vw - 32px);
+        max-width: 420px;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .action-buttons button {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .chat-input-field {
+        font-size: 16px;
+        padding: 12px 16px;
+        min-height: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <!-- Info Button (left) -->
+    <button id="shortcutsBtn" class="bg-white shadow-md rounded-full w-12 h-12 flex items-center justify-center text-xl hover:shadow-lg transition-shadow" aria-label="Keyboard shortcuts">
+      ℹ️
+    </button>
+
+    <!-- Settings Button (right) -->
+    <button id="settingsBtn" class="bg-white shadow-md rounded-full w-12 h-12 flex items-center justify-center text-2xl hover:shadow-lg transition-shadow" aria-label="Settings">
+      <span id="settingsIcon">⚙️</span>
+    </button>
+  </div>
+
+  <!-- Settings Panel (enhanced with test case selector) -->
+  <div id="settingsPanel" class="hidden fixed top-20 right-4 bg-white shadow-xl rounded-lg p-6 settings-panel-wide z-50 animate-slide-in">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold text-slate-800">Settings</h3>
+      <button id="closeSettingsBtn" class="text-slate-400 hover:text-slate-600 text-2xl leading-none" aria-label="Close">&times;</button>
+    </div>
+
+    <!-- API Settings -->
+    <div class="space-y-3">
+      <h4 class="text-sm font-semibold text-slate-700 uppercase tracking-wide">API Configuration</h4>
+      <label for="apiKeyInput" class="block text-sm font-medium text-slate-700">API Key:</label>
+      <input
+        type="password"
+        id="apiKeyInput"
+        placeholder="Enter your API key"
+        class="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+      >
+      <p class="text-xs text-slate-500">Get your API key from the .env file</p>
+      <button id="saveApiKeyBtn" class="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition-colors font-medium">
+        Save API Key
+      </button>
+    </div>
+
+    <!-- Divider -->
+    <div class="settings-divider"></div>
+
+    <!-- Demo Mode: Test Case Selector -->
+    <div class="space-y-3">
+      <h4 class="text-sm font-semibold text-slate-700 uppercase tracking-wide">Demo Mode</h4>
+      <label for="testCaseSelect" class="block text-sm font-medium text-slate-700">Test Case Selector:</label>
+      <select
+        id="testCaseSelect"
+        class="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white text-sm"
+      >
+        <option value="">-- Select a test case --</option>
+      </select>
+
+      <!-- Test Case Metadata -->
+      <div id="testCaseMetadata" class="hidden mt-3 p-3 bg-purple-50 border-l-4 border-purple-500 rounded text-xs">
+        <div class="space-y-1">
+          <div>
+            <span class="font-semibold text-slate-700">Test ID:</span>
+            <span id="testId" class="text-slate-600 ml-1"></span>
+          </div>
+          <div>
+            <span class="font-semibold text-slate-700">Expected Type:</span>
+            <span id="expectedType" class="text-slate-600 ml-1"></span>
+          </div>
+          <div>
+            <span class="font-semibold text-slate-700">Category:</span>
+            <span id="category" class="text-slate-600 ml-1"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shortcuts Panel -->
+  <div id="shortcutsPanel" class="hidden fixed top-20 left-4 bg-white shadow-xl rounded-lg p-6 w-80 z-50 animate-slide-in">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold text-slate-800">Keyboard Shortcuts</h3>
+      <button id="closeShortcutsBtn" class="text-slate-400 hover:text-slate-600 text-2xl leading-none" aria-label="Close">&times;</button>
+    </div>
+    <div class="space-y-2 text-sm text-slate-700">
+      <div class="flex justify-between items-center">
+        <span class="font-medium">Generate Response:</span>
+        <kbd class="px-2 py-1 bg-slate-100 rounded text-xs">Ctrl/Cmd + Enter</kbd>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="font-medium">Clear Response:</span>
+        <kbd class="px-2 py-1 bg-slate-100 rounded text-xs">Escape</kbd>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="font-medium">Open Settings:</span>
+        <kbd class="px-2 py-1 bg-slate-100 rounded text-xs">Ctrl/Cmd + K</kbd>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat Container -->
+  <div class="chat-container" id="chatContainer">
+    <!-- Guest Message (appears when test case selected) -->
+    <div id="guestMessageContainer" class="message guest-message" style="display: none;">
+      <div class="avatar">👤</div>
+      <div class="bubble" id="guestMessageText">
+        <!-- Guest message will appear here -->
+      </div>
+    </div>
+
+    <!-- Agent Response (appears after generation) -->
+    <div id="agentMessageContainer" class="agent-message" style="display: none;">
+      <div class="bubble">
+        <!-- Loading state -->
+        <div id="loadingIndicator" class="loading-dots" style="display: none;">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <!-- Single editable textarea -->
+        <textarea
+          id="chatInput"
+          class="chat-input-field"
+          placeholder="Type your message or click 'Help me reply' to generate a response..."
+        ></textarea>
+
+        <!-- Textarea actions (Copy, Clear) -->
+        <div id="textareaActions" class="textarea-actions" style="display: flex;">
+          <button id="copyBtn" aria-label="Copy response">
+            <span>📋</span> Copy
+          </button>
+          <button id="clearBtn" aria-label="Clear response">
+            <span>✖️</span> Clear
+          </button>
+        </div>
+
+        <!-- Response Metadata -->
+        <div id="responseMetadata" class="response-metadata" style="display: none;">
+          <!-- Metadata will be inserted here -->
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button id="imagesBtn" aria-label="Upload images">
+            <span>🖼️</span> Images
+          </button>
+          <button id="templatesBtn" aria-label="View templates">
+            <span>💬</span> Templates
+          </button>
+          <button id="helpReplyBtn" aria-label="Generate AI response">
+            <span>✨</span> Help me reply
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    // Configuration
+    const API_URL = 'http://localhost:8000';
+    const STORAGE_KEY = 'guest_agent_api_key';
+
+    // State
+    let testCases = [];
+    let currentTestCase = null;
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadTestCases();
+      setupEventListeners();
+      loadApiKeyFromStorage();
+      setupKeyboardShortcuts();
+    });
+
+    // Load test cases from API
+    async function loadTestCases() {
+      try {
+        const response = await fetch(`${API_URL}/data/test_cases/test_cases.json`);
+        if (!response.ok) {
+          throw new Error('Failed to load test cases');
+        }
+        testCases = await response.json();
+        populateTestCaseDropdown();
+
+        // Auto-select test case 1
+        if (testCases.length > 0) {
+          const testCase1 = testCases.find(tc => tc.id === 'test_case_1') || testCases[0];
+          const select = document.getElementById('testCaseSelect');
+          select.value = testCase1.id;
+          currentTestCase = testCase1;
+          displayTestCase(testCase1);
+        }
+      } catch (error) {
+        showToast(`Error loading test cases: ${error.message}`, 'error');
+      }
+    }
+
+    // Populate dropdown with test cases
+    function populateTestCaseDropdown() {
+      const select = document.getElementById('testCaseSelect');
+
+      // Clear existing options except the first one
+      while (select.options.length > 1) {
+        select.remove(1);
+      }
+
+      // Add test cases
+      testCases.forEach((testCase) => {
+        const option = document.createElement('option');
+        option.value = testCase.id;
+        option.textContent = `${testCase.id}: ${testCase.guest_message.substring(0, 60)}${testCase.guest_message.length > 60 ? '...' : ''}`;
+        select.appendChild(option);
+      });
+    }
+
+    // Display selected test case in chat bubble
+    function displayTestCase(testCase) {
+      // Show guest message
+      document.getElementById('guestMessageText').textContent = testCase.guest_message;
+      document.getElementById('guestMessageContainer').style.display = 'flex';
+
+      // Show agent message container (with action buttons)
+      document.getElementById('agentMessageContainer').style.display = 'flex';
+
+      // Update metadata in settings panel
+      document.getElementById('testId').textContent = testCase.id;
+      document.getElementById('expectedType').textContent = testCase.expected_response_types.join(', ');
+      document.getElementById('category').textContent = testCase.expected_category || 'N/A';
+      document.getElementById('testCaseMetadata').classList.remove('hidden');
+
+      // Clear any previous response
+      clearResponse();
+    }
+
+    // Clear conversation
+    function clearConversation() {
+      document.getElementById('guestMessageContainer').style.display = 'none';
+      document.getElementById('agentMessageContainer').style.display = 'none';
+      document.getElementById('testCaseMetadata').classList.add('hidden');
+      document.getElementById('testCaseSelect').value = '';
+      currentTestCase = null;
+      clearResponse();
+    }
+
+    // Clear response only
+    function clearResponse() {
+      document.getElementById('chatInput').value = '';
+      document.getElementById('chatInput').disabled = false;
+      document.getElementById('responseMetadata').style.display = 'none';
+    }
+
+    // Send message (cosmetic for mockup)
+    function sendMessage() {
+      const chatInput = document.getElementById('chatInput');
+      const message = chatInput.value.trim();
+
+      if (message === '') return;
+
+      // Show success toast
+      showToast('Message sent! (Demo mode - no actual sending)', 'success');
+
+      // Clear input
+      clearResponse();
+    }
+
+    // Generate response
+    async function generateResponse() {
+      const apiKey = getApiKey();
+
+      if (!apiKey) {
+        showToast('Please enter your API key in settings', 'error');
+        document.getElementById('settingsBtn').click();
+        return;
+      }
+
+      if (!currentTestCase) {
+        showToast('Please select a test case first', 'error');
+        document.getElementById('settingsBtn').click();
+        return;
+      }
+
+      // Show loading state
+      document.getElementById('loadingIndicator').style.display = 'flex';
+      document.getElementById('chatInput').disabled = true;
+      document.getElementById('responseMetadata').style.display = 'none';
+      document.getElementById('helpReplyBtn').disabled = true;
+
+      try {
+        const response = await fetch(`${API_URL}/api/v1/generate-response`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-API-Key': apiKey
+          },
+          body: JSON.stringify({
+            message: currentTestCase.guest_message,
+            property_id: currentTestCase.property_id,
+            reservation_id: currentTestCase.reservation_id
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.detail || response.statusText);
+        }
+
+        const data = await response.json();
+
+        // Hide loading, populate textarea, re-enable and auto-focus
+        document.getElementById('loadingIndicator').style.display = 'none';
+        document.getElementById('chatInput').value = data.response_text;
+        document.getElementById('chatInput').disabled = false;
+        document.getElementById('chatInput').focus();
+
+        // Display metadata
+        const matchesExpected = data.response_type === currentTestCase.expected_response_types[0] ||
+                                currentTestCase.expected_response_types.includes(data.response_type);
+
+        const metadataHTML = `
+          <div class="metadata-grid">
+            <div class="metadata-item">
+              <span class="metadata-label">Response Type:</span>
+              <span>${data.response_type}</span>
+            </div>
+            <div class="metadata-item">
+              <span class="metadata-label">Confidence:</span>
+              <span>${(data.confidence_score * 100).toFixed(0)}%</span>
+            </div>
+            <div class="metadata-item">
+              <span class="metadata-label">Execution Time:</span>
+              <span>${data.metadata.execution_time_ms.toFixed(0)}ms</span>
+            </div>
+            <div class="metadata-item">
+              <span class="metadata-label">Expected:</span>
+              <span>${currentTestCase.expected_response_types.join(', ')} ${matchesExpected ? '✅' : '⚠️'}</span>
+            </div>
+          </div>
+          ${data.metadata.pii_detected ? '<div style="margin-top: 8px; color: #f59e0b; font-weight: 600;">⚠️ PII Detected</div>' : ''}
+        `;
+
+        document.getElementById('responseMetadata').innerHTML = metadataHTML;
+        document.getElementById('responseMetadata').style.display = 'block';
+
+        showToast('Response generated successfully!', 'success');
+
+      } catch (error) {
+        document.getElementById('loadingIndicator').style.display = 'none';
+        showToast(`Error: ${error.message}`, 'error');
+      } finally {
+        document.getElementById('helpReplyBtn').disabled = false;
+      }
+    }
+
+    // Copy to clipboard
+    async function copyToClipboard() {
+      const text = document.getElementById('chatInput').value;
+
+      if (!text) {
+        showToast('No text to copy', 'error');
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast('Text copied to clipboard!', 'success');
+      } catch (error) {
+        showToast('Failed to copy to clipboard', 'error');
+      }
+    }
+
+    // Show "Coming soon" toast
+    function showComingSoonToast(feature) {
+      showToast(`Coming soon: ${feature}`, 'info');
+    }
+
+    // Show toast notification
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+
+    // API Key management
+    function getApiKey() {
+      return localStorage.getItem(STORAGE_KEY) || '';
+    }
+
+    function saveApiKey(key) {
+      localStorage.setItem(STORAGE_KEY, key);
+      updateAuthStatus();
+    }
+
+    function loadApiKeyFromStorage() {
+      const key = getApiKey();
+      if (key) {
+        document.getElementById('apiKeyInput').value = key;
+        updateAuthStatus();
+      }
+    }
+
+    function updateAuthStatus() {
+      const hasKey = !!getApiKey();
+      const icon = document.getElementById('settingsIcon');
+      icon.textContent = hasKey ? '✅' : '⚙️';
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+      // Settings panel
+      document.getElementById('settingsBtn').addEventListener('click', () => {
+        const panel = document.getElementById('settingsPanel');
+        panel.classList.toggle('hidden');
+        document.getElementById('shortcutsPanel').classList.add('hidden');
+      });
+
+      document.getElementById('closeSettingsBtn').addEventListener('click', () => {
+        document.getElementById('settingsPanel').classList.add('hidden');
+      });
+
+      document.getElementById('saveApiKeyBtn').addEventListener('click', () => {
+        const key = document.getElementById('apiKeyInput').value.trim();
+        if (key) {
+          saveApiKey(key);
+          showToast('API key saved successfully!', 'success');
+          document.getElementById('settingsPanel').classList.add('hidden');
+        } else {
+          showToast('Please enter a valid API key', 'error');
+        }
+      });
+
+      // Shortcuts panel
+      document.getElementById('shortcutsBtn').addEventListener('click', () => {
+        const panel = document.getElementById('shortcutsPanel');
+        panel.classList.toggle('hidden');
+        document.getElementById('settingsPanel').classList.add('hidden');
+      });
+
+      document.getElementById('closeShortcutsBtn').addEventListener('click', () => {
+        document.getElementById('shortcutsPanel').classList.add('hidden');
+      });
+
+      // Test case selection
+      document.getElementById('testCaseSelect').addEventListener('change', (e) => {
+        const selectedId = e.target.value;
+        if (selectedId !== '') {
+          currentTestCase = testCases.find(tc => tc.id === selectedId);
+          displayTestCase(currentTestCase);
+        } else {
+          clearConversation();
+        }
+      });
+
+      // Action buttons
+      document.getElementById('imagesBtn').addEventListener('click', () => {
+        showComingSoonToast('Image upload feature');
+      });
+
+      document.getElementById('templatesBtn').addEventListener('click', () => {
+        showComingSoonToast('Template library');
+      });
+
+      document.getElementById('helpReplyBtn').addEventListener('click', generateResponse);
+
+      // Textarea actions
+      document.getElementById('copyBtn').addEventListener('click', copyToClipboard);
+
+      document.getElementById('clearBtn').addEventListener('click', () => {
+        clearResponse();
+        showToast('Text cleared', 'success');
+      });
+
+      // Close panels when clicking outside
+      document.addEventListener('click', (e) => {
+        const settingsPanel = document.getElementById('settingsPanel');
+        const settingsBtn = document.getElementById('settingsBtn');
+        const shortcutsPanel = document.getElementById('shortcutsPanel');
+        const shortcutsBtn = document.getElementById('shortcutsBtn');
+
+        if (!settingsPanel.contains(e.target) && !settingsBtn.contains(e.target)) {
+          settingsPanel.classList.add('hidden');
+        }
+
+        if (!shortcutsPanel.contains(e.target) && !shortcutsBtn.contains(e.target)) {
+          shortcutsPanel.classList.add('hidden');
+        }
+      });
+    }
+
+    // Keyboard shortcuts
+    function setupKeyboardShortcuts() {
+      document.addEventListener('keydown', (e) => {
+        // Ctrl/Cmd + Enter: Generate response
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          e.preventDefault();
+          generateResponse();
+        }
+
+        // Ctrl/Cmd + K: Open settings
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+          e.preventDefault();
+          document.getElementById('settingsBtn').click();
+        }
+
+        // Escape: Clear response or close panels
+        if (e.key === 'Escape') {
+          // Close panels first
+          const settingsOpen = !document.getElementById('settingsPanel').classList.contains('hidden');
+          const shortcutsOpen = !document.getElementById('shortcutsPanel').classList.contains('hidden');
+
+          if (settingsOpen || shortcutsOpen) {
+            document.getElementById('settingsPanel').classList.add('hidden');
+            document.getElementById('shortcutsPanel').classList.add('hidden');
+          } else {
+            // Clear response if no panels are open and not focused on input
+            if (!['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+              clearResponse();
+            }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
