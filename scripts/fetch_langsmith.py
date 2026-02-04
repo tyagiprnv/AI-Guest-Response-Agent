@@ -10,13 +10,13 @@ load_dotenv()
 from langsmith import Client
 
 
-def fetch_langsmith_data(project_name: str = None, limit: int = 35):
+def fetch_langsmith_data(project_name: str = None, limit: int = 55):
     """Fetch and analyze recent runs from LangSmith."""
     client = Client()
 
     # Use provided project name or default
     if project_name is None:
-        project_name = os.getenv("LANGCHAIN_PROJECT", "GuestAgentGroq")
+        project_name = os.getenv("LANGCHAIN_PROJECT", "GuestAgent")
 
     print(f"Fetching runs from project: {project_name}\n")
 
@@ -56,8 +56,10 @@ def fetch_langsmith_data(project_name: str = None, limit: int = 35):
         print(f"  Max: {max(latencies):.2f}s")
 
         p50_idx = int(len(latencies_sorted) * 0.5)
+        p95_idx = min(int(len(latencies_sorted) * 0.95), len(latencies_sorted) - 1)
         p99_idx = min(int(len(latencies_sorted) * 0.99), len(latencies_sorted) - 1)
         print(f"  p50: {latencies_sorted[p50_idx]:.2f}s")
+        print(f"  p95: {latencies_sorted[p95_idx]:.2f}s")
         print(f"  p99: {latencies_sorted[p99_idx]:.2f}s")
 
         # Count fast vs slow
@@ -73,6 +75,7 @@ def fetch_langsmith_data(project_name: str = None, limit: int = 35):
             "min": min(latencies),
             "max": max(latencies),
             "p50": latencies_sorted[p50_idx],
+            "p95": latencies_sorted[p95_idx],
             "p99": latencies_sorted[p99_idx],
             "fast_count": fast,
             "medium_count": medium,

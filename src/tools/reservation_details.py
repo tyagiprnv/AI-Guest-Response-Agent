@@ -74,7 +74,7 @@ async def get_reservation_info(reservation_id: str | None) -> Dict[str, Any] | N
 
     # Check cache
     cache_key = f"reservation:{reservation_id}"
-    cached = tool_result_cache.get(cache_key)
+    cached = await tool_result_cache.get(cache_key)
     if cached:
         cache_hit.labels(cache_type="tool_result").inc()
         return cached
@@ -92,6 +92,6 @@ async def get_reservation_info(reservation_id: str | None) -> Dict[str, Any] | N
     result = reservation.model_dump(mode="json")
 
     # Cache result
-    tool_result_cache.set(cache_key, result)
+    await tool_result_cache.set(cache_key, result)
 
     return result

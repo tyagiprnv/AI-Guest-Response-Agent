@@ -38,7 +38,7 @@ async def generate_response(request: GenerateResponseRequest):
     """
 
     # Check response cache
-    cached_response = response_cache.get_response(
+    cached_response = await response_cache.get_response(
         request.message, request.property_id, request.reservation_id
     )
 
@@ -69,7 +69,7 @@ async def generate_response(request: GenerateResponseRequest):
 
         # Cache successful responses (not errors)
         if result["response_type"] != "error":
-            response_cache.set_response(
+            await response_cache.set_response(
                 request.message,
                 request.property_id,
                 request.reservation_id,

@@ -37,6 +37,8 @@ def json_serial(obj):
 
 async def apply_guardrails(state: AgentState) -> Dict[str, Any]:
     """Apply safety guardrails to the guest message."""
+    from src.guardrails.topic_filter import is_safe_query, topic_filter_path, check_topic_restriction
+
     message = state["guest_message"]
 
     # Check for sensitive PII that should block request
@@ -54,17 +56,26 @@ async def apply_guardrails(state: AgentState) -> Dict[str, Any]:
     # Detect and redact PII (synchronous call)
     redacted_message, has_pii = detect_and_redact_pii(message)
 
-    # Check topic restrictions
-    topic_result = await check_topic_restriction(redacted_message)
+    # Fast-path topic check: Skip LLM for obviously safe queries
+    topic_result = None
+    if is_safe_query(redacted_message):
+        logger.debug(f"Topic filter fast-path: query is safe - {redacted_message[:50]}...")
+        topic_filter_path.labels(path="fast_path").inc()
+        topic_result = {
+            "allowed": True,
+            "reason": "Query matches safe patterns",
+            "topic": "general",
+        }
+    # Note: For non-fast-path queries, topic checking happens in generate_response (parallel with response generation)
 
     logger.info(
-        f"Guardrails applied - PII: {has_pii}, Topic allowed: {topic_result['allowed']}"
+        f"Guardrails applied - PII: {has_pii}, Fast-path topic check: {topic_result is not None}"
     )
 
     return {
         "pii_detected": has_pii,
         "redacted_message": redacted_message,
-        "topic_filter_result": topic_result,
+        "topic_filter_result": topic_result,  # None if needs LLM check, dict if fast-path passed
     }
 
 
@@ -105,27 +116,64 @@ async def execute_tools(state: AgentState) -> Dict[str, Any]:
 
 
 async def generate_response(state: AgentState) -> Dict[str, Any]:
-    """Generate the final response."""
+    """Generate the final response with parallel topic checking for non-fast-path queries."""
+    from src.guardrails.topic_filter import check_topic_restriction
+
     settings = get_settings()
 
-    # Check if request was blocked by guardrails
-    if not state["topic_filter_result"]["allowed"]:
+    # Check if request was blocked by fast-path topic filter or PII
+    topic_result = state.get("topic_filter_result")
+    if topic_result is not None and not topic_result["allowed"]:
         return await generate_no_response(state)
+
+    # For queries that didn't match fast-path, run topic check in parallel with response generation
+    needs_topic_check = topic_result is None
 
     # Check if we have good template matches
     templates = state.get("retrieved_templates", [])
     has_good_templates = templates and templates[0]["score"] >= settings.retrieval_similarity_threshold
 
-    if has_good_templates:
-        # Try direct substitution for very high confidence matches
-        if settings.direct_substitution_enabled:
-            best_template = templates[0]
-            if best_template["score"] >= settings.direct_substitution_threshold:
-                result = await generate_direct_template_response(state)
-                if result is not None:
-                    return result
-                # Fall through to LLM-based template response
+    # Try direct substitution for very high confidence matches (only if topic already checked)
+    if has_good_templates and settings.direct_substitution_enabled and not needs_topic_check:
+        best_template = templates[0]
+        if best_template["score"] >= settings.direct_substitution_threshold:
+            result = await generate_direct_template_response(state)
+            if result is not None:
+                return result
+            # Fall through to LLM-based response
 
+    # If topic check needed, run in parallel with response generation
+    if needs_topic_check:
+        # Start both tasks in parallel
+        topic_task = asyncio.create_task(check_topic_restriction(state["redacted_message"]))
+
+        if has_good_templates:
+            response_task = asyncio.create_task(generate_template_response(state))
+        else:
+            response_task = asyncio.create_task(generate_custom_response(state))
+
+        # Wait for topic filter first
+        topic_result = await topic_task
+
+        # If topic is blocked, cancel response generation and return rejection
+        if not topic_result["allowed"]:
+            if not response_task.done():
+                response_task.cancel()
+                try:
+                    await response_task
+                except asyncio.CancelledError:
+                    logger.info("Cancelled response generation due to topic restriction")
+                    pass
+
+            # Update state with topic filter result for generate_no_response
+            state["topic_filter_result"] = topic_result
+            return await generate_no_response(state)
+
+        # Topic allowed - wait for and return the response
+        return await response_task
+
+    # Topic already checked (fast-path), just generate response
+    if has_good_templates:
         return await generate_template_response(state)
     else:
         return await generate_custom_response(state)
@@ -191,6 +239,7 @@ async def generate_template_response(state: AgentState) -> Dict[str, Any]:
         model=settings.llm_model,
         temperature=settings.llm_temperature,
         api_key=settings.groq_api_key,
+        max_tokens=settings.llm_max_tokens,
     )
 
     # Format templates
@@ -254,6 +303,7 @@ async def generate_custom_response(state: AgentState) -> Dict[str, Any]:
         model=settings.llm_model,
         temperature=settings.llm_temperature,
         api_key=settings.groq_api_key,
+        max_tokens=settings.llm_max_tokens,
     )
 
     property_info = json.dumps(state.get("property_details"), indent=2, default=json_serial) if state.get("property_details") else "Not available"
@@ -311,6 +361,9 @@ async def generate_no_response(state: AgentState) -> Dict[str, Any]:
 
 def should_continue(state: AgentState) -> str:
     """Determine if workflow should continue or reject."""
-    if not state["topic_filter_result"]["allowed"]:
+    topic_result = state.get("topic_filter_result")
+    # None means passed fast-path check (allowed)
+    # Dict with "allowed": False means blocked
+    if topic_result is not None and not topic_result.get("allowed", True):
         return "reject"
     return "continue"

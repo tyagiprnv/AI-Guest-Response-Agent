@@ -30,23 +30,8 @@ class RedisCache(BaseCache):
             )
         return self._redis
 
-    def get(self, key: str) -> Optional[Any]:
-        """Get value from cache (sync wrapper for async operation)."""
-        import asyncio
-
-        try:
-            loop = asyncio.get_event_loop()
-            if loop.is_running():
-                # If event loop is running, we can't use asyncio.run
-                # Create a task and return None (will be populated by async code)
-                return None
-            else:
-                return asyncio.run(self._get_async(key))
-        except Exception:
-            return None
-
-    async def _get_async(self, key: str) -> Optional[Any]:
-        """Get value from cache (async)."""
+    async def get(self, key: str) -> Optional[Any]:
+        """Get value from cache."""
         try:
             redis = await self._get_redis()
             value = await redis.get(f"{self._prefix}:{key}")
@@ -56,22 +41,8 @@ class RedisCache(BaseCache):
         except Exception:
             return None
 
-    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> None:
-        """Set value in cache (sync wrapper for async operation)."""
-        import asyncio
-
-        try:
-            loop = asyncio.get_event_loop()
-            if loop.is_running():
-                # Create task but don't wait
-                asyncio.create_task(self._set_async(key, value, ttl))
-            else:
-                asyncio.run(self._set_async(key, value, ttl))
-        except Exception:
-            pass
-
-    async def _set_async(self, key: str, value: Any, ttl: Optional[int] = None) -> None:
-        """Set value in cache (async)."""
+    async def set(self, key: str, value: Any, ttl: Optional[int] = None) -> None:
+        """Set value in cache."""
         try:
             redis = await self._get_redis()
             await redis.setex(
@@ -82,21 +53,8 @@ class RedisCache(BaseCache):
         except Exception:
             pass
 
-    def clear(self) -> None:
+    async def clear(self) -> None:
         """Clear all cache with this prefix."""
-        import asyncio
-
-        try:
-            loop = asyncio.get_event_loop()
-            if loop.is_running():
-                asyncio.create_task(self._clear_async())
-            else:
-                asyncio.run(self._clear_async())
-        except Exception:
-            pass
-
-    async def _clear_async(self) -> None:
-        """Clear all cache with this prefix (async)."""
         try:
             redis = await self._get_redis()
             keys = await redis.keys(f"{self._prefix}:*")
@@ -105,21 +63,8 @@ class RedisCache(BaseCache):
         except Exception:
             pass
 
-    def size(self) -> int:
+    async def size(self) -> int:
         """Get cache size."""
-        import asyncio
-
-        try:
-            loop = asyncio.get_event_loop()
-            if loop.is_running():
-                return 0
-            else:
-                return asyncio.run(self._size_async())
-        except Exception:
-            return 0
-
-    async def _size_async(self) -> int:
-        """Get cache size (async)."""
         try:
             redis = await self._get_redis()
             keys = await redis.keys(f"{self._prefix}:*")
@@ -157,15 +102,15 @@ class RedisEmbeddingCache(RedisCache):
         normalized = RedisEmbeddingCache._normalize_text(text)
         return hashlib.sha256(normalized.encode()).hexdigest()
 
-    def get_embedding(self, text: str) -> Optional[list[float]]:
+    async def get_embedding(self, text: str) -> Optional[list[float]]:
         """Get cached embedding."""
         key = self._hash_text(text)
-        return self.get(key)
+        return await self.get(key)
 
-    def set_embedding(self, text: str, embedding: list[float]) -> None:
+    async def set_embedding(self, text: str, embedding: list[float]) -> None:
         """Cache embedding."""
         key = self._hash_text(text)
-        self.set(key, embedding)
+        await self.set(key, embedding)
 
 
 class RedisToolResultCache(RedisCache):
@@ -180,7 +125,7 @@ class RedisResponseCache(RedisCache):
     """Redis-backed response cache."""
 
     def __init__(self):
-        super().__init__(ttl_seconds=60, prefix="response")
+        super().__init__(ttl_seconds=300, prefix="response")  # Increased from 60s to 5 minutes
 
     @staticmethod
     def _create_key(message: str, property_id: str, reservation_id: str | None) -> str:
@@ -188,16 +133,16 @@ class RedisResponseCache(RedisCache):
         key_str = f"{message}:{property_id}:{reservation_id or ''}"
         return hashlib.sha256(key_str.encode()).hexdigest()
 
-    def get_response(
+    async def get_response(
         self, message: str, property_id: str, reservation_id: str | None
     ) -> Optional[dict]:
         """Get cached response."""
         key = self._create_key(message, property_id, reservation_id)
-        return self.get(key)
+        return await self.get(key)
 
-    def set_response(
+    async def set_response(
         self, message: str, property_id: str, reservation_id: str | None, response: dict
     ) -> None:
         """Cache response."""
         key = self._create_key(message, property_id, reservation_id)
-        self.set(key, response)
+        await self.set(key, response)

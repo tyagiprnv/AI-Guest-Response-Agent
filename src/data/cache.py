@@ -275,10 +275,11 @@ async def warm_embedding_cache() -> int:
     logger = get_logger(__name__)
 
     # Filter out queries that are already cached
-    queries_to_warm = [
-        q for q in COMMON_QUERIES
-        if embedding_cache.get_embedding(q) is None
-    ]
+    queries_to_warm = []
+    for q in COMMON_QUERIES:
+        cached = await embedding_cache.get_embedding(q)
+        if cached is None:
+            queries_to_warm.append(q)
 
     if not queries_to_warm:
         logger.info("Embedding cache already warm, no queries to generate")
@@ -292,7 +293,7 @@ async def warm_embedding_cache() -> int:
 
         # Cache each embedding
         for query, embedding in zip(queries_to_warm, embeddings):
-            embedding_cache.set_embedding(query, embedding)
+            await embedding_cache.set_embedding(query, embedding)
 
         logger.info(f"Embedding cache warmed successfully with {len(queries_to_warm)} queries")
         return len(queries_to_warm)

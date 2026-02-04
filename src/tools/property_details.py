@@ -77,7 +77,7 @@ async def get_property_info(property_id: str) -> Dict[str, Any] | None:
     """Get property information (direct function for use in agent)."""
     # Check cache
     cache_key = f"property:{property_id}"
-    cached = tool_result_cache.get(cache_key)
+    cached = await tool_result_cache.get(cache_key)
     if cached:
         cache_hit.labels(cache_type="tool_result").inc()
         return cached
@@ -95,6 +95,6 @@ async def get_property_info(property_id: str) -> Dict[str, Any] | None:
     result = property.model_dump(mode="json")
 
     # Cache result
-    tool_result_cache.set(cache_key, result)
+    await tool_result_cache.set(cache_key, result)
 
     return result

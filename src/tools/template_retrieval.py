@@ -70,7 +70,7 @@ class TemplateRetrievalTool(BaseTool):
         settings = get_settings()
 
         # Check embedding cache
-        embedding = embedding_cache.get_embedding(query)
+        embedding = await embedding_cache.get_embedding(query)
         if embedding:
             cache_hit.labels(cache_type="embedding").inc()
         else:
@@ -78,10 +78,10 @@ class TemplateRetrievalTool(BaseTool):
             # Generate embedding
             embedding = await generate_embedding(query)
             # Cache embedding
-            embedding_cache.set_embedding(query, embedding)
+            await embedding_cache.set_embedding(query, embedding)
 
-        # Search Qdrant - fetch more results to account for deduplication
-        fetch_limit = settings.retrieval_top_k * 3
+        # Search Qdrant - fetch more results to account for deduplication (reduced from 3x to 2x)
+        fetch_limit = settings.retrieval_top_k * 2
         results = await search_similar(
             collection_name=settings.qdrant_collection_name,
             query_vector=embedding,
@@ -116,16 +116,16 @@ async def retrieve_templates(query: str) -> List[Dict[str, Any]]:
     settings = get_settings()
 
     # Check embedding cache
-    embedding = embedding_cache.get_embedding(query)
+    embedding = await embedding_cache.get_embedding(query)
     if embedding:
         cache_hit.labels(cache_type="embedding").inc()
     else:
         cache_miss.labels(cache_type="embedding").inc()
         embedding = await generate_embedding(query)
-        embedding_cache.set_embedding(query, embedding)
+        await embedding_cache.set_embedding(query, embedding)
 
-    # Search Qdrant - fetch more results to account for deduplication
-    fetch_limit = settings.retrieval_top_k * 3
+    # Search Qdrant - fetch more results to account for deduplication (reduced from 3x to 2x)
+    fetch_limit = settings.retrieval_top_k * 2
     results = await search_similar(
         collection_name=settings.qdrant_collection_name,
         query_vector=embedding,
