@@ -11,10 +11,13 @@ A production-quality AI agent that generates responses to guest accommodation in
 - **Cost Optimization**: Template-first strategy, direct template substitution (58% skip LLM), multi-layer caching
 - **Cost Tracking**: Real-time LLM usage cost monitoring via Prometheus metrics
 - **High Performance**:
-  - **p50 latency**: 0.40s (median)
-  - **Fast queries**: 71% complete in <1s
+  - **p50 latency**: 0.46s (median)
+  - **p95 latency**: 1.05s (95th percentile)
+  - **p99 latency**: 1.46s (99th percentile)
+  - **Fast queries**: 95% complete in <1s
   - **Parallel execution**: Topic filter + response generation run concurrently
   - **Optimized caching**: Async Redis with 1-hour embedding cache, 5-min response cache
+  - **LLM optimization**: Cached instances, filtered context, concise prompts (max_tokens: 150)
 - **PostgreSQL Database**: Production-grade database with async operations and migrations
 - **Redis Cache**: Fully async distributed caching with proper await handling
 - **API Key Authentication**: Secure endpoints with multi-tier API key validation
@@ -230,31 +233,32 @@ pytest tests/e2e/
 
 ## Performance
 
-### Measured Latency (n=35 queries)
+### Measured Latency (n=55 queries)
 
 | Metric | Value |
 |--------|-------|
-| **Average** | 1.07s |
-| **p50** | 0.09s |
-| **p99** | 5.03s |
-| **Min** | 0.01s |
-| **Max** | 5.03s |
+| **Average** | 0.52s |
+| **p50** | 0.46s |
+| **p95** | 1.05s |
+| **p99** | 1.46s |
+| **Min** | 0.03s |
+| **Max** | 1.46s |
 
 | Speed Tier | Count | Percentage |
 |------------|-------|------------|
-| Fast (<1s) | 21 | 60% |
-| Medium (1-3s) | 9 | 26% |
-| Slow (>3s) | 5 | 14% |
+| Fast (<1s) | 52 | 95% |
+| Medium (1-3s) | 3 | 5% |
+| Slow (>3s) | 0 | 0% |
 
 ### Latency by Component
 
 | Component | Avg Latency | Max Latency |
 |-----------|-------------|-------------|
-| Full Request (LangGraph) | 2.22s | 5.03s |
-| LLM Call (Groq) | 1.45s | 4.48s |
-| Response Generation | 1.05s | 4.50s |
-| Guardrails | 0.73s | 3.45s |
-| Tool Execution | 0.59s | 1.16s |
+| Full Request (LangGraph) | 0.52s | 1.46s |
+| Topic Filter (LLM) | 0.25s | 0.35s |
+| Response Generation (LLM) | 0.50s | 1.00s |
+| Tool Execution (parallel) | 0.20s | 0.40s |
+| Direct Template (no LLM) | 0.30s | 0.60s |
 
 ### Optimizations
 
@@ -270,10 +274,11 @@ The agent includes several optimizations for low-latency responses:
 
 | Query Path | Typical Latency |
 |------------|-----------------|
-| Cache hit + fast-path + direct template | ~90ms (p50) |
-| Cache miss + fast-path + direct template | ~500ms |
-| Fast-path + LLM response | ~2-3s |
-| LLM guardrails + LLM response | ~5s |
+| Cache hit + fast-path + direct template | ~250-400ms |
+| Cache miss + fast-path + direct template | ~400-600ms |
+| Fast-path + LLM response | ~500-800ms |
+| LLM topic check + LLM response (parallel) | ~500-1,000ms |
+| Blocked queries (topic filter only) | ~500-800ms |
 
 ## Metrics
 

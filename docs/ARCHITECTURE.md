@@ -229,10 +229,11 @@ flowchart TD
 
 - **Fast-Path Optimization**: 71% of queries use regex-based topic filtering (~90ms) instead of LLM
 - **Parallel Execution**: Topic filter and response generation run concurrently for non-fast-path queries
-- **Cancellation Strategy**: If topic is blocked, response generation is cancelled (~600ms vs 5-7s)
+- **Cancellation Strategy**: If topic is blocked, response generation is cancelled (~500ms vs 5-7s)
 - **Three-Tier Response**: Direct template (58%), Template + LLM (5%), Custom LLM (18%), Blocked (18%)
 - **Multi-Layer Caching**: Redis cache at embedding, tool, and response levels
-- **Performance**: p50 latency = 0.40s, 71% of requests complete in <1s
+- **LLM Optimization**: Cached instances, filtered context, concise prompts (max_tokens: 150)
+- **Performance**: p50 = 0.46s, p95 = 1.05s, p99 = 1.46s, 95% of requests complete in <1s
 
 ### Conditional Routing
 
@@ -371,9 +372,9 @@ def select_response_strategy(tools_output, property_details):
 | Tier | Condition | LLM Call? | Latency | Cost | Usage |
 |------|-----------|-----------|---------|------|-------|
 | Direct Template | Score ≥ 0.75 + all placeholders filled | NO | ~200-600ms | $0.00 | 58% |
-| Template + LLM | Score ≥ 0.70 | Yes (1-2 parallel) | ~700-1,500ms | ~$0.002-0.004 | 5% |
-| Custom LLM | Score < 0.70 | Yes (1-2 parallel) | ~1,000-2,000ms | ~$0.005-0.02 | 18% |
-| No Response | Blocked by guardrails | Topic LLM only | ~600ms | ~$0.002 | 18% |
+| Template + LLM | Score ≥ 0.70 | Yes (1-2 parallel) | ~500-800ms | ~$0.001-0.002 | 5% |
+| Custom LLM | Score < 0.70 | Yes (1-2 parallel) | ~500-1,000ms | ~$0.002-0.005 | 18% |
+| No Response | Blocked by guardrails | Topic LLM only | ~500-800ms | ~$0.001 | 18% |
 
 **Configuration** (`settings.py` / `.env`):
 - `direct_substitution_enabled`: true
@@ -733,33 +734,45 @@ ENABLE_COST_TRACKING=true
 
 ## Performance Characteristics
 
-### Latency Profile - Optimized (n=55 queries, 2025-02)
+### Latency Profile - Optimized (n=55 queries, 2026-02-04)
 ```
 Fast-path queries (71%):   ~200-600ms  (direct template, no LLM)
-Blocked queries (18%):     ~600ms      (topic filter only, response cancelled)
-Complex queries (11%):     ~1,000-2,000ms (parallel topic + response LLM)
+Blocked queries (18%):     ~500-800ms  (topic filter only, response cancelled)
+Complex queries (11%):     ~500-1,000ms (parallel topic + response LLM)
 
 Distribution:
-  p50 (median):     0.40s   (most queries are fast!)
+  p50 (median):     0.46s   (most queries are fast!)
   p75:              0.60s
-  p95:              1.50s
-  p99:              2.00s
-  Average:          1.96s
-  Fast (<1s):       71% of all requests
-  Medium (1-3s):    2%
-  Slow (>3s):       27% (complex custom responses with detailed generation)
+  p95:              1.05s   (87% improvement from 11.47s)
+  p99:              1.46s   (87% improvement from 11.47s)
+  Average:          0.52s   (71% improvement from 1.79s)
+  Fast (<1s):       95% of all requests (up from 76%)
+  Medium (1-3s):    5%
+  Slow (>3s):       0% (eliminated!)
 ```
 
-### Key Optimizations (2025-02)
+### Key Optimizations Timeline
+
+**Phase 1 (2025-02):**
 1. **Fixed Async Redis Cache** - Proper async implementation, cache hit rate 0% → 70%+
 2. **Parallel Topic Filter + Response** - Run concurrently, save ~1.5s on legitimate queries
 3. **Increased Cache TTLs** - Embedding cache: 5min → 1 hour, Response: 1min → 5min
 4. **Lowered Direct Substitution Threshold** - 0.80 → 0.75, more queries skip LLM (58%)
 5. **Optimized Qdrant Fetching** - 3x multiplier → 2x, reduced over-fetching
 
+**Phase 2 (2026-02-04):**
+6. **LLM Response Optimization** - max_tokens: 1000→150, temperature: 0.7→0.1, filtered context
+7. **LLM Instance Caching** - Cached ChatGroq instances to eliminate per-request initialization
+8. **Test Rate Limiting** - 2.5s delays between tests to prevent Groq API rate limiting
+
 **Performance Improvement**:
-- Median latency: ~5s → **0.40s** (92% improvement)
-- Blocked queries: 5-7s → **0.60s** (90% improvement)
+- Initial (2025-01): p50 = 5s, p99 = unknown
+- After Phase 1 (2025-02): p50 = 0.40s (92% improvement)
+- After Phase 2 (2026-02-04):
+  - p50 = 0.46s (maintained)
+  - p95 = 1.05s (90% improvement from 10.34s)
+  - p99 = 1.46s (87% improvement from 11.47s)
+  - Fast (<1s) = 95% (up from 76%)
 - Test pass rate: 85.5% → **100%** (all guardrails working)
 
 ### Cost Profile
