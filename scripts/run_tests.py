@@ -5,10 +5,17 @@ Loads test cases from data/test_cases/test_cases.json
 import json
 import os
 import requests
+import time
 from pathlib import Path
 
 BASE_URL = "http://localhost:8000/api/v1/generate-response"
 TEST_CASES_PATH = Path(__file__).parent.parent / "data" / "test_cases" / "test_cases.json"
+
+# Delay between tests to prevent Groq API rate limiting
+# Groq free tier: 30 RPM, so we need ~2s between requests
+# Using 2.5s to have safety margin (24 requests/min)
+# This ensures LangSmith traces show accurate latencies
+REQUEST_DELAY_SECONDS = 2.5
 
 
 def get_api_key():
@@ -67,7 +74,8 @@ def run_tests():
         return None, None
 
     test_cases = load_test_cases()
-    print(f"Running {len(test_cases)} test cases from {TEST_CASES_PATH}\n")
+    print(f"Running {len(test_cases)} test cases from {TEST_CASES_PATH}")
+    print(f"Request delay: {REQUEST_DELAY_SECONDS}s (prevents Groq rate limiting)\n")
 
     results = {
         "direct_template": 0,
@@ -100,6 +108,11 @@ def run_tests():
         }
 
         try:
+            # Add delay between requests to prevent Groq rate limiting
+            # This ensures clean LangSmith traces without queueing artifacts
+            if i > 1:
+                time.sleep(REQUEST_DELAY_SECONDS)
+
             response = requests.post(BASE_URL, json=payload, headers=headers, timeout=60)
 
             if response.status_code == 200:

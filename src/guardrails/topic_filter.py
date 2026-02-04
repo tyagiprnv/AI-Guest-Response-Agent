@@ -192,6 +192,10 @@ async def check_topic_restriction(message: str) -> Dict[str, Any]:
     Returns:
         Dict with keys: allowed (bool), reason (str), topic (str)
     """
+    from time import time
+
+    start_time = time()
+
     # Fast-path: Skip LLM for obviously safe queries
     if is_safe_query(message):
         logger.debug(f"Topic filter fast-path: query is safe - {message[:50]}...")
@@ -203,13 +207,20 @@ async def check_topic_restriction(message: str) -> Dict[str, Any]:
         }
 
     # Get cached LLM instance for ambiguous/potentially restricted queries
+    llm_start = time()
     llm = get_topic_filter_llm()
+    llm_init_time = (time() - llm_start) * 1000
+    logger.info(f"Topic filter LLM init: {llm_init_time:.1f}ms")
 
     # Classify topic
     prompt = TOPIC_FILTER_PROMPT.format(message=message)
-    logger.debug(f"Topic filter LLM classification for message: {message[:50]}...")
+    logger.info(f"Topic filter LLM classification starting for: {message[:50]}...")
 
+    call_start = time()
     response = await llm.ainvoke(prompt)
+    call_time = (time() - call_start) * 1000
+    logger.info(f"Topic filter LLM call completed in {call_time:.1f}ms")
+
     topic_filter_path.labels(path="llm").inc()
     logger.debug(f"Topic filter raw response: {response.content[:200]}")
 
