@@ -146,94 +146,42 @@ class AgentState:
 
 ### Workflow Diagram
 
-The following Mermaid diagram illustrates the complete workflow from user request to final output:
-
 ```mermaid
 flowchart TD
-    Start([User Request]) --> API[FastAPI Application]
+    Start([User Request]) --> API[API Layer]
 
-    API --> Middleware{Middleware Layer}
-    Middleware -->|CORS Check| RateLimit[Rate Limiting]
-    RateLimit -->|API Key Auth| Validation[Input Validation]
-    Validation -->|Pydantic Schema| AgentInit[Initialize Agent State]
+    API --> Guardrails[Apply Guardrails]
+    Guardrails --> PII[PII Detection]
+    PII --> Topic[Topic Filter]
 
-    AgentInit --> Guardrails[Apply Guardrails Node]
+    Topic -->|Blocked| Reject[Return Rejection]
+    Topic -->|Allowed| Tools[Execute Tools]
 
-    Guardrails --> PII[PII Detection<br/>Presidio]
-    PII --> TopicFilter[Topic Filter]
-    TopicFilter -->|Fast-path 71%| FastPath[Regex Check<br/>~90ms]
-    TopicFilter -->|Complex 29%| ParallelExec{Parallel Execution}
+    Tools --> Template[Template Retrieval]
+    Tools --> Property[Property Lookup]
+    Tools --> Reservation[Reservation Lookup]
 
-    FastPath -->|Safe Topic| GuardPass[Guardrails Passed]
-    FastPath -->|Blocked| GuardFail[Guardrails Failed]
+    Template --> Generate[Generate Response]
+    Property --> Generate
+    Reservation --> Generate
 
-    ParallelExec -->|Concurrent| TopicLLM[Topic Classification<br/>LLM Call]
-    ParallelExec -->|Concurrent| ResponseGen[Start Response Generation]
-    TopicLLM -->|Blocked| CancelResponse[Cancel Response<br/>~600ms]
-    TopicLLM -->|Allowed| GuardPass
-    CancelResponse --> GuardFail
+    Generate -->|High Match| Direct[Direct Template]
+    Generate -->|Medium Match| Refine[Template + LLM]
+    Generate -->|Low Match| Custom[Custom LLM]
 
-    GuardPass --> ExecuteTools[Execute Tools Node<br/>Parallel Execution]
-    GuardFail --> RejectResponse[Generate Rejection Response]
+    Direct --> Response[Return Response]
+    Refine --> Response
+    Custom --> Response
+    Reject --> Response
 
-    ExecuteTools --> Tool1[Template Retrieval<br/>Qdrant Search]
-    ExecuteTools --> Tool2[Property Details<br/>PostgreSQL/Cache]
-    ExecuteTools --> Tool3[Reservation Details<br/>PostgreSQL/Cache]
-
-    Tool1 --> ToolResults[Aggregate Tool Results]
-    Tool2 --> ToolResults
-    Tool3 --> ToolResults
-
-    ToolResults --> GenerateNode[Generate Response Node]
-
-    GenerateNode --> Strategy{Response Strategy}
-
-    Strategy -->|Score ≥0.75<br/>All placeholders filled| DirectTemplate[Tier 1: Direct Template<br/>No LLM • ~200-600ms<br/>58% of queries]
-    Strategy -->|Score ≥0.70| TemplateLLM[Tier 2: Template + LLM<br/>1-2 LLM calls<br/>~700-1,500ms<br/>5% of queries]
-    Strategy -->|Score <0.70<br/>Context available| CustomLLM[Tier 3: Custom LLM<br/>1-2 LLM calls<br/>~1,000-2,000ms<br/>18% of queries]
-    Strategy -->|No match| NoResponse[No Response<br/>Default message]
-
-    DirectTemplate --> FinalResponse[Format Response]
-    TemplateLLM --> FinalResponse
-    CustomLLM --> FinalResponse
-    NoResponse --> FinalResponse
-    RejectResponse --> FinalResponse
-
-    FinalResponse --> Metadata[Add Metadata<br/>tokens, cost, latency]
-    Metadata --> Monitoring{Export Observability}
-
-    Monitoring --> LangSmith[LangSmith Tracing]
-    Monitoring --> Prometheus[Prometheus Metrics]
-    Monitoring --> Logs[Structured Logs]
-
-    LangSmith --> Return[Return JSON Response]
-    Prometheus --> Return
-    Logs --> Return
-
-    Return --> End([Client Receives Response])
+    Response --> End([Client])
 
     style Start fill:#e1f5ff
     style End fill:#e1f5ff
     style Guardrails fill:#fff3cd
-    style ExecuteTools fill:#d4edda
-    style GenerateNode fill:#d1ecf1
-    style DirectTemplate fill:#d4edda
-    style TemplateLLM fill:#fff3cd
-    style CustomLLM fill:#f8d7da
-    style RejectResponse fill:#f8d7da
-    style ParallelExec fill:#e2e3e5
-    style CancelResponse fill:#f8d7da
+    style Tools fill:#d4edda
+    style Generate fill:#d1ecf1
 ```
-
-**Key Workflow Characteristics:**
-
-- **Fast-Path Optimization**: 71% of queries use regex-based topic filtering (~90ms) instead of LLM
-- **Parallel Execution**: Topic filter and response generation run concurrently for non-fast-path queries
-- **Cancellation Strategy**: If topic is blocked, response generation is cancelled (~500ms vs 5-7s)
-- **Three-Tier Response**: Direct template (58%), Template + LLM (5%), Custom LLM (18%), Blocked (18%)
-- **Multi-Layer Caching**: Redis cache at embedding, tool, and response levels
-- **LLM Optimization**: Cached instances, filtered context, concise prompts (max_tokens: 150)
-- **Performance**: p50 = 0.46s, p95 = 1.05s, p99 = 1.46s, 95% of requests complete in <1s
 
 ### Conditional Routing
 
