@@ -37,8 +37,8 @@ A production-quality AI agent that generates responses to guest accommodation in
 | LLM | Groq (LLaMA 3.1 8B Instant) |
 | Embeddings | OpenAI text-embedding-3-small |
 | Vector DB | Qdrant |
-| Database | PostgreSQL 16 |
-| Cache | Redis 7 |
+| Database | PostgreSQL |
+| Cache | Redis |
 | API | FastAPI |
 | Monitoring | LangSmith + Prometheus + Grafana |
 | Deployment | Docker Compose |
