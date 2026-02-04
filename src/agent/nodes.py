@@ -4,6 +4,7 @@ LangGraph agent nodes.
 import asyncio
 import json
 from datetime import datetime, date
+from functools import lru_cache
 from time import time
 from typing import Any, Dict
 
@@ -26,6 +27,18 @@ from src.tools.template_retrieval import retrieve_templates
 from src.tools.template_substitution import build_context, can_use_direct_substitution
 
 logger = get_logger(__name__)
+
+
+@lru_cache(maxsize=1)
+def get_response_llm():
+    """Get cached LLM instance for response generation."""
+    settings = get_settings()
+    return ChatGroq(
+        model=settings.llm_model,
+        temperature=settings.llm_temperature,
+        api_key=settings.groq_api_key,
+        max_tokens=settings.llm_max_tokens,
+    )
 
 
 def json_serial(obj):
@@ -266,13 +279,8 @@ async def generate_direct_template_response(state: AgentState) -> Dict[str, Any]
 
 async def generate_template_response(state: AgentState) -> Dict[str, Any]:
     """Generate response using templates."""
-    settings = get_settings()
-    llm = ChatGroq(
-        model=settings.llm_model,
-        temperature=settings.llm_temperature,
-        api_key=settings.groq_api_key,
-        max_tokens=settings.llm_max_tokens,
-    )
+    # Get cached LLM instance
+    llm = get_response_llm()
 
     # Format templates
     templates_text = "\n\n".join([
@@ -330,13 +338,8 @@ async def generate_template_response(state: AgentState) -> Dict[str, Any]:
 
 async def generate_custom_response(state: AgentState) -> Dict[str, Any]:
     """Generate custom response without templates."""
-    settings = get_settings()
-    llm = ChatGroq(
-        model=settings.llm_model,
-        temperature=settings.llm_temperature,
-        api_key=settings.groq_api_key,
-        max_tokens=settings.llm_max_tokens,
-    )
+    # Get cached LLM instance
+    llm = get_response_llm()
 
     # Use filtered context for efficiency
     property_info = filter_property_context(state.get("property_details"))

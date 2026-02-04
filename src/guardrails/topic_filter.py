@@ -3,6 +3,7 @@ Topic filter to restrict certain types of queries.
 """
 import json
 import re
+from functools import lru_cache
 from typing import Any, Dict
 
 from langchain_groq import ChatGroq
@@ -12,6 +13,17 @@ from src.monitoring.logging import get_logger
 from src.monitoring.metrics import guardrail_triggered, topic_filter_path
 
 logger = get_logger(__name__)
+
+
+@lru_cache(maxsize=1)
+def get_topic_filter_llm():
+    """Get cached LLM instance for topic filtering."""
+    settings = get_settings()
+    return ChatGroq(
+        model=settings.llm_model,
+        temperature=0,
+        api_key=settings.groq_api_key,
+    )
 
 # Restricted topics
 RESTRICTED_TOPICS = [
@@ -190,14 +202,8 @@ async def check_topic_restriction(message: str) -> Dict[str, Any]:
             "topic": "general",
         }
 
-    settings = get_settings()
-
-    # Initialize LLM for ambiguous/potentially restricted queries
-    llm = ChatGroq(
-        model=settings.llm_model,
-        temperature=0,
-        api_key=settings.groq_api_key,
-    )
+    # Get cached LLM instance for ambiguous/potentially restricted queries
+    llm = get_topic_filter_llm()
 
     # Classify topic
     prompt = TOPIC_FILTER_PROMPT.format(message=message)
