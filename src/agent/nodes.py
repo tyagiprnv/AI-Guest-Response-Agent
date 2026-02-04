@@ -35,6 +35,38 @@ def json_serial(obj):
     raise TypeError(f"Type {type(obj)} not serializable")
 
 
+def filter_property_context(property_data: dict | None) -> str:
+    """Extract only relevant property fields for LLM context."""
+    if not property_data:
+        return "Not available"
+
+    filtered = {
+        "name": property_data.get("name"),
+        "check_in_time": property_data.get("check_in_time"),
+        "check_out_time": property_data.get("check_out_time"),
+        "parking": property_data.get("parking"),
+        "parking_details": property_data.get("parking_details"),
+        "amenities": property_data.get("amenities", []),
+        "policies": property_data.get("policies", {}),
+    }
+    return json.dumps(filtered, default=json_serial)
+
+
+def filter_reservation_context(reservation_data: dict | None) -> str:
+    """Extract only relevant reservation fields for LLM context."""
+    if not reservation_data:
+        return "Not available"
+
+    filtered = {
+        "check_in_date": reservation_data.get("check_in_date"),
+        "check_out_date": reservation_data.get("check_out_date"),
+        "room_type": reservation_data.get("room_type"),
+        "guest_count": reservation_data.get("guest_count"),
+        "special_requests": reservation_data.get("special_requests", []),
+    }
+    return json.dumps(filtered, default=json_serial)
+
+
 async def apply_guardrails(state: AgentState) -> Dict[str, Any]:
     """Apply safety guardrails to the guest message."""
     from src.guardrails.topic_filter import is_safe_query, topic_filter_path, check_topic_restriction
@@ -250,9 +282,9 @@ async def generate_template_response(state: AgentState) -> Dict[str, Any]:
         for i, t in enumerate(state["retrieved_templates"][:3])
     ])
 
-    # Format property and reservation info
-    property_info = json.dumps(state.get("property_details"), indent=2, default=json_serial) if state.get("property_details") else "Not available"
-    reservation_info = json.dumps(state.get("reservation_details"), indent=2, default=json_serial) if state.get("reservation_details") else "Not available"
+    # Format property and reservation info (filtered for efficiency)
+    property_info = filter_property_context(state.get("property_details"))
+    reservation_info = filter_reservation_context(state.get("reservation_details"))
 
     prompt = RESPONSE_GENERATION_PROMPT.format(
         guest_message=state["redacted_message"],
@@ -306,8 +338,9 @@ async def generate_custom_response(state: AgentState) -> Dict[str, Any]:
         max_tokens=settings.llm_max_tokens,
     )
 
-    property_info = json.dumps(state.get("property_details"), indent=2, default=json_serial) if state.get("property_details") else "Not available"
-    reservation_info = json.dumps(state.get("reservation_details"), indent=2, default=json_serial) if state.get("reservation_details") else "Not available"
+    # Use filtered context for efficiency
+    property_info = filter_property_context(state.get("property_details"))
+    reservation_info = filter_reservation_context(state.get("reservation_details"))
 
     prompt = CUSTOM_RESPONSE_PROMPT.format(
         guest_message=state["redacted_message"],
