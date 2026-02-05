@@ -47,9 +47,13 @@ class Settings(BaseSettings):
 
     # Embedding Configuration
     embedding_model: str = Field(
-        default="text-embedding-3-small", description="OpenAI embedding model"
+        default="sentence-transformers/all-MiniLM-L6-v2",
+        description="Embedding model (sentence-transformers or OpenAI)"
     )
-    embedding_dimension: int = Field(default=1536, description="Embedding dimension")
+    embedding_dimension: int = Field(
+        default=384,
+        description="Embedding dimension (384 for all-MiniLM-L6-v2, 1536 for text-embedding-3-small)"
+    )
 
     # LLM Configuration
     llm_model: str = Field(default="llama-3.1-8b-instant", description="Groq model")

@@ -1,5 +1,5 @@
 # Multi-stage build for optimized image size
-FROM python:3.11-slim as builder
+FROM python:3.11 as builder
 
 # Set working directory
 WORKDIR /app

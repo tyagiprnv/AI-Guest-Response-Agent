@@ -28,8 +28,8 @@ def setup_test_environment():
 
 @pytest.fixture
 def mock_openai_embedding():
-    """Mock OpenAI embedding generation."""
-    return [0.1] * 1536  # Standard embedding size
+    """Mock sentence-transformers embedding generation."""
+    return [0.1] * 384  # sentence-transformers/all-MiniLM-L6-v2 embedding size
 
 
 @pytest.fixture
