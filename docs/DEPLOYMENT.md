@@ -626,7 +626,7 @@ curl http://localhost:6333/collections/templates | jq .result.points_count
 
 #### 7. High Latency
 
-**Symptom**: Responses take > 5 seconds consistently (P99: ~5s, Average: ~1.07s)
+**Symptom**: Responses consistently slower than expected
 
 **Diagnosis**:
 ```bash
@@ -655,11 +655,19 @@ curl 'http://localhost:9090/api/v1/query?query=direct_substitution_count'
 - **High load** → Scale API instances, add load balancer
 - **Network issues** → Check latency to external APIs
 
-**Expected latency tiers** (n=35 queries):
-- Direct template (cache hit): ~90ms (p50)
-- Fast path queries: <1s (60% of queries)
-- LLM response: ~2-3s (26% of queries)
-- Full LLM guardrails + response: ~5s (14% of queries)
+**Expected latency** (n=55 queries):
+
+*Warm cache (typical):*
+- p50: 70ms
+- p95: 610ms
+- p99: 660ms
+- 100% of queries < 1s
+
+*Cold cache (worst case):*
+- p50: 70ms (unchanged)
+- p95: 830ms (+220ms)
+- p99: 1,890ms (+1.23s)
+- 98% of queries < 1s
 
 #### 8. Memory Issues
 
@@ -781,11 +789,15 @@ embedding_cache = TTLCache(maxsize=2000, ttl=7200)  # Up from 1000/3600
 EMBEDDING_MODEL = "text-embedding-ada-002"  # Faster than 3-small
 ```
 
-**Latency targets with optimizations** (n=35 queries):
-- Direct template (cache hit): ~90ms (p50)
-- Fast path queries: <1s (60% of queries)
-- LLM response: ~2-3s (26% of queries)
-- Full LLM guardrails + response: ~5s (14% of queries)
+**Achieved performance** (n=55 queries):
+
+*Warm cache:*
+- p50: 70ms, p95: 610ms, p99: 660ms
+- 100% of queries < 1s
+
+*Cold cache:*
+- p50: 70ms, p95: 830ms, p99: 1,890ms
+- 98% of queries < 1s
 
 ### Optimize for Cost
 
@@ -890,6 +902,7 @@ api:
 
 ---
 
-**Version**: 1.1
-**Last Updated**: 2026-01-27
+**Version**: 1.2
+**Last Updated**: 2026-02-05
 **Author**: Pranav Tyagi
+**Latest Changes**: Updated latency benchmarks with warm vs cold cache data

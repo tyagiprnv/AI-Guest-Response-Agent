@@ -294,11 +294,21 @@ Performance:
 - **Accuracy**: Should be > 4.0 on average
 - **Safety**: Should be > 4.5 on average (stricter)
 
-**Performance Metrics** (n=35 queries):
-- **Latency**: P50 ~99ms, Average ~1.07s, P99 ~5s
+**Performance Metrics** (n=55 queries):
+
+*Warm cache:*
+- **Latency**: p50: 70ms, p95: 610ms, p99: 660ms, Average: 210ms
+- **Fast queries**: 100% complete in <1s
+
+*Cold cache:*
+- **Latency**: p50: 70ms, p95: 830ms, p99: 1,890ms, Average: 270ms
+- **Fast queries**: 98% complete in <1s
+
+*Other metrics:*
 - **Cost**: Should be < $0.005 per request on average (with direct substitution)
 - **Template Match Rate**: Should be 90-100% with trigger-query embeddings
 - **Direct Substitution Rate**: Should be 60-80% of template matches
+- **Cache Impact**: ~200ms improvement at p95, ~1.2s improvement at p99
 
 ### Best and Worst Cases
 
@@ -505,6 +515,7 @@ Track metrics over time:
 
 ---
 
-**Version**: 1.1
-**Last Updated**: 2026-01-27
+**Version**: 1.2
+**Last Updated**: 2026-02-05
 **Author**: Pranav Tyagi
+**Latest Changes**: Updated performance metrics with warm/cold cache benchmarks

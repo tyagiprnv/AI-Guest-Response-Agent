@@ -317,12 +317,12 @@ def select_response_strategy(tools_output, property_details):
     return "no_response", DEFAULT_MESSAGE
 ```
 
-| Tier | Condition | LLM Call? | Latency | Cost | Usage |
-|------|-----------|-----------|---------|------|-------|
-| Direct Template | Score ≥ 0.75 + all placeholders filled | NO | ~200-600ms | $0.00 | 58% |
-| Template + LLM | Score ≥ 0.70 | Yes (1-2 parallel) | ~500-800ms | ~$0.001-0.002 | 5% |
-| Custom LLM | Score < 0.70 | Yes (1-2 parallel) | ~500-1,000ms | ~$0.002-0.005 | 18% |
-| No Response | Blocked by guardrails | Topic LLM only | ~500-800ms | ~$0.001 | 18% |
+| Tier | Condition | LLM Call? | Latency (Warm/Cold) | Cost | Usage |
+|------|-----------|-----------|---------------------|------|-------|
+| Direct Template | Score ≥ 0.75 + all placeholders filled | NO | 50-150ms / 100-300ms | $0.00 | 58% |
+| Template + LLM | Score ≥ 0.70 | Yes (1-2 parallel) | 200-400ms / 400-800ms | ~$0.001-0.002 | 5% |
+| Custom LLM | Score < 0.70 | Yes (1-2 parallel) | 300-600ms / 600-1,200ms | ~$0.002-0.005 | 18% |
+| No Response | Blocked by guardrails | Topic LLM only | 400-600ms / 800-1,500ms | ~$0.001 | 18% |
 
 **Configuration** (`settings.py` / `.env`):
 - `direct_substitution_enabled`: true
@@ -617,9 +617,9 @@ ENABLE_COST_TRACKING=true
    └─ Return to client
 ```
 
-**Total Latency** (n=35 queries):
-- P50: ~90ms (direct template, cache hit)
-- P99: ~5s (worst case)
+**Total Latency** (n=55 queries):
+- **Warm cache**: p50: 70ms, p95: 610ms, p99: 660ms
+- **Cold cache**: p50: 70ms, p95: 830ms, p99: 1,890ms
 
 ## Technology Stack
 
@@ -682,22 +682,43 @@ ENABLE_COST_TRACKING=true
 
 ## Performance Characteristics
 
-### Latency Profile - Optimized (n=55 queries, 2026-02-04)
-```
-Fast-path queries (71%):   ~200-600ms  (direct template, no LLM)
-Blocked queries (18%):     ~500-800ms  (topic filter only, response cancelled)
-Complex queries (11%):     ~500-1,000ms (parallel topic + response LLM)
+### Latency Profile - Optimized (n=55 queries, 2026-02-05)
 
-Distribution:
-  p50 (median):     0.46s   (most queries are fast!)
-  p75:              0.60s
-  p95:              1.05s   (87% improvement from 11.47s)
-  p99:              1.46s   (87% improvement from 11.47s)
-  Average:          0.52s   (71% improvement from 1.79s)
-  Fast (<1s):       95% of all requests (up from 76%)
-  Medium (1-3s):    5%
-  Slow (>3s):       0% (eliminated!)
+**Warm Cache (typical production):**
 ```
+Distribution:
+  p50 (median):     0.07s   (70% fast-path + cache hits)
+  p75:              ~0.15s
+  p95:              0.61s
+  p99:              0.66s
+  Average:          0.21s
+  Min:              0.02s
+  Max:              0.66s
+  Fast (<1s):       100% of all requests
+  Medium (1-3s):    0%
+  Slow (>3s):       0%
+```
+
+**Cold Start (empty cache):**
+```
+Distribution:
+  p50 (median):     0.07s   (unchanged - fast-path unaffected)
+  p75:              ~0.15s
+  p95:              0.83s   (+220ms vs warm)
+  p99:              1.89s   (+1.23s vs warm)
+  Average:          0.27s   (+60ms vs warm)
+  Min:              0.03s
+  Max:              1.89s
+  Fast (<1s):       98% of all requests (54/55)
+  Medium (1-3s):    2% (1/55)
+  Slow (>3s):       0%
+```
+
+**Cache Impact Analysis:**
+- **Median (p50)**: Unchanged - fast-path queries bypass cache
+- **p95**: +220ms cold start - moderate cache benefit
+- **p99**: +1.23s cold start - significant cache benefit for complex queries
+- **Resilience**: System degrades gracefully, 98% still <1s without cache
 
 ### Key Optimizations Timeline
 
@@ -716,11 +737,18 @@ Distribution:
 **Performance Improvement**:
 - Initial (2025-01): p50 = 5s, p99 = unknown
 - After Phase 1 (2025-02): p50 = 0.40s (92% improvement)
-- After Phase 2 (2026-02-04):
-  - p50 = 0.46s (maintained)
-  - p95 = 1.05s (90% improvement from 10.34s)
-  - p99 = 1.46s (87% improvement from 11.47s)
-  - Fast (<1s) = 95% (up from 76%)
+- After Phase 2 (2026-02-05, warm cache):
+  - p50 = 0.07s (98.6% improvement from initial)
+  - p95 = 0.61s (94% improvement from 10.34s)
+  - p99 = 0.66s (93% improvement from 11.47s)
+  - Average = 0.21s
+  - Fast (<1s) = 100% (up from 76%)
+- After Phase 2 (2026-02-05, cold cache):
+  - p50 = 0.07s (unchanged, fast-path unaffected)
+  - p95 = 0.83s (92% improvement from 10.34s)
+  - p99 = 1.89s (83% improvement from 11.47s)
+  - Average = 0.27s
+  - Fast (<1s) = 98% (54/55 requests)
 - Test pass rate: 85.5% → **100%** (all guardrails working)
 
 ### Cost Profile
@@ -772,7 +800,7 @@ Savings with 70% template rate:
 
 ---
 
-**Version**: 1.2
-**Last Updated**: 2026-02-04
+**Version**: 1.3
+**Last Updated**: 2026-02-05
 **Author**: Pranav Tyagi
-**Latest Changes**: Performance optimizations - async Redis cache fix, parallel topic filter execution, optimized cache TTLs
+**Latest Changes**: Updated latency benchmarks with warm vs cold cache analysis (n=55 queries)
